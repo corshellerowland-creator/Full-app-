@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faceless Trader</title>
+<style>
+body{margin:0;background:#0a0615;color:#f5eaff;font-family:sans-serif}
+.header{padding:20px;font-size:22px;font-weight:bold;color:#ff4df0;text-shadow:0 0 10px rgba(255,77,240,0.6)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.card{padding:18px;border-radius:14px;background:#140a25;box-shadow:0 0 15px rgba(255,0,200,0.25);cursor:pointer}
+.section{display:none;padding:16px}
+.active{display:block}
+button{padding:10px;border:none;border-radius:10px;background:#ff4df0;color:white;margin-top:10px}
+h2{color:#39ffb6}
+</style>
+</head>
+<body>
+
+<div class="header">Faceless Trader</div>
+
+<div id="home" class="active">
+<div class="grid">
+<div class="card" onclick="openSection('strategy')">Strategy</div>
+<div class="card" onclick="openSection('journal')">Journal</div>
+<div class="card" onclick="openSection('psychology')">Psychology</div>
+<div class="card" onclick="openSection('stats')">Stats</div>
+</div>
+</div>
+
+<div id="strategy" class="section">
+<h2>Strategy</h2>
+<p>ICC / EMA / Supply & Demand</p>
+<button onclick="goHome()">Back</button>
+</div>
+
+<div id="journal" class="section">
+<h2>Journal</h2>
+<p>Log your trades here</p>
+<button onclick="goHome()">Back</button>
+</div>
+
+<div id="psychology" class="section">
+<h2>Psychology</h2>
+<button onclick="setState('Calm')">Calm</button>
+<button onclick="setState('Anxious')">Anxious</button>
+<p id="state"></p>
+<button onclick="goHome()">Back</button>
+</div>
+
+<div id="stats" class="section">
+<h2>Stats</h2>
+<p>Coming from journal</p>
+<button onclick="goHome()">Back</button>
+</div>
+
+<script>
+function openSection(id){
+ document.getElementById('home').classList.remove('active');
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+}
+function goHome(){
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById('home').classList.add('active');
+}
+function setState(state){
+ document.getElementById('state').innerText="State: "+state;
+}
+</script>
+
+</body>
+</html>
