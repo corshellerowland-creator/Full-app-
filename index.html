@@ -572,6 +572,148 @@ textarea.field{min-height:88px;resize:vertical;}
 .option .check{opacity:0;}.option.active{border-color:rgba(255,255,255,.16);background:linear-gradient(135deg,color-mix(in srgb,var(--cardA) 65%, transparent), color-mix(in srgb,var(--cardB) 92%, transparent));}.option.active .check{opacity:1;}
 @media (max-width:390px){.row,.grid2,.statsGrid,.kpiGrid,.homeQuick,.topStats,.kvGrid{grid-template-columns:1fr}.hero{display:block}.hero-inner{max-width:none;padding-right:72px}.style-wrap{position:absolute;top:14px;right:14px}.dropdown{width:min(235px,calc(100vw - 46px))}}
 
+
+/* ===== theme bridge polish ===== */
+.app-content{
+  margin-top:14px;
+}
+.app-content .view{
+  display:none;
+}
+.app-content .view.active{
+  display:block;
+}
+.app-content .section,
+.app-content .kpi,
+.app-content .stat,
+.app-content .listItem,
+.app-content .phaseCard,
+.app-content .accountList > *,
+.app-content .journalList > *,
+.app-content .goalSummary > *{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--cardA) 84%, rgba(255,255,255,.06)),
+      color-mix(in srgb, var(--cardB) 92%, rgba(5,3,10,.28))
+    ) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:
+    inset 0 0 16px color-mix(in srgb, var(--glowA) 30%, transparent),
+    0 0 18px color-mix(in srgb, var(--glowA) 28%, transparent),
+    0 16px 32px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(18px);
+}
+.app-content .section::before,
+.app-content .kpi::before,
+.app-content .stat::before,
+.app-content .phaseCard::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(255,255,255,.72) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 48% 10%, rgba(255,255,255,.56) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 84% 17%, rgba(255,255,255,.74) 0 1px, transparent 1.7px);
+  opacity:.26;
+}
+.app-content .sectionTitle,
+.app-content .num,
+.app-content .big,
+.app-content .value{
+  background:linear-gradient(90deg,#ffffff 0%, #ffe3ff 42%, #dff8ff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.app-content .muted,
+.app-content .label,
+.app-content .fieldLabel,
+.app-content .sub,
+.app-content .smallBadge,
+.app-content .chip,
+.app-content .status{
+  color:#eadcff !important;
+}
+.app-content .smallBadge,
+.app-content .chip,
+.app-content .status{
+  background:linear-gradient(180deg,var(--pillA),var(--pillB)) !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:inset 0 0 10px color-mix(in srgb, var(--glowA) 32%, transparent), 0 0 14px color-mix(in srgb, var(--glowA) 26%, transparent) !important;
+}
+.app-content .field,
+.app-content select.field,
+.app-content textarea.field,
+.app-content input.field{
+  background:linear-gradient(180deg, rgba(22,14,38,.92), rgba(13,9,24,.94)) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  color:var(--text) !important;
+  box-shadow: inset 0 0 12px color-mix(in srgb, var(--glowA) 14%, transparent);
+}
+.app-content .btn,
+.app-content .cta,
+.app-content .quickBtn,
+.app-content .miniBtn,
+.app-content .btnWide{
+  background:linear-gradient(180deg,var(--pillA),var(--pillB)) !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  color:#fff !important;
+  box-shadow:
+    inset 0 0 10px color-mix(in srgb, var(--glowA) 26%, transparent),
+    0 0 16px color-mix(in srgb, var(--glowA) 24%, transparent) !important;
+}
+.app-content .btn.warn,
+.app-content .rulesBtn{
+  background:linear-gradient(135deg, color-mix(in srgb, var(--activeA) 74%, #ff5e7e), color-mix(in srgb, var(--activeB) 70%, #8b5cf6)) !important;
+}
+.app-content .btn.primary,
+.app-content .cta,
+.app-content .pill.active{
+  background:linear-gradient(135deg,var(--activeA),var(--activeB),var(--activeC)) !important;
+  box-shadow:
+    0 12px 26px color-mix(in srgb, var(--activeA) 34%, transparent),
+    inset 0 0 12px rgba(255,255,255,.12) !important;
+}
+.app-content .kpiGrid,
+.app-content .grid2,
+.app-content .statsGrid,
+.app-content .homeQuick,
+.app-content .kvGrid{
+  gap:12px !important;
+}
+.app-content .quickBtn{
+  text-align:left;
+}
+.app-content iframe.strategyFrame{
+  border-radius:22px;
+  box-shadow:0 0 20px color-mix(in srgb, var(--glowA) 24%, transparent);
+}
+.tabs#mainTabs .pill{
+  min-width:max-content;
+  background:linear-gradient(180deg, rgba(159,95,242,.18), rgba(56,37,106,.54));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:inset 0 0 10px rgba(255,255,255,.04);
+}
+.tabs#mainTabs .pill.active{
+  background:linear-gradient(135deg,var(--activeA),var(--activeB),var(--activeC)) !important;
+}
+.hero-note{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  padding:10px 16px;
+  border-radius:999px;
+  color:#fff;
+  font-weight:800;
+  background:linear-gradient(180deg, rgba(34,23,58,.82), rgba(17,12,31,.78));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: inset 0 0 12px color-mix(in srgb, var(--glowA) 18%, transparent);
+}
+
 </style>
 </head>
 <body class="theme-soft-purple">
