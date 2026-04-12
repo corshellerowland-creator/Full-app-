@@ -714,6 +714,43 @@ textarea.field{min-height:88px;resize:vertical;}
   box-shadow: inset 0 0 12px color-mix(in srgb, var(--glowA) 18%, transparent);
 }
 
+
+/* ---- user requested polish ---- */
+.hero .hero-copy,
+.hero .heroText,
+.hero .hero-content,
+.hero .hero-left,
+.hero-note{
+  display:none !important;
+}
+.hero h1,
+.hero .sub{
+  display:none !important;
+}
+.styleBtn{
+  background: linear-gradient(135deg, var(--activeA), var(--activeB), var(--activeC)) !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--glowA) 70%, transparent),
+    0 0 40px color-mix(in srgb, var(--activeA) 35%, transparent),
+    inset 0 0 12px rgba(255,255,255,.16) !important;
+}
+.styleBtn:hover{
+  box-shadow:
+    0 0 28px color-mix(in srgb, var(--glowA) 85%, transparent),
+    0 0 56px color-mix(in srgb, var(--activeA) 45%, transparent),
+    inset 0 0 12px rgba(255,255,255,.18) !important;
+}
+.hero{
+  min-height:230px !important;
+}
+.heroTop{
+  justify-content:flex-end !important;
+}
+.brandWrap{
+  display:none !important;
+}
+
 </style>
 </head>
 <body class="theme-soft-purple">
@@ -753,7 +790,7 @@ textarea.field{min-height:88px;resize:vertical;}
 
     <div class="tabs" id="mainTabs">
       <button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
-    </div>
+    <button class="pill" data-view="psych">Psych</button></div>
 
     <div class="app-content">
 <section class="view active" id="home">
@@ -3201,5 +3238,62 @@ window.addEventListener('load', () => {
   if(ghost) ghost.onclick = function(e){ e.preventDefault(); };
 })();
 </script>
+
+<section class="view" id="psych">
+  <div class="section">
+    <h2 class="sectionTitle">Psychology</h2>
+    <div class="kpiGrid">
+      <div class="kpi">
+        <div class="label">Discipline Score</div>
+        <div class="num" id="psychScore">0%</div>
+      </div>
+      <div class="kpi">
+        <div class="label">State</div>
+        <div class="num" id="psychState" style="font-size:18px">Neutral</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="sectionTitle">Mental Checklist</h2>
+    <label class="checkrow"><input type="checkbox" onchange="updatePsych()"> Waited for confirmation</label>
+    <label class="checkrow"><input type="checkbox" onchange="updatePsych()"> No FOMO / no chasing</label>
+    <label class="checkrow"><input type="checkbox" onchange="updatePsych()"> Followed my plan</label>
+    <label class="checkrow"><input type="checkbox" onchange="updatePsych()"> Stopped after my limit</label>
+    <label class="checkrow"><input type="checkbox" onchange="updatePsych()"> Stayed patient through setup</label>
+    <div class="psychNote">Use this tab as your discipline filter before and after trades.</div>
+  </div>
+</section>
+
+
+<script>
+function updatePsych(){
+  const checks = document.querySelectorAll('#psych input[type="checkbox"]');
+  let checked = 0;
+  checks.forEach(c => { if(c.checked) checked++; });
+  const total = checks.length || 1;
+  const score = Math.round((checked / total) * 100);
+  const scoreEl = document.getElementById('psychScore');
+  const stateEl = document.getElementById('psychState');
+  if(scoreEl) scoreEl.textContent = score + '%';
+  let state = 'Weak';
+  if(score >= 80) state = 'Locked In';
+  else if(score >= 50) state = 'Average';
+  if(stateEl) stateEl.textContent = state;
+}
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => {
+    btn.addEventListener('click', function(){
+      const target = this.getAttribute('data-view');
+      document.querySelectorAll('#mainTabs .pill').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const el = document.getElementById(target);
+      if(el) el.classList.add('active');
+    });
+  });
+});
+</script>
+
 </body>
 </html>
