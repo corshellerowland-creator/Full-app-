@@ -870,6 +870,22 @@ textarea.field{min-height:88px;resize:vertical;}
   }
 }
 
+
+/* interactive psychology */
+#psych .psych-rule{cursor:pointer;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, opacity .18s ease;}
+#psych .psych-rule:active{transform:scale(.99);}
+#psych .psych-rule.done{
+  border-color:rgba(255,255,255,.18);
+  box-shadow:inset 0 0 18px color-mix(in srgb, var(--glowA) 28%, transparent), 0 0 22px color-mix(in srgb, var(--glowA) 24%, transparent);
+}
+#psych .psych-rule.done .psych-num{
+  background:linear-gradient(135deg,#7dffcb,#5ff0ff);
+  color:#081118;
+}
+#psych .psych-rule.skip{opacity:.62;}
+#psych .psych-actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;}
+#psych .psych-btn{cursor:pointer;}
+
 </style>
 </head>
 <body class="theme-soft-purple">
@@ -3032,360 +3048,7 @@ updateUI(); renderJournalList();
     </div>
   </div>
 </div>
-<script>
-const STORAGE_KEY='facelessTraderMergedICC_v1';
-const defaultState={theme:{palette:'amethyst',modeIndex:0},goals:{eval:{daily:0,loss:0},funded:{daily:0,loss:0},live:{daily:0,loss:0}},plan:{bias:'',setup:'Supply & Demand',session:'New York'},evals:[],funded:[],live:[],journal:[],timer:{remaining:7200,running:false,ended:false,interval:null},iccChecks:{}};
-['b1','b2','b3','b4','i1','i2','i3','i4','c1','c2','c3','c4','e1','e2','e3','e4'].forEach(k=>defaultState.iccChecks[k]=false);
-let state=JSON.parse(localStorage.getItem(STORAGE_KEY)||JSON.stringify(defaultState));
-if(!state.theme) state.theme=defaultState.theme; if(!state.goals) state.goals=defaultState.goals; if(!state.iccChecks) state.iccChecks=defaultState.iccChecks;
-const money=n=>Number(n||0).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2});
-const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
-const todayISO=()=>new Date().toISOString().slice(0,10);
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,timer:{...state.timer,interval:null}}))}
-function applyTheme(){document.body.dataset.palette=state.theme.palette;document.getElementById('themeBadge').textContent=state.theme.palette==='amethyst'?'Soft Amethyst':'Soft Quantum'}
-document.getElementById('styleCycleBtn').onclick=()=>{state.theme.palette=state.theme.palette==='amethyst'?'quantum':'amethyst';applyTheme();saveState();}
-function switchView(viewId){document.querySelectorAll('#mainTabs .pill').forEach(tab=>tab.classList.toggle('active',tab.dataset.view===viewId));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===viewId));window.scrollTo({top:0,behavior:'smooth'})}
-document.querySelectorAll('#mainTabs .pill').forEach(tab=>tab.addEventListener('click',()=>switchView(tab.dataset.view)));
-document.querySelectorAll('[data-strategy-tab]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-strategy-tab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.iccPhase').forEach(v=>v.classList.remove('active'));document.getElementById('strategy-'+btn.dataset.strategyTab).classList.add('active')}));
-function applyGoalPreset(goal,loss){goalDaily.value=goal;goalLoss.value=loss}
-function saveGoal(){const type=goalType.value;state.goals[type]={daily:Number(goalDaily.value||0),loss:Number(goalLoss.value||0)};saveState();renderAll()}
-function renderGoals(){goalSummary.innerHTML=['eval','funded','live'].map(type=>{const g=state.goals[type]||{};return `<div class="listItem"><div class="accountTop"><div><div class="accountTitle">${type[0].toUpperCase()+type.slice(1)} Goal</div><div class="muted">${money(g.daily)} target · ${money(g.loss)} max loss</div></div><span class="chip">${type}</span></div></div>`}).join('')}
-function savePlan(){state.plan={bias:planBias.value,setup:planSetup.value,session:planSession.value};saveState()}
-function iccCount(prefix){return Object.entries(state.iccChecks).filter(([k,v])=>k.startsWith(prefix)&&v).length}
-function renderICC(){const counts={b:iccCount('b'),i:iccCount('i'),c:iccCount('c'),e:iccCount('e')};iccScore.innerText=Math.max(0,Math.round((Object.values(state.iccChecks).filter(Boolean).length/16)*100)-(state.iccChecks.i4?0:10)-(state.iccChecks.e3?0:10))+'%';iccProgress.style.width=iccScore.innerText;iccHint.innerText=Number(iccScore.innerText.replace('%',''))>=90?'A SETUP':Number(iccScore.innerText.replace('%',''))>=75?'B SETUP':'WAIT';iccStatus.innerText=iccHint.innerText==='A SETUP'?'Execute Trade':iccHint.innerText==='B SETUP'?'Almost There':'Not Clean Yet';iccStatusSub.innerText=iccHint.innerText==='WAIT'?'More confirmation needed.':'Clean enough to review.';document.getElementById('icc-bias-count').innerText=`${counts.b} / 4`;document.getElementById('icc-indication-count').innerText=`${counts.i} / 4`;document.getElementById('icc-correction-count').innerText=`${counts.c} / 4`;document.getElementById('icc-entry-count').innerText=`${counts.e} / 4`;document.querySelectorAll('.icc-check').forEach(el=>el.checked=!!state.iccChecks[el.dataset.key])}
-document.querySelectorAll('.icc-check').forEach(el=>el.addEventListener('change',()=>{state.iccChecks[el.dataset.key]=el.checked;saveState();renderICC()}));
-function resetICC(){Object.keys(state.iccChecks).forEach(k=>state.iccChecks[k]=false);saveState();renderICC()}
-function getCollection(type){return type==='eval'?state.evals:type==='funded'?state.funded:state.live}
-function applyAccountDefaults(type){const size=Number(document.getElementById(type+'Size').value||0);if(type==='eval'){evalGoal.value=size===50000?3000:size===25000?1250:'';evalDrawdown.value=size===50000?2000:size===25000?1000:''}else if(type==='funded'){fundedPayoutGoal.value=size===50000?3000:size===25000?1250:'';fundedDrawdown.value=size===50000?2000:size===25000?1000:''}}
-function assignNumbers(){['eval','funded','live'].forEach(type=>getCollection(type).sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)).forEach((a,i)=>a.number=i+1))}
-function hydrateNames(){state.evals.forEach(a=>a.firmOrName=a.firm);state.funded.forEach(a=>a.firmOrName=a.firm);state.live.forEach(a=>a.firmOrName=a.label||a.broker)}
-function recalcAccounts(){['eval','funded','live'].forEach(type=>getCollection(type).forEach(a=>{const linked=state.journal.filter(j=>j.accountType===type&&j.accountId===a.id);const pnl=linked.reduce((s,j)=>s+Number(j.pnl||0),0);a.totalPnl=pnl;a.currentBalance=Number(a.startingBalance||0)+pnl;if(type==='eval'){a.remainingToGoal=Math.max(0,Number(a.goal||0)-pnl);a.buffer=a.currentBalance-(Number(a.startingBalance||0)-Number(a.maxDrawdown||0));if(!['failed','archived'].includes(a.status))a.status=pnl>=Number(a.goal||Infinity)?'passed':'active'}if(type==='funded'){a.remainingToPayoutGoal=Math.max(0,Number(a.payoutGoal||0)-Math.max(0,pnl));a.buffer=a.currentBalance-(Number(a.startingBalance||0)-Number(a.maxDrawdown||0));if(!['blown','archived'].includes(a.status))a.status=a.buffer<=Number(a.maxDrawdown||0)*0.2?'risk':'active'}if(type==='live'){a.remainingToGoal=Math.max(0,Number(a.dailyGoal||0)-Math.max(0,pnl));a.riskBuffer=Number(a.riskLimit||0)+pnl}}))}
-function clearAccountForm(type){const ids={eval:['evalId','evalFirm','evalSize','evalGoal','evalDrawdown','evalDays','evalNotes'],funded:['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedNotes'],live:['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveNotes']}[type];ids.forEach(id=>document.getElementById(id).value='');if(type==='eval')evalStatus.value='active';if(type==='funded')fundedStatus.value='active';if(type==='live')liveStatus.value='active'}
-function saveAccount(type){const list=getCollection(type);const id=document.getElementById(type+'Id').value||uid();let payload;if(type==='eval'){payload={id,createdAt:list.find(a=>a.id===id)?.createdAt||new Date().toISOString(),firm:evalFirm.value,startingBalance:Number(evalSize.value||0),goal:Number(evalGoal.value||0),maxDrawdown:Number(evalDrawdown.value||0),daysPassed:Number(evalDays.value||0),status:evalStatus.value,notes:evalNotes.value};if(!payload.firm||!payload.startingBalance)return}else if(type==='funded'){payload={id,createdAt:list.find(a=>a.id===id)?.createdAt||new Date().toISOString(),firm:fundedFirm.value,startingBalance:Number(fundedSize.value||0),payoutGoal:Number(fundedPayoutGoal.value||0),maxDrawdown:Number(fundedDrawdown.value||0),payoutTaken:Number(fundedPayoutTaken.value||0),status:fundedStatus.value,notes:fundedNotes.value};if(!payload.firm||!payload.startingBalance)return}else{payload={id,createdAt:list.find(a=>a.id===id)?.createdAt||new Date().toISOString(),broker:liveBroker.value,label:liveLabel.value,startingBalance:Number(liveBalance.value||0),riskLimit:Number(liveRiskLimit.value||0),dailyGoal:Number(liveGoal.value||0),status:liveStatus.value,notes:liveNotes.value};if(!payload.broker)return}const idx=list.findIndex(a=>a.id===id);if(idx>=0)list[idx]={...list[idx],...payload};else list.push(payload);postDataChange();clearAccountForm(type)}
-function editAccount(type,id){const a=getCollection(type).find(x=>x.id===id);if(!a)return;switchView(type);if(type==='eval'){evalId.value=a.id;evalFirm.value=a.firm;evalSize.value=a.startingBalance;evalGoal.value=a.goal;evalDrawdown.value=a.maxDrawdown;evalDays.value=a.daysPassed||0;evalStatus.value=a.status;evalNotes.value=a.notes||''}else if(type==='funded'){fundedId.value=a.id;fundedFirm.value=a.firm;fundedSize.value=a.startingBalance;fundedPayoutGoal.value=a.payoutGoal||0;fundedDrawdown.value=a.maxDrawdown;fundedPayoutTaken.value=a.payoutTaken||0;fundedStatus.value=a.status;fundedNotes.value=a.notes||''}else{liveId.value=a.id;liveBroker.value=a.broker;liveLabel.value=a.label||'';liveBalance.value=a.startingBalance;liveRiskLimit.value=a.riskLimit;liveGoal.value=a.dailyGoal||0;liveStatus.value=a.status;liveNotes.value=a.notes||''}}
-function deleteAccount(type,id){const list=getCollection(type);const idx=list.findIndex(a=>a.id===id);if(idx>=0)list.splice(idx,1);state.journal=state.journal.filter(j=>!(j.accountType===type&&j.accountId===id));postDataChange()}
-function renderAccountList(type,containerId){const items=[...getCollection(type)].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));const el=document.getElementById(containerId);if(!items.length){el.innerHTML='<div class="empty">Nothing saved yet.</div>';return}el.innerHTML=items.map(a=>{const pnlClass=Number(a.totalPnl||0)>=0?'positive':'negative';const extra=type==='eval'?`<div class="kv"><div class="k">Left to Pass</div><div class="v">${money(a.remainingToGoal||0)}</div></div>`:type==='funded'?`<div class="kv"><div class="k">Payout Progress</div><div class="v">${money((a.payoutGoal||0)-(a.remainingToPayoutGoal||0))} / ${money(a.payoutGoal||0)}</div></div>`:`<div class="kv"><div class="k">Left to Goal</div><div class="v">${money(a.remainingToGoal||0)}</div></div>`;return `<div class="listItem"><div class="accountTop"><div><div class="accountTitle">${type[0].toUpperCase()+type.slice(1)} ${a.number} — ${a.firmOrName}</div><div class="muted">${a.createdAt.slice(0,10)}</div></div><span class="status">${a.status}</span></div><div class="kvGrid"><div class="kv"><div class="k">Current Balance</div><div class="v">${money(a.currentBalance||a.startingBalance)}</div></div><div class="kv"><div class="k">Total PnL</div><div class="v ${pnlClass}">${money(a.totalPnl||0)}</div></div><div class="kv"><div class="k">Buffer</div><div class="v">${money(a.buffer??a.riskBuffer??0)}</div></div>${extra}</div><div class="btnrow"><button class="btn" onclick="editAccount('${type}','${a.id}')">Edit</button><button class="btn warn" onclick="deleteAccount('${type}','${a.id}')">Delete</button></div></div>`}).join('')}
-function refreshJournalAccounts(){const type=journalAccountType.value;const items=getCollection(type);if(!items.length){journalAccountId.innerHTML='<option value="">No accounts yet</option>';return}journalAccountId.innerHTML=[...items].sort((a,b)=>a.number-b.number).map(a=>`<option value="${a.id}">${type[0].toUpperCase()+type.slice(1)} ${a.number} — ${a.firmOrName}</option>`).join('')}
-let pendingJournalImage='';
-function previewJournalImage(e){const file=e.target.files&&e.target.files[0];if(!file){journalPreview.style.display='none';pendingJournalImage='';return}const reader=new FileReader();reader.onload=function(){pendingJournalImage=reader.result;journalPreview.src=pendingJournalImage;journalPreview.style.display='block'};reader.readAsDataURL(file)}
-function clearJournalForm(){journalId.value='';journalDate.value=todayISO();journalAccountType.value='eval';journalPnl.value='';journalSetup.value='';journalTag.value='valid';journalNotes.value='';journalScreenshot.value='';pendingJournalImage='';journalPreview.src='';journalPreview.style.display='none';refreshJournalAccounts()}
-function saveJournal(){const id=journalId.value||uid();const old=state.journal.find(j=>j.id===id);const payload={id,date:journalDate.value,accountType:journalAccountType.value,accountId:journalAccountId.value,pnl:Number(journalPnl.value||0),setup:journalSetup.value,tag:journalTag.value,notes:journalNotes.value,screenshot:pendingJournalImage||old?.screenshot||''};const idx=state.journal.findIndex(j=>j.id===id);if(idx>=0)state.journal[idx]=payload;else state.journal.push(payload);postDataChange();clearJournalForm()}
-function editJournal(id){const j=state.journal.find(x=>x.id===id);if(!j)return;switchView('journal');journalId.value=j.id;journalDate.value=j.date;journalAccountType.value=j.accountType;refreshJournalAccounts();journalAccountId.value=j.accountId;journalPnl.value=j.pnl;journalSetup.value=j.setup||'';journalTag.value=j.tag;journalNotes.value=j.notes||'';pendingJournalImage=j.screenshot||'';if(pendingJournalImage){journalPreview.src=pendingJournalImage;journalPreview.style.display='block'}else journalPreview.style.display='none'}
-function deleteJournal(id){const idx=state.journal.findIndex(j=>j.id===id);if(idx>=0)state.journal.splice(idx,1);postDataChange()}
-function renderJournal(){const el=journalList;const recentEl=recentJournal;const items=[...state.journal].sort((a,b)=>new Date(b.date)-new Date(a.date));if(!items.length){el.innerHTML='<div class="empty">No journal entries yet.</div>';recentEl.innerHTML='<div class="empty">No journal entries yet.</div>';return}const one=j=>{const account=getCollection(j.accountType).find(a=>a.id===j.accountId);return `<div class="listItem"><div class="journalTop"><div><div class="accountTitle">${j.setup||'Trade Entry'}</div><div class="muted">${j.date} • ${j.accountType} ${account?.number||''} ${account?'— '+account.firmOrName:''}</div></div><span class="${Number(j.pnl)>=0?'positive':'negative'}"><strong>${money(j.pnl)}</strong></span></div><div class="row"><span class="chip">${j.tag}</span></div>${j.notes?`<div class="muted" style="margin-top:8px">${j.notes}</div>`:''}${j.screenshot?`<img class="previewImg" style="display:block" src="${j.screenshot}">`:''}<div class="btnrow"><button class="btn" onclick="editJournal('${j.id}')">Edit</button><button class="btn warn" onclick="deleteJournal('${j.id}')">Delete</button></div></div>`};el.innerHTML=items.map(one).join('');recentEl.innerHTML=items.slice(0,3).map(one).join('')}
-function renderHomeAndStats(){const today=todayISO();const todayPnl=state.journal.filter(j=>j.date===today).reduce((s,j)=>s+Number(j.pnl||0),0);todayPnlEl.textContent=money(todayPnl)}
-const todayPnlEl=document.getElementById('todayPnl');
-function renderHomeStats(){const today=todayISO();const todayPnl=state.journal.filter(j=>j.date===today).reduce((s,j)=>s+Number(j.pnl||0),0);todayPnlEl.textContent=money(todayPnl);const activeType=['live','funded','eval'].find(t=>Number(state.goals[t]?.daily||0))||'eval';const g=state.goals[activeType]||{daily:0,loss:0};homeGoal.textContent=g.daily?money(g.daily):'$—';homeLoss.textContent=g.loss?money(g.loss):'$—';homeGoalType.textContent=g.daily?`${activeType} goal active`:'No goal set';todayBadge.textContent=g.daily?`Goal ${money(g.daily)} · Loss ${money(g.loss)}`:'No goal active';accountCount.textContent=state.evals.length+state.funded.length+state.live.length;const trades=state.journal.filter(x=>x.tag==='valid'||x.tag==='failed');const wins=trades.filter(x=>Number(x.pnl)>0).length;const losses=trades.filter(x=>Number(x.pnl)<0).length;statEntries.textContent=state.journal.length;statWinRate.textContent=(wins+losses)?`${Math.round((wins/(wins+losses))*100)}%`:'0%';const byDate={};state.journal.forEach(j=>byDate[j.date]=(byDate[j.date]||0)+Number(j.pnl||0));let goalHit=0,lossHit=0;Object.entries(byDate).forEach(([date,pnl])=>{const any=state.journal.find(x=>x.date===date);const gg=state.goals[any?.accountType||'eval']||{};if(Number(gg.daily||0)&&pnl>=Number(gg.daily))goalHit++;if(Number(gg.loss||0)&&pnl<=-Math.abs(Number(gg.loss)))lossHit++});statGoalHit.textContent=goalHit;statLossHit.textContent=lossHit;const names=['Supply & Demand','ORB','EMA/TEMA','ICC'];const strat=names.map(name=>{const arr=state.journal.filter(x=>x.setup===name);const w=arr.filter(x=>Number(x.pnl)>0).length;const l=arr.filter(x=>Number(x.pnl)<0).length;const wr=(w+l)?Math.round((w/(w+l))*100):0;const pnl=arr.reduce((s,x)=>s+Number(x.pnl||0),0);return {name,trades:arr.length,w,l,wr,pnl}});const best=[...strat].sort((a,b)=>(b.wr-a.wr)||(b.pnl-a.pnl))[0];bestStrategy.textContent=best&&best.trades?best.name:'—';bestStrategyMeta.textContent=best&&best.trades?`${best.wr}% win rate · ${money(best.pnl)}`:'Waiting for trades';strategyStats.innerHTML=strat.map(s=>`<div class="listItem"><div class="accountTop"><div><div class="accountTitle">${s.name}</div><div class="muted">${s.trades} trades</div></div><span class="chip">${s.w} / ${s.l}</span></div><div class="kvGrid"><div class="kv"><div class="k">Win %</div><div class="v">${s.wr}%</div></div><div class="kv"><div class="k">PnL</div><div class="v">${money(s.pnl)}</div></div></div></div>`).join('');const now=new Date();const sameWeek=d=>{const dd=new Date(d);const start=new Date(now);start.setDate(now.getDate()-6);return dd>=start&&dd<=now};const sameMonth=d=>new Date(d).getMonth()===now.getMonth()&&new Date(d).getFullYear()===now.getFullYear();const weekly=state.journal.filter(j=>sameWeek(j.date)).reduce((s,j)=>s+Number(j.pnl||0),0);const monthly=state.journal.filter(j=>sameMonth(j.date)).reduce((s,j)=>s+Number(j.pnl||0),0);pnlDaily.textContent=money(todayPnl);pnlWeekly.textContent=money(weekly);pnlMonthly.textContent=money(monthly);pnlProgress.textContent=g.daily?`${Math.min(100,Math.max(0,Math.round((Math.max(0,todayPnl)/g.daily)*100)))}%`:'0%'}
-function calculateSizer(){const risk=Number(riskDollar.value||0),stop=Number(stopPoints.value||0),instrument=instrumentEl.value,pointValue={mnq:2,mes:5,mgc:10,mym:0.5}[instrument];if(!risk||!stop||!pointValue){suggestedSize.value='';return}suggestedSize.value=Math.max(1,Math.floor(risk/(stop*pointValue)))}
-const instrumentEl=document.getElementById('instrument');
-function updateTimerDisplay(){const t=state.timer.remaining;const h=String(Math.floor(t/3600)).padStart(2,'0'),m=String(Math.floor((t%3600)/60)).padStart(2,'0'),s=String(t%60).padStart(2,'0');clock.textContent=`${h}:${m}:${s}`;sessionStatus.textContent=state.timer.running?'Running':state.timer.ended?'Ended':state.timer.remaining<7200?'Paused':'Waiting'}
-function startTimer(){if(state.timer.running||state.timer.ended)return;state.timer.running=true;state.timer.interval=setInterval(()=>{state.timer.remaining=Math.max(0,state.timer.remaining-1);if(state.timer.remaining===0){clearInterval(state.timer.interval);state.timer.running=false;state.timer.ended=true;state.timer.interval=null}updateTimerDisplay();saveState()},1000);updateTimerDisplay()}
-function pauseTimer(){if(!state.timer.running)return;clearInterval(state.timer.interval);state.timer.interval=null;state.timer.running=false;updateTimerDisplay();saveState()}
-function resumeTimer(){if(state.timer.running||state.timer.ended||state.timer.remaining<=0)return;startTimer()}
-function endTimerEarly(){clearInterval(state.timer.interval);state.timer.interval=null;state.timer.running=false;state.timer.ended=true;state.timer.remaining=0;updateTimerDisplay();saveState()}
-function postDataChange(){assignNumbers();hydrateNames();recalcAccounts();saveState();renderAll()}
-function renderAll(){applyTheme();renderGoals();renderICC();renderAccountList('eval','evalList');renderAccountList('funded','fundedList');renderAccountList('live','liveList');refreshJournalAccounts();renderJournal();renderHomeStats();updateTimerDisplay()}
-journalDate.value=todayISO();renderAll();
-</script>
 
-<script>
-document.querySelectorAll('[data-merged-strategy]').forEach(btn => {
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('[data-merged-strategy]').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.mergedStrategyPane').forEach(p => p.style.display = 'none');
-    this.classList.add('active');
-    const target = document.getElementById('merged-' + this.dataset.mergedStrategy);
-    if (target) target.style.display = 'block';
-  });
-});
-</script>
-
-<script>
-function resizeStrategyFrames(){
-  document.querySelectorAll('.strategyFrame').forEach(frame => {
-    try {
-      const doc = frame.contentDocument || frame.contentWindow.document;
-      if (!doc || !doc.body) return;
-      const h = Math.max(
-        doc.body.scrollHeight || 0,
-        doc.documentElement ? doc.documentElement.scrollHeight : 0
-      );
-      if (h && h > 300) frame.style.height = (h + 24) + 'px';
-    } catch(e) {}
-  });
-}
-
-document.querySelectorAll('.strategyFrame').forEach(frame => {
-  frame.addEventListener('load', () => {
-    resizeStrategyFrames();
-    setTimeout(resizeStrategyFrames, 300);
-    setTimeout(resizeStrategyFrames, 1000);
-  });
-});
-setInterval(resizeStrategyFrames, 1500);
-
-function readJSON(key){
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
-  catch(e){ return []; }
-}
-
-function syncExternalStrategyStats(){
-  const shellEntries = readJSON('facelessTraderMergedICC_v1');
-  const shellJournal = shellEntries && shellEntries.journal ? shellEntries.journal : [];
-
-  const iccEmaJournal = readJSON('faceless_strategy_journal_v1');
-  const sdJournal = readJSON('snd_icc_style_journal_v2');
-
-  const all = []
-    .concat(shellJournal.map(j => ({
-      strategy: j.setup || 'Unknown',
-      pnl: Number(j.pnl || 0),
-      date: j.date || '',
-      source: 'shell'
-    })))
-    .concat(iccEmaJournal.map(j => ({
-      strategy: j.strategy === 'EMA / TEMA' ? 'EMA/TEMA' : (j.strategy || 'ICC'),
-      pnl: Number(j.result === 'Win' ? 1 : j.result === 'Loss' ? -1 : 0),
-      date: j.date || '',
-      source: 'iccema'
-    })))
-    .concat(sdJournal.map(j => ({
-      strategy: 'Supply & Demand',
-      pnl: Number(j.result === 'Win' ? 1 : j.result === 'Loss' ? -1 : 0),
-      date: j.date || '',
-      source: 'sd'
-    })));
-
-  const statEntries = document.getElementById('statEntries');
-  const statWinRate = document.getElementById('statWinRate');
-  const strategyStats = document.getElementById('strategyStats');
-  const bestStrategy = document.getElementById('bestStrategy');
-  const bestStrategyMeta = document.getElementById('bestStrategyMeta');
-  const recentJournal = document.getElementById('recentJournal');
-
-  if (!all.length){
-    if (statEntries) statEntries.textContent = '0';
-    if (statWinRate) statWinRate.textContent = '0%';
-    if (strategyStats) strategyStats.innerHTML = '<div class="empty">No strategy entries yet.</div>';
-    if (bestStrategy) bestStrategy.textContent = '—';
-    if (bestStrategyMeta) bestStrategyMeta.textContent = 'Waiting for trades';
-    return;
-  }
-
-  const wins = all.filter(x => x.pnl > 0).length;
-  const losses = all.filter(x => x.pnl < 0).length;
-  const wr = (wins + losses) ? Math.round((wins / (wins + losses)) * 100) : 0;
-
-  if (statEntries) statEntries.textContent = String(all.length);
-  if (statWinRate) statWinRate.textContent = wr + '%';
-
-  const buckets = {};
-  all.forEach(x => {
-    const k = x.strategy || 'Unknown';
-    if (!buckets[k]) buckets[k] = {name:k, trades:0, wins:0, losses:0, pnl:0};
-    buckets[k].trades += 1;
-    if (x.pnl > 0) buckets[k].wins += 1;
-    if (x.pnl < 0) buckets[k].losses += 1;
-    buckets[k].pnl += x.pnl;
-  });
-
-  const rows = Object.values(buckets).map(b => {
-    const rate = (b.wins + b.losses) ? Math.round((b.wins / (b.wins + b.losses)) * 100) : 0;
-    b.rate = rate;
-    return b;
-  }).sort((a,b) => (b.rate - a.rate) || (b.pnl - a.pnl));
-
-  if (strategyStats){
-    strategyStats.innerHTML = rows.map(r => `
-      <div class="listItem">
-        <div class="accountTop">
-          <div>
-            <div class="accountTitle">${r.name}</div>
-            <div class="muted">${r.trades} entries</div>
-          </div>
-          <span class="chip">${r.wins} / ${r.losses}</span>
-        </div>
-        <div class="kvGrid">
-          <div class="kv"><div class="k">Win %</div><div class="v">${r.rate}%</div></div>
-          <div class="kv"><div class="k">Net Score</div><div class="v">${r.pnl}</div></div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  const best = rows[0];
-  if (bestStrategy) bestStrategy.textContent = best ? best.name : '—';
-  if (bestStrategyMeta) bestStrategyMeta.textContent = best ? `${best.rate}% win rate` : 'Waiting for trades';
-
-  if (recentJournal){
-    recentJournal.innerHTML = all.slice().reverse().slice(0,3).map(j => `
-      <div class="listItem">
-        <div class="journalTop">
-          <div>
-            <div class="accountTitle">${j.strategy}</div>
-            <div class="muted">${j.date || ''}</div>
-          </div>
-          <span class="${j.pnl > 0 ? 'positive' : j.pnl < 0 ? 'negative' : ''}"><strong>${j.pnl}</strong></span>
-        </div>
-      </div>
-    `).join('');
-  }
-}
-
-window.addEventListener('load', () => {
-  syncExternalStrategyStats();
-  setTimeout(syncExternalStrategyStats, 1000);
-  setInterval(syncExternalStrategyStats, 2000);
-});
-</script>
-
-
-<script>
-(function(){
-  const TICKER_VALUES = { MNQ: 2, MES: 5, MGC: 10, MYM: 0.5 };
-
-  function formatMoney(value){
-    return "$" + Number(value || 0).toLocaleString(undefined, {maximumFractionDigits: 2});
-  }
-
-  function resetPlanFields(){
-    const mental = document.getElementById("planMental");
-    const ticker = document.getElementById("planTicker");
-    const contracts = document.getElementById("planContracts");
-    const goal = document.getElementById("planGoal");
-    const rr = document.getElementById("planRR");
-    const stop = document.getElementById("planStop");
-
-    if (mental) mental.value = "";
-    if (ticker) ticker.value = "MNQ";
-    if (contracts) contracts.value = "1";
-    if (goal) goal.value = "125";
-    if (rr) rr.value = "1:1";
-    if (stop) stop.value = "";
-
-    updatePlanTab();
-  }
-
-  function updatePlanTab(){
-    const mental = document.getElementById("planMental")?.value || "";
-    const ticker = document.getElementById("planTicker")?.value || "MNQ";
-    const contracts = Number(document.getElementById("planContracts")?.value || 0);
-    const goal = Number(document.getElementById("planGoal")?.value || 0);
-    const rr = document.getElementById("planRR")?.value || "1:1";
-    const stop = Number(document.getElementById("planStop")?.value || 0);
-
-    const perPoint = TICKER_VALUES[ticker] || 0;
-    const risk = contracts * stop * perPoint;
-    const target = rr === "1:2" ? risk * 2 : risk;
-    const wins = target > 0 ? Math.ceil(goal / target) : 0;
-
-    const status =
-      stop <= 0 ? "Add stop" :
-      risk <= 0 ? "Waiting" :
-      risk > goal ? "Over risk" :
-      "Valid";
-
-    const mentalOut =
-      mental === "Calm / Focused" ? "Proceed" :
-      mental === "Anxious / Impatient" ? "Slow down" :
-      "—";
-
-    const perPointEl = document.getElementById("planPerPoint");
-    const riskEl = document.getElementById("planRisk");
-    const targetEl = document.getElementById("planTarget");
-    const winsEl = document.getElementById("planWins");
-    const statusEl = document.getElementById("planStatus");
-    const mentalEl = document.getElementById("planMentalOut");
-
-    if (perPointEl) perPointEl.textContent = formatMoney(perPoint);
-    if (riskEl) riskEl.textContent = formatMoney(risk);
-    if (targetEl) targetEl.textContent = formatMoney(target);
-    if (winsEl) winsEl.textContent = String(wins);
-    if (statusEl) statusEl.textContent = status;
-    if (mentalEl) mentalEl.textContent = mentalOut;
-  }
-
-  function bindPlanTab(){
-    ["planMental","planTicker","planContracts","planGoal","planRR","planStop"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener("change", updatePlanTab);
-        el.addEventListener("input", updatePlanTab);
-      }
-    });
-
-    const resetBtn = document.getElementById("planResetBtn");
-    if (resetBtn) resetBtn.addEventListener("click", resetPlanFields);
-
-    resetPlanFields();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bindPlanTab);
-  } else {
-    bindPlanTab();
-  }
-})();
-</script>
-
-
-<script>
-(function(){
-  const toggle = document.getElementById('styleToggle');
-  const dropdown = document.getElementById('dropdown');
-  const options = Array.from(document.querySelectorAll('.option'));
-  const badge = document.getElementById('themeBadge');
-  const STORAGE_KEY = 'facelessTraderThemeV2';
-  function cleanLabel(text){return text.trim().replace(/^[^A-Za-z]+\s*/, '');}
-  function applyThemeClass(themeClass,label,save){
-    document.body.classList.remove('theme-soft-purple','theme-bright-purple','theme-soft-bluegreen','theme-bright-bluegreen');
-    document.body.classList.add(themeClass);
-    options.forEach(btn=>btn.classList.toggle('active', btn.dataset.theme===themeClass));
-    if(badge) badge.textContent = label;
-    if(save) localStorage.setItem(STORAGE_KEY, themeClass);
-  }
-  if(toggle && dropdown){
-    toggle.onclick = function(e){ e.preventDefault(); e.stopPropagation(); dropdown.classList.toggle('open'); toggle.classList.toggle('open', dropdown.classList.contains('open')); };
-    options.forEach(btn=>btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); applyThemeClass(btn.dataset.theme, cleanLabel(btn.textContent), true); dropdown.classList.remove('open'); toggle.classList.remove('open'); }));
-    document.addEventListener('click', function(e){ if(!dropdown.contains(e.target) && !toggle.contains(e.target)){ dropdown.classList.remove('open'); toggle.classList.remove('open'); } });
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ dropdown.classList.remove('open'); toggle.classList.remove('open'); } });
-    const saved = localStorage.getItem(STORAGE_KEY) || 'theme-soft-purple';
-    const btn = options.find(o=>o.dataset.theme===saved) || options[0];
-    applyThemeClass(btn.dataset.theme, cleanLabel(btn.textContent), false);
-  }
-  const ghost = document.getElementById('styleCycleBtn');
-  if(ghost) ghost.onclick = function(e){ e.preventDefault(); };
-})();
-</script>
-
-<script>
-function updatePsych(){
-  const checks = document.querySelectorAll('#psych input[type="checkbox"]');
-  let checked = 0;
-  checks.forEach(c => { if(c.checked) checked++; });
-  const total = checks.length || 1;
-  const score = Math.round((checked / total) * 100);
-  const scoreEl = document.getElementById('psychScore');
-  const stateEl = document.getElementById('psychState');
-  if(scoreEl) scoreEl.textContent = score + '%';
-  let state = 'Weak';
-  if(score >= 80) state = 'Locked In';
-  else if(score >= 50) state = 'Average';
-  if(stateEl) stateEl.textContent = state;
-}
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => {
-    btn.addEventListener('click', function(){
-      const target = this.getAttribute('data-view');
-      document.querySelectorAll('#mainTabs .pill').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      const el = document.getElementById(target);
-      if(el) el.classList.add('active');
-    });
-  });
-});
-</script>
 
 
 <section class="view" id="psych">
@@ -3407,7 +3070,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
-    <div class="psych-rule">
+    <div class="psych-rule" data-psych-rule="1">
       <div class="psych-num">1</div>
       <div>
         <div class="psych-rule-title">Confirmation first.</div>
@@ -3415,7 +3078,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
-    <div class="psych-rule">
+    <div class="psych-rule" data-psych-rule="2">
       <div class="psych-num">2</div>
       <div>
         <div class="psych-rule-title">No FOMO candles.</div>
@@ -3423,7 +3086,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
-    <div class="psych-rule">
+    <div class="psych-rule" data-psych-rule="3">
       <div class="psych-num">3</div>
       <div>
         <div class="psych-rule-title">Respect trade cap.</div>
@@ -3431,7 +3094,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
-    <div class="psych-rule">
+    <div class="psych-rule" data-psych-rule="4">
       <div class="psych-num">4</div>
       <div>
         <div class="psych-rule-title">Money follows skill.</div>
@@ -3440,11 +3103,96 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <div class="psych-actions">
-      <button class="psych-btn">Journal Emotion</button>
-      <button class="psych-btn">Reset Mindset</button>
+      <button class="psych-btn" id="psychJournalBtn" type="button">Journal Emotion</button>
+      <button class="psych-btn" id="psychResetBtn" type="button">Reset Mindset</button>
     </div>
   </div>
 </section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const tabs = document.querySelectorAll('#mainTabs .pill[data-view]');
+  const views = document.querySelectorAll('.view');
+
+  function switchView(viewId){
+    tabs.forEach(t => t.classList.remove('active'));
+    const activeTab = document.querySelector('#mainTabs .pill[data-view="' + viewId + '"]');
+    if(activeTab) activeTab.classList.add('active');
+    views.forEach(v => v.classList.remove('active'));
+    const target = document.getElementById(viewId);
+    if(target) target.classList.add('active');
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(e){
+      e.preventDefault();
+      const viewId = this.getAttribute('data-view');
+      switchView(viewId);
+    });
+  });
+
+  const psychRules = Array.from(document.querySelectorAll('#psych .psych-rule'));
+  const psychScore = document.getElementById('psychScore');
+  const psychFocus = document.getElementById('psychFocus');
+  const progress = document.getElementById('psychProgressFill');
+  const journalBtn = document.getElementById('psychJournalBtn');
+  const resetBtn = document.getElementById('psychResetBtn');
+
+  function refreshPsych(){
+    const doneCount = psychRules.filter(r => r.classList.contains('done')).length;
+    const score = Math.round((doneCount / (psychRules.length || 1)) * 100);
+    if(psychScore) psychScore.textContent = score + '%';
+    if(progress) progress.style.width = score + '%';
+
+    let focus = 'Wait';
+    if(score >= 100) focus = 'Locked In';
+    else if(score >= 75) focus = 'Patient';
+    else if(score >= 50) focus = 'Be Selective';
+    else if(score >= 25) focus = 'Slow Down';
+    if(psychFocus) psychFocus.textContent = focus;
+  }
+
+  psychRules.forEach(rule => {
+    rule.addEventListener('click', function(){
+      if(this.classList.contains('done')){
+        this.classList.remove('done');
+        this.classList.add('skip');
+      } else if(this.classList.contains('skip')){
+        this.classList.remove('skip');
+      } else {
+        this.classList.add('done');
+      }
+      refreshPsych();
+    });
+  });
+
+  if(journalBtn){
+    journalBtn.addEventListener('click', function(){
+      const journalTab = document.querySelector('#mainTabs .pill[data-view="journal"]');
+      if(journalTab){
+        switchView('journal');
+      } else {
+        alert('Journal tab not found in this build yet.');
+      }
+    });
+  }
+
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      psychRules.forEach(r => {
+        r.classList.remove('done');
+        r.classList.remove('skip');
+      });
+      refreshPsych();
+    });
+  }
+
+  // expose for existing inline quick buttons if present
+  window.switchView = switchView;
+  refreshPsych();
+});
+</script>
 
 </body>
 </html>
