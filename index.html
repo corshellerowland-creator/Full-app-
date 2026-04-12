@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Faceless Trader</title>
+<title>Faceless Trader Premium Production</title>
 <style>
 :root{
   --bg:#090711; --bg2:#120d22; --text:#f7efff; --muted:#c7b9da;
@@ -18,10 +18,9 @@ html,body{margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-
   radial-gradient(circle at top left,var(--hero1),transparent 28%),radial-gradient(circle at top right,var(--hero2),transparent 25%),linear-gradient(180deg,var(--bg),#0d0a18 50%,var(--bg2))}
 body{padding:18px}
 .app{max-width:430px;margin:0 auto}
-.panel{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow),0 0 28px var(--panelGlow);backdrop-filter:blur(12px);transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease}
-.hero{padding:18px 18px 16px;position:relative;overflow:visible;background:radial-gradient(circle at 10% 12%,var(--hero1),transparent 18%),radial-gradient(circle at 90% 10%,var(--hero2),transparent 18%),linear-gradient(180deg,rgba(10,7,18,.96),rgba(8,6,15,.99));box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 40px var(--panelGlow)}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow),0 0 28px var(--panelGlow);backdrop-filter:blur(12px)}
+.hero{padding:18px 18px 16px;position:relative;overflow:hidden}
 .hero:after{content:"";position:absolute;right:-40px;top:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--grad1) 35%,transparent),transparent 62%);filter:blur(10px)}
-.hero:before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 28%,transparent 70%,rgba(255,255,255,.02));opacity:.9}
 .heroTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .brandWrap{display:flex;gap:12px;align-items:center}
 .avatarWrap{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);box-shadow:0 0 20px var(--panelGlow)}
@@ -29,13 +28,7 @@ body{padding:18px}
 .avatar:before{content:"";position:absolute;inset:8px 11px 10px;border-radius:40px 40px 28px 28px/36px 36px 24px 24px;background:#08060f}
 .avatar:after{content:"";position:absolute;left:18px;right:18px;top:23px;height:8px;background:radial-gradient(circle at 20% 50%,var(--grad1) 0 2px,transparent 3px),radial-gradient(circle at 80% 50%,var(--grad1) 0 2px,transparent 3px);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--grad1) 60%,transparent))}
 h1{font-size:26px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px;line-height:1.35}
-.styleBtn{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:#1b1431;color:#fff;font-size:12px;font-weight:800;cursor:pointer;transition:transform .2s ease, box-shadow .2s ease, background .2s ease}
-body{transition:background .35s ease,color .25s ease}
-.pill,.btn,.cta,.quickBtn{transition:transform .2s ease, box-shadow .25s ease, background .25s ease}
-.pill.active{transform:translateY(-1px) scale(1.03)}
-.btn:active,.cta:active,.quickBtn:active,.styleBtn:active{transform:scale(.98)}
-.checkrow input{accent-color:var(--grad1)}
-.psychNote{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.45}
+.styleBtn{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:#1b1431;color:#fff;font-size:12px;font-weight:800;cursor:pointer}
 .topStats,.grid2,.statsGrid,.kpiGrid,.homeQuick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .topStats{margin-top:14px}
 .stat,.section,.kpi,.listItem,.phaseCard{padding:14px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border:1px solid var(--line)}
@@ -71,14 +64,171 @@ textarea.field{min-height:88px;resize:vertical}
 .quickBtn{padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-weight:800;cursor:pointer;text-align:left;color:var(--text)}
 .previewImg{width:100%;max-height:220px;object-fit:cover;border-radius:16px;margin-top:10px;border:1px solid rgba(255,255,255,.08);display:none}
 @media (max-width:390px){.grid2,.statsGrid,.kpiGrid,.homeQuick,.topStats,.kvGrid{grid-template-columns:1fr}}
+
+
+/* === Premium Theme Merge Overrides === */
+:root {
+  --bg:#05030a;
+  --bg2:#090511;
+  --text:#fff8ff;
+  --muted:#eadcff;
+  --glowA: rgba(255,89,220,.24);
+  --glowB: rgba(198,108,255,.18);
+  --glowC: rgba(155,125,255,.10);
+  --cardA: rgba(118,72,186,.34);
+  --cardB: rgba(38,24,72,.70);
+  --pillA: rgba(152,90,233,.58);
+  --pillB: rgba(71,44,128,.72);
+  --activeA:#f277df;
+  --activeB:#c87cff;
+  --activeC:#e2bbff;
+}
+body.theme-soft-purple {
+  --glowA: rgba(255,89,220,.24);
+  --glowB: rgba(198,108,255,.18);
+  --glowC: rgba(155,125,255,.10);
+  --cardA: rgba(118,72,186,.34);
+  --cardB: rgba(38,24,72,.70);
+  --pillA: rgba(152,90,233,.58);
+  --pillB: rgba(71,44,128,.72);
+  --activeA:#f277df;
+  --activeB:#c87cff;
+  --activeC:#e2bbff;
+}
+body.theme-bright-purple {
+  --glowA: rgba(255,89,220,.42);
+  --glowB: rgba(198,108,255,.30);
+  --glowC: rgba(162,132,255,.14);
+  --cardA: rgba(146,82,228,.56);
+  --cardB: rgba(58,31,110,.78);
+  --pillA: rgba(182,100,255,.84);
+  --pillB: rgba(94,55,174,.88);
+  --activeA:#ff63e2;
+  --activeB:#d06dff;
+  --activeC:#f4a9ff;
+}
+body.theme-soft-bluegreen {
+  --glowA: rgba(84,218,255,.20);
+  --glowB: rgba(84,128,255,.18);
+  --glowC: rgba(93,255,205,.14);
+  --cardA: rgba(69,140,218,.34);
+  --cardB: rgba(23,48,91,.70);
+  --pillA: rgba(94,212,255,.58);
+  --pillB: rgba(58,97,184,.76);
+  --activeA:#77deff;
+  --activeB:#67b2ff;
+  --activeC:#8bffd9;
+}
+body.theme-bright-bluegreen {
+  --glowA: rgba(80,255,190,.30);
+  --glowB: rgba(60,255,170,.26);
+  --glowC: rgba(120,255,220,.28);
+  --cardA: rgba(60,220,170,.45);
+  --cardB: rgba(10,60,45,.82);
+  --pillA: rgba(90,255,180,.85);
+  --pillB: rgba(40,120,90,.88);
+  --activeA:#6affc8;
+  --activeB:#4dffb8;
+  --activeC:#8cffea;
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 14% 0%, var(--glowA), transparent 24%),
+    radial-gradient(circle at 84% 0%, var(--glowB), transparent 24%),
+    radial-gradient(circle at 50% 100%, var(--glowC), transparent 32%),
+    linear-gradient(180deg, var(--bg) 0%, #080410 44%, var(--bg2) 100%) !important;
+  color:var(--text);
+}
+body{transition:background .35s ease,color .25s ease;}
+.app{max-width:430px;}
+.panel,
+.stat,.section,.kpi,.listItem,.phaseCard,.kv,.quickBtn,.field,select.field,textarea.field{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--cardA) 60%, rgba(255,255,255,.03)), color-mix(in srgb, var(--cardB) 85%, rgba(0,0,0,.35))) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 0 24px color-mix(in srgb, var(--glowA) 22%, transparent);
+}
+.hero{
+  position:relative;
+  overflow:visible !important;
+  background:
+    radial-gradient(circle at 10% 12%, var(--glowA), transparent 18%),
+    radial-gradient(circle at 90% 10%, var(--glowB), transparent 18%),
+    radial-gradient(circle at 54% 100%, var(--glowC), transparent 26%),
+    linear-gradient(180deg, rgba(20,11,36,.98), rgba(8,6,16,.99)) !important;
+  box-shadow:0 24px 72px rgba(0,0,0,.56),0 0 40px color-mix(in srgb, var(--glowA) 40%, transparent),inset 0 0 0 1px rgba(255,255,255,.03) !important;
+}
+.hero:after{display:none !important;}
+.pill{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  transition:all .22s ease;
+}
+.pill.active{
+  background:linear-gradient(135deg,var(--pillA),var(--pillB)) !important;
+  box-shadow:0 10px 24px color-mix(in srgb, var(--glowA) 38%, transparent),0 0 18px color-mix(in srgb, var(--glowB) 28%, transparent) !important;
+  transform:translateY(-1px);
+}
+.btn,.cta,.styleBtn,.smallBadge,.chip,.status{
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+.btn.primary,.cta,.styleBtn{
+  background:linear-gradient(135deg,var(--pillA),var(--pillB)) !important;
+  box-shadow:0 12px 24px color-mix(in srgb, var(--glowA) 34%, transparent) !important;
+}
+.btn.warn{
+  background:linear-gradient(135deg, rgba(255,94,126,.82), color-mix(in srgb, var(--pillB) 92%, rgba(139,92,246,.85))) !important;
+}
+.smallBadge,.chip,.status{
+  background:rgba(255,255,255,.06) !important;
+}
+.avatarWrap{
+  box-shadow:0 0 20px color-mix(in srgb, var(--glowA) 34%, transparent) !important;
+}
+.avatar{
+  background:radial-gradient(circle at 50% 22%, color-mix(in srgb, var(--activeA) 35%, transparent), transparent 34%), linear-gradient(180deg,#1a1430,#0d0a18) !important;
+}
+.themePickerWrap{position:relative;display:flex;flex-direction:column;align-items:flex-end;gap:8px;z-index:60;}
+.themePanel{
+  position:absolute;top:48px;right:0;display:none;flex-direction:column;gap:8px;min-width:185px;
+  padding:10px;border-radius:16px;background:rgba(10,8,20,.96);border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 18px 38px rgba(0,0,0,.55),0 0 22px color-mix(in srgb, var(--glowA) 35%, transparent);
+  backdrop-filter:blur(14px);
+}
+.themePanel.open{display:flex;}
+.themeOption{
+  display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:none;border-radius:12px;cursor:pointer;
+  color:var(--text);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.08);
+  text-align:left;font-weight:700;
+}
+.themeOption.active{
+  background:linear-gradient(135deg,var(--pillA),var(--pillB));
+  box-shadow:0 10px 20px color-mix(in srgb, var(--glowA) 32%, transparent);
+}
+.themeDot{width:12px;height:12px;border-radius:999px;display:inline-block;box-shadow:0 0 10px rgba(255,255,255,.22) inset,0 0 12px rgba(255,255,255,.12);}
+.dot-soft-purple{background:linear-gradient(135deg,#f277df,#c87cff);}
+.dot-bright-purple{background:linear-gradient(135deg,#ff63e2,#d06dff);}
+.dot-soft-bluegreen{background:linear-gradient(135deg,#77deff,#8bffd9);}
+.dot-bright-bluegreen{background:linear-gradient(135deg,#6affc8,#4dffb8);}
+#themeBadge{min-width:118px;justify-content:center;}
+
 </style>
 </head>
-<body data-palette="amethyst">
+<body class="theme-soft-purple" data-palette="amethyst">
 <div class="app">
   <div class="panel hero">
     <div class="heroTop">
       <div class="brandWrap"><div class="avatarWrap"><div class="avatar"></div></div><div><h1>Faceless Trader</h1><div class="sub">ICC look + full app engine + journal syncing</div></div></div>
-      <button class="styleBtn" id="styleCycleBtn">Style</button>
+      <div class="themePickerWrap">
+      <button class="styleBtn" id="styleCycleBtn" type="button">Style</button>
+      <div class="themePanel" id="themePanel">
+        <button class="themeOption" type="button" data-theme="theme-soft-purple"><span class="themeDot dot-soft-purple"></span>Soft Purple</button>
+        <button class="themeOption" type="button" data-theme="theme-bright-purple"><span class="themeDot dot-bright-purple"></span>Bright Purple</button>
+        <button class="themeOption" type="button" data-theme="theme-soft-bluegreen"><span class="themeDot dot-soft-bluegreen"></span>Soft Blue Green</button>
+        <button class="themeOption" type="button" data-theme="theme-bright-bluegreen"><span class="themeDot dot-bright-bluegreen"></span>Bright Blue Green</button>
+      </div>
+      </div>
     </div>
     <div class="topStats">
       <div class="stat"><div class="label">Today PnL</div><div class="big" id="todayPnl">$0</div><div class="smallBadge" id="todayBadge">No goal active</div></div>
@@ -2203,20 +2353,56 @@ updateUI(); renderJournalList();
   <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
 
   <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
+
+  <section class="view" id="psych">
+    <div class="section"><h2 class="sectionTitle">Psychology</h2><div class="muted">Keep your execution clean before and after the trade.</div><div class="kpiGrid" style="margin-top:10px"><div class="kpi"><div class="label">Discipline Score</div><div class="num" id="psychScore">0%</div></div><div class="kpi"><div class="label">State</div><div class="num" id="psychState" style="font-size:18px">Neutral</div></div></div></div>
+    <div class="section"><h2 class="sectionTitle">Mental Checklist</h2>
+      <label class="checkrow"><input type="checkbox" class="psych-check"> Waited for confirmation</label>
+      <label class="checkrow"><input type="checkbox" class="psych-check"> No FOMO or chasing</label>
+      <label class="checkrow"><input type="checkbox" class="psych-check"> Followed the plan</label>
+      <label class="checkrow"><input type="checkbox" class="psych-check"> Respected trade cap</label>
+      <label class="checkrow"><input type="checkbox" class="psych-check"> Stayed patient after big candles</label>
+    </div>
+  </section>
 </div>
 
 <script>
 const STORAGE_KEY='facelessTraderMergedICC_v1';
-const defaultState={theme:{palette:'amethyst',modeIndex:0},goals:{eval:{daily:0,loss:0},funded:{daily:0,loss:0},live:{daily:0,loss:0}},plan:{bias:'',setup:'Supply & Demand',session:'New York'},evals:[],funded:[],live:[],journal:[],timer:{remaining:7200,running:false,ended:false,interval:null},iccChecks:{}};
+const defaultState={theme:{name:'theme-soft-purple'},goals:{eval:{daily:0,loss:0},funded:{daily:0,loss:0},live:{daily:0,loss:0}},plan:{bias:'',setup:'Supply & Demand',session:'New York'},evals:[],funded:[],live:[],journal:[],timer:{remaining:7200,running:false,ended:false,interval:null},iccChecks:{}};
 ['b1','b2','b3','b4','i1','i2','i3','i4','c1','c2','c3','c4','e1','e2','e3','e4'].forEach(k=>defaultState.iccChecks[k]=false);
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY)||JSON.stringify(defaultState));
-if(!state.theme) state.theme=defaultState.theme; if(!state.goals) state.goals=defaultState.goals; if(!state.iccChecks) state.iccChecks=defaultState.iccChecks;
+if(!state.theme || typeof state.theme!=='object') state.theme=defaultState.theme; if(!state.theme.name){ state.theme.name = state.theme.palette==='quantum' ? 'theme-soft-bluegreen' : 'theme-soft-purple'; }
+if(!state.goals) state.goals=defaultState.goals; if(!state.iccChecks) state.iccChecks=defaultState.iccChecks;
 const money=n=>Number(n||0).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2});
 const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
 const todayISO=()=>new Date().toISOString().slice(0,10);
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,timer:{...state.timer,interval:null}}))}
-function applyTheme(){document.body.dataset.palette=state.theme.palette;document.getElementById('themeBadge').textContent=state.theme.palette==='amethyst'?'Soft Purple':'Blue Green'}
-document.getElementById('styleCycleBtn').onclick=()=>{state.theme.palette=state.theme.palette==='amethyst'?'quantum':'amethyst';applyTheme();saveState();}
+const THEME_LABELS = {
+  'theme-soft-purple':'Soft Purple',
+  'theme-bright-purple':'Bright Purple',
+  'theme-soft-bluegreen':'Soft Blue Green',
+  'theme-bright-bluegreen':'Bright Blue Green'
+};
+function applyTheme(){
+  document.body.classList.remove('theme-soft-purple','theme-bright-purple','theme-soft-bluegreen','theme-bright-bluegreen');
+  document.body.classList.add(state.theme.name || 'theme-soft-purple');
+  const badge=document.getElementById('themeBadge');
+  if(badge) badge.textContent = THEME_LABELS[state.theme.name] || 'Soft Purple';
+  document.querySelectorAll('.themeOption').forEach(btn=>btn.classList.toggle('active', btn.dataset.theme===state.theme.name));
+}
+const styleBtn = document.getElementById('styleCycleBtn');
+const themePanel = document.getElementById('themePanel');
+if(styleBtn && themePanel){
+  styleBtn.addEventListener('click', (e)=>{ e.stopPropagation(); themePanel.classList.toggle('open'); });
+  document.querySelectorAll('.themeOption').forEach(btn=>btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    state.theme.name = btn.dataset.theme;
+    applyTheme();
+    saveState();
+    themePanel.classList.remove('open');
+  }));
+  document.addEventListener('click', (e)=>{ if(!themePanel.contains(e.target) && e.target!==styleBtn){ themePanel.classList.remove('open'); } });
+}
 function switchView(viewId){document.querySelectorAll('#mainTabs .pill').forEach(tab=>tab.classList.toggle('active',tab.dataset.view===viewId));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===viewId));window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('#mainTabs .pill').forEach(tab=>tab.addEventListener('click',()=>switchView(tab.dataset.view)));
 document.querySelectorAll('[data-strategy-tab]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-strategy-tab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.iccPhase').forEach(v=>v.classList.remove('active'));document.getElementById('strategy-'+btn.dataset.strategyTab).classList.add('active')}));
@@ -2503,35 +2689,20 @@ window.addEventListener('load', () => {
 
 
 <script>
-(function(){
-  function updatePsych(){
-    const checks = Array.from(document.querySelectorAll('[data-psych-check]'));
-    const total = checks.length || 1;
-    const checked = checks.filter(c => c.checked).length;
-    const score = Math.round((checked / total) * 100);
-    const scoreEl = document.getElementById('psychScore');
-    const stateEl = document.getElementById('psychState');
-    const focusEl = document.getElementById('psychFocus');
-    const biasEl = document.getElementById('psychBiasOut');
-    if (scoreEl) scoreEl.textContent = score + '%';
-    if (stateEl) stateEl.textContent = score >= 80 ? 'Locked In' : score >= 50 ? 'Average' : 'Weak';
-    if (focusEl) focusEl.textContent = checked >= 4 ? 'Disciplined' : checked >= 2 ? 'Cautious' : 'Fragile';
-    if (biasEl) biasEl.textContent = checks[0]?.checked && checks[4]?.checked ? 'Patient' : 'Reactive';
-  }
-  function bindPsych(){
-    document.querySelectorAll('[data-psych-check]').forEach(el => el.addEventListener('change', updatePsych));
-    const reset = document.getElementById('psychResetBtn');
-    if (reset) reset.addEventListener('click', function(){
-      document.querySelectorAll('[data-psych-check]').forEach(el => el.checked = false);
-      updatePsych();
-    });
-    updatePsych();
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindPsych);
-  else bindPsych();
-  window.updatePsych = updatePsych;
-})();
+function updatePsych(){
+  const checks = Array.from(document.querySelectorAll('.psych-check'));
+  const total = checks.length || 1;
+  const done = checks.filter(c=>c.checked).length;
+  const score = Math.round((done/total)*100);
+  const scoreEl = document.getElementById('psychScore');
+  const stateEl = document.getElementById('psychState');
+  if(scoreEl) scoreEl.textContent = score + '%';
+  if(stateEl) stateEl.textContent = score >= 80 ? 'Locked In' : score >= 50 ? 'Average' : 'Weak';
+}
+document.querySelectorAll('.psych-check').forEach(c=>c.addEventListener('change', updatePsych));
+updatePsych();
 </script>
+
 </body>
 
 </html>
