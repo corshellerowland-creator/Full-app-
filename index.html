@@ -4,6 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Faceless Trader</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Faceless Trader">
+<meta name="theme-color" content="#05030a">
 <style>
 
 :root {
@@ -886,9 +894,226 @@ textarea.field{min-height:88px;resize:vertical;}
 #psych .psych-actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;}
 #psych .psych-btn{cursor:pointer;}
 
+
+/* connected system merge */
+.connectedNote{
+  margin-top:10px;
+  color:#eadcff;
+  font-size:13px;
+  opacity:.92;
+}
+.connectedStrip{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
+}
+.connectedMini{
+  padding:14px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--cardA) 86%, rgba(255,255,255,.05)),
+      color-mix(in srgb, var(--cardB) 94%, rgba(5,3,10,.22))
+    );
+  box-shadow:
+    inset 0 0 14px color-mix(in srgb, var(--glowA) 24%, transparent),
+    0 0 18px color-mix(in srgb, var(--glowA) 18%, transparent);
+}
+.connectedMini .miniLabel{
+  color:#eadcff;
+  font-size:13px;
+  margin-bottom:6px;
+}
+.connectedMini .miniNum{
+  font-size:28px;
+  font-weight:900;
+}
+.lockStatusCard{
+  margin-top:12px;
+  padding:16px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--cardA) 86%, rgba(255,255,255,.05)),
+      color-mix(in srgb, var(--cardB) 94%, rgba(5,3,10,.22))
+    );
+}
+.lockState{
+  font-size:28px;
+  font-weight:900;
+  margin:4px 0 8px 0;
+}
+.lockReason{
+  color:#eadcff;
+}
+.lockMeta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
+}
+.lockBadge{
+  padding:12px;
+  border-radius:16px;
+  background:linear-gradient(180deg,var(--pillA),var(--pillB));
+  border:1px solid rgba(255,255,255,.12);
+  color:#fff;
+  font-weight:800;
+}
+.pill.locked{
+  opacity:.45 !important;
+  filter:grayscale(.35);
+}
+
+
+/* strategy pane switch fix */
+.mergedStrategyPane{display:none;}
+.mergedStrategyPane.active{display:block !important;}
+
+
+/* style button dropdown fix */
+.theme-panel{
+  position:absolute;
+  top:56px;
+  right:0;
+  display:none;
+  flex-direction:column;
+  gap:8px;
+  width:180px;
+  padding:12px;
+  z-index:9999;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(20,11,36,.98), rgba(8,6,16,.99));
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.5),
+    0 0 24px color-mix(in srgb, var(--glowA) 35%, transparent);
+  backdrop-filter:blur(16px);
+}
+.theme-panel.open{display:flex !important;}
+.theme-option{
+  padding:12px 14px;
+  border:none;
+  border-radius:14px;
+  color:#fff;
+  text-align:left;
+  font-weight:800;
+  cursor:pointer;
+  background:linear-gradient(180deg,var(--pillA),var(--pillB));
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 0 10px color-mix(in srgb, var(--glowA) 20%, transparent);
+}
+.theme-anchor{
+  position:relative;
+}
+
+
+/* final style + sync fix */
+.style-wrap{
+  position:absolute !important;
+  right:14px !important;
+  bottom:14px !important;
+  z-index:10050 !important;
+}
+#styleToggle{
+  position:relative !important;
+  z-index:10051 !important;
+  pointer-events:auto !important;
+}
+#dropdown{
+  position:absolute !important;
+  right:0 !important;
+  top:56px !important;
+  z-index:10052 !important;
+  pointer-events:auto !important;
+}
+#dropdown.open{
+  display:flex !important;
+}
+.ghost-cycle{
+  display:none !important;
+}
+
+
+/* app mode splash */
+#appSplash {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background:
+    linear-gradient(180deg, rgba(5,3,10,.88), rgba(5,3,10,.96)),
+    url('splash.jpg') center center / cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 40px 24px 64px;
+  transition: opacity .45s ease, visibility .45s ease;
+}
+#appSplash.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#appSplash .splashCard {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 26px;
+  padding: 18px 18px 20px;
+  background: linear-gradient(180deg, rgba(16,10,29,.72), rgba(10,7,18,.78));
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow:
+    0 0 30px rgba(95,255,220,.16),
+    0 0 50px rgba(148,76,255,.16),
+    0 20px 50px rgba(0,0,0,.4);
+  backdrop-filter: blur(14px);
+  text-align: center;
+}
+#appSplash .splashTitle {
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+#appSplash .splashSub {
+  color: #dcd0ff;
+  font-size: 15px;
+  margin: 0 0 18px 0;
+}
+#appSplash .splashDots {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+#appSplash .splashDots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6affc8, #c87cff);
+  box-shadow: 0 0 14px rgba(106,255,200,.42);
+  animation: splashPulse 1s infinite ease-in-out;
+}
+#appSplash .splashDots span:nth-child(2){ animation-delay: .15s; }
+#appSplash .splashDots span:nth-child(3){ animation-delay: .30s; }
+@keyframes splashPulse {
+  0%, 100% { transform: scale(.8); opacity: .6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
 </style>
 </head>
 <body class="theme-soft-purple">
+<div id="appSplash" aria-hidden="true">
+  <div class="splashCard">
+    <div class="splashTitle">Faceless Trader</div>
+    <div class="splashSub">Discipline first. Trade second.</div>
+    <div class="splashDots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
 <div class="shell">
   <div class="dashboard">
     <div class="hero">
@@ -3027,15 +3252,15 @@ updateUI(); renderJournalList();
 
   <section class="view" id="eval"><div class="section"><h2 class="sectionTitle">Eval Tracker</h2><input type="hidden" id="evalId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="evalFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="evalSize" onchange="applyAccountDefaults('eval')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Profit Goal</div><input class="field" id="evalGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="evalDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Days Passed</div><input class="field" id="evalDays" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="evalStatus"><option value="active">Active</option><option value="passed">Passed</option><option value="failed">Failed</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="evalNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('eval')">Save Eval</button><button class="btn" onclick="clearAccountForm('eval')">Clear</button></div></div><div class="section"><h2 class="sectionTitle">Saved Evals</h2><div id="evalList" class="accountList"></div></div></section>
 
-  <section class="view" id="funded"><div class="section"><h2 class="sectionTitle">Funded Tracker</h2><input type="hidden" id="fundedId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="fundedFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="fundedSize" onchange="applyAccountDefaults('funded')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Goal</div><input class="field" id="fundedPayoutGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="fundedDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Taken</div><input class="field" id="fundedPayoutTaken" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="fundedStatus"><option value="active">Active</option><option value="risk">Drawdown Risk</option><option value="blown">Blown</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="fundedNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('funded')">Save Funded</button><button class="btn" onclick="clearAccountForm('funded')">Clear</button></div></div><div class="section"><h2 class="sectionTitle">Saved Funded</h2><div id="fundedList" class="accountList"></div></div></section>
+  <section class="view" id="funded"><div class="section"><h2 class="sectionTitle">Funded Tracker</h2><input type="hidden" id="fundedId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="fundedFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="fundedSize" onchange="applyAccountDefaults('funded')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Goal</div><input class="field" id="fundedPayoutGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="fundedDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Taken</div><input class="field" id="fundedPayoutTaken" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="fundedStatus"><option value="active">Active</option><option value="risk">Drawdown Risk</option><option value="blown">Blown</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="fundedNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('funded')">Save Funded</button><button class="btn" onclick="clearAccountForm('funded')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Funded Running PnL</div><div class="miniNum" id="fundedRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Funded Trades</div><div class="miniNum" id="fundedTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Funded</h2><div id="fundedList" class="accountList"></div></div></section>
 
-  <section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input type="hidden" id="liveId"><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div></div><div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div id="liveList" class="accountList"></div></div></section>
+  <section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input type="hidden" id="liveId"><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Live Running PnL</div><div class="miniNum" id="liveRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Live Trades</div><div class="miniNum" id="liveTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div id="liveList" class="accountList"></div></div></section>
 
-  <section class="view" id="journal"><div class="section"><h2 class="sectionTitle">Journal</h2><input type="hidden" id="journalId"><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" type="number" step="0.01"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply & Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input class="field" id="journalScreenshot" type="file" accept="image/*" onchange="previewJournalImage(event)"><img id="journalPreview" class="previewImg"></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div id="journalList" class="journalList"></div></div></section>
+  <section class="view" id="journal"><div class="section"><h2 class="sectionTitle">Journal</h2><input type="hidden" id="journalId"><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" type="number" step="0.01"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply & Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input class="field" id="journalScreenshot" type="file" accept="image/*" onchange="previewJournalImage(event)"><img id="journalPreview" class="previewImg"></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div id="journalList" class="journalList"></div></div></section>
 
   <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div id="strategyStats" class="accountList"></div></div></section>
 
-  <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">This section reads from your max loss and daily goal. Use it as your discipline stop.</div><div class="btnrow"><button class="btn warn">Lock Trading</button><button class="btn">Unlock</button></div></div></section>
+  <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
 
   <section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
 
@@ -3194,5 +3419,770 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+<script>
+(function(){
+  const CONNECT_KEY = 'faceless_connected_state_v1';
+  const defaultState = {
+    totalEntries: 0,
+    wins: 0,
+    losses: 0,
+    strategy: {
+      'Supply & Demand': { win: 0, loss: 0 },
+      'ORB': { win: 0, loss: 0 },
+      'EMA/TEMA': { win: 0, loss: 0 },
+      'ICC': { win: 0, loss: 0 }
+    },
+    fundedPnL: 0,
+    livePnL: 0,
+    fundedTrades: 0,
+    liveTrades: 0,
+    dailyPnL: 0,
+    weeklyPnL: 0,
+    monthlyPnL: 0,
+    forceLocked: false,
+    forceUnlocked: false
+  };
+
+  function loadConnectState(){
+    try{
+      const raw = localStorage.getItem(CONNECT_KEY);
+      return raw ? Object.assign({}, defaultState, JSON.parse(raw)) : JSON.parse(JSON.stringify(defaultState));
+    }catch(e){
+      return JSON.parse(JSON.stringify(defaultState));
+    }
+  }
+
+  let connectState = loadConnectState();
+
+  function saveConnectState(){
+    localStorage.setItem(CONNECT_KEY, JSON.stringify(connectState));
+  }
+
+  function psychUnlocked(){
+    const scoreEl = document.getElementById('psychScore');
+    if(!scoreEl) return true;
+    const num = parseInt((scoreEl.textContent || '0').replace(/[^0-9]/g,''), 10) || 0;
+    return num >= 80;
+  }
+
+  function currency(n){
+    const sign = n < 0 ? '-' : '';
+    return sign + '$' + Math.abs(Number(n || 0)).toFixed(0);
+  }
+
+  function bestStrategyInfo(){
+    const entries = Object.entries(connectState.strategy).map(([name,val])=>{
+      const total = (val.win||0) + (val.loss||0);
+      const rate = total ? Math.round((val.win/total)*100) : 0;
+      return {name,total,rate,win:val.win||0,loss:val.loss||0};
+    }).filter(x=>x.total>0).sort((a,b)=>b.rate-a.rate || b.total-a.total);
+    return entries[0] || null;
+  }
+
+  function renderConnected(){
+    const winRate = connectState.totalEntries ? Math.round((connectState.wins / connectState.totalEntries) * 100) : 0;
+
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    };
+
+    setText('statEntries', String(connectState.totalEntries));
+    setText('statWinRate', winRate + '%');
+    setText('fundedRunningPnl', currency(connectState.fundedPnL));
+    setText('liveRunningPnl', currency(connectState.livePnL));
+    setText('fundedTradeCount', String(connectState.fundedTrades));
+    setText('liveTradeCount', String(connectState.liveTrades));
+    setText('pnlDaily', currency(connectState.dailyPnL));
+    setText('pnlWeekly', currency(connectState.weeklyPnL));
+    setText('pnlMonthly', currency(connectState.monthlyPnL));
+
+    const best = bestStrategyInfo();
+    setText('bestStrategy', best ? best.name : '—');
+    setText('bestStrategyMeta', best ? (best.win + 'W / ' + best.loss + 'L · ' + best.rate + '%') : 'Waiting for trades');
+
+    const stratWrap = document.getElementById('strategyStats');
+    if(stratWrap){
+      const rows = Object.entries(connectState.strategy).map(([name,val])=>{
+        const total = (val.win||0)+(val.loss||0);
+        const rate = total ? Math.round((val.win/total)*100) : 0;
+        return `<div class="entryCard"><div class="entryTitle">${name}</div><div class="entryMeta">${val.win||0}W / ${val.loss||0}L · ${rate}% win rate</div></div>`;
+      }).join('');
+      stratWrap.innerHTML = rows;
+    }
+
+    const accountCountEl = document.getElementById('accountCount');
+    if(accountCountEl){
+      const totalAccounts = ((connectState.fundedTrades>0)?1:0) + ((connectState.liveTrades>0)?1:0);
+      accountCountEl.textContent = String(totalAccounts);
+    }
+
+    updateLockSystem();
+  }
+
+  function updateLockSystem(){
+    let locked = false;
+    let reason = 'Ready to trade.';
+
+    if(connectState.forceLocked){
+      locked = true;
+      reason = 'Manual lock is on.';
+    } else if(!connectState.forceUnlocked && !psychUnlocked()){
+      locked = true;
+      reason = 'Complete Psychology checklist to 80% first.';
+    } else if(connectState.totalEntries >= 5){
+      locked = true;
+      reason = 'Daily trade cap hit.';
+    } else if(connectState.fundedPnL <= -300){
+      locked = true;
+      reason = 'Funded loss floor hit.';
+    } else if(connectState.livePnL <= -300){
+      locked = true;
+      reason = 'Live loss floor hit.';
+    }
+
+    const stateEl = document.getElementById('lockStateText');
+    const reasonEl = document.getElementById('lockReasonText');
+    const tradeEl = document.getElementById('lockTradeCount');
+    const floorEl = document.getElementById('lockLossFloor');
+    if(stateEl) stateEl.textContent = locked ? 'LOCKED' : 'UNLOCKED';
+    if(reasonEl) reasonEl.textContent = reason;
+    if(tradeEl) tradeEl.textContent = String(connectState.totalEntries);
+    if(floorEl) floorEl.textContent = '$-300';
+
+    document.querySelectorAll('#mainTabs .pill[data-view="strategy"], #mainTabs .pill[data-view="live"]').forEach(tab=>{
+      if(locked) tab.classList.add('locked');
+      else tab.classList.remove('locked');
+    });
+
+    // intercept click based on latest lock state
+    window.__facelessTradeLocked = locked;
+    saveConnectState();
+  }
+
+  window.saveJournal = function(){
+    const accountType = document.getElementById('journalAccountType')?.value || 'live';
+    const setup = document.getElementById('journalSetup')?.value || '';
+    const tag = (document.getElementById('journalTag')?.value || '').toLowerCase();
+    const pnl = parseFloat(document.getElementById('journalPnl')?.value || '0') || 0;
+
+    if(!setup){
+      alert('Pick a setup first.');
+      return;
+    }
+
+    let result = 'flat';
+    if(tag.includes('failed') || pnl < 0) result = 'loss';
+    else if(tag.includes('valid') || pnl > 0) result = 'win';
+
+    connectState.totalEntries += 1;
+    if(result === 'win') connectState.wins += 1;
+    if(result === 'loss') connectState.losses += 1;
+
+    if(connectState.strategy[setup]){
+      if(result === 'win') connectState.strategy[setup].win += 1;
+      if(result === 'loss') connectState.strategy[setup].loss += 1;
+    }
+
+    if(accountType === 'funded'){
+      connectState.fundedPnL += pnl;
+      connectState.fundedTrades += 1;
+    } else if(accountType === 'live'){
+      connectState.livePnL += pnl;
+      connectState.liveTrades += 1;
+    }
+
+    connectState.dailyPnL += pnl;
+    connectState.weeklyPnL += pnl;
+    connectState.monthlyPnL += pnl;
+
+    saveConnectState();
+    renderConnected();
+
+    // keep original journal history if present
+    const list = document.getElementById('journalList');
+    if(list){
+      const card = document.createElement('div');
+      card.className = 'entryCard';
+      card.innerHTML = '<div class="entryTitle">' + setup + ' · ' + accountType.toUpperCase() + '</div><div class="entryMeta">' + (result === 'flat' ? 'No Trade / Flat' : result.toUpperCase()) + ' · ' + currency(pnl) + '</div>';
+      list.prepend(card);
+    }
+
+    alert('Journal saved and connected system updated.');
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const originalSwitch = window.switchView;
+    if(originalSwitch){
+      window.switchView = function(viewId){
+        if(window.__facelessTradeLocked && (viewId === 'strategy' || viewId === 'live')){
+          alert('🔒 Trading is locked right now.');
+          return;
+        }
+        return originalSwitch(viewId);
+      };
+    }
+
+    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(tab=>{
+      tab.addEventListener('click', function(e){
+        const viewId = this.getAttribute('data-view');
+        if(window.__facelessTradeLocked && (viewId === 'strategy' || viewId === 'live')){
+          e.preventDefault();
+          e.stopPropagation();
+          alert('🔒 Trading is locked right now.');
+        }
+      }, true);
+    });
+
+    const lockBtn = document.getElementById('forceLockBtn');
+    const unlockBtn = document.getElementById('forceUnlockBtn');
+    if(lockBtn){
+      lockBtn.addEventListener('click', function(){
+        connectState.forceLocked = true;
+        connectState.forceUnlocked = false;
+        renderConnected();
+      });
+    }
+    if(unlockBtn){
+      unlockBtn.addEventListener('click', function(){
+        connectState.forceLocked = false;
+        connectState.forceUnlocked = true;
+        renderConnected();
+      });
+    }
+
+    renderConnected();
+  });
+})();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const mergedTabs = document.querySelectorAll('#mergedStrategyTabs [data-merged-strategy]');
+  const mergedPanes = {
+    icc: document.getElementById('merged-icc'),
+    ema: document.getElementById('merged-ema'),
+    sd: document.getElementById('merged-sd')
+  };
+
+  function activateMergedStrategy(key){
+    mergedTabs.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-merged-strategy') === key);
+    });
+
+    Object.entries(mergedPanes).forEach(([paneKey, pane]) => {
+      if(!pane) return;
+      pane.classList.toggle('active', paneKey === key);
+      pane.style.display = paneKey === key ? 'block' : 'none';
+    });
+  }
+
+  mergedTabs.forEach(btn => {
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      const key = this.getAttribute('data-merged-strategy');
+      activateMergedStrategy(key);
+    });
+  });
+
+  activateMergedStrategy('icc');
+});
+</script>
+
+
+
+
+
+<script>
+(function(){
+  const APP_KEY = 'faceless_app_state_v2';
+  const defaultState = {
+    activeView: 'home',
+    goals: [],
+    fundedAccounts: [],
+    liveAccounts: [],
+    journalEntries: [],
+    timer: { total: 0, remaining: 0, running: false, lastTick: 0 }
+  };
+
+  function loadAppState(){
+    try{
+      const raw = localStorage.getItem(APP_KEY);
+      return raw ? Object.assign({}, defaultState, JSON.parse(raw)) : JSON.parse(JSON.stringify(defaultState));
+    }catch(e){
+      return JSON.parse(JSON.stringify(defaultState));
+    }
+  }
+  let appState = loadAppState();
+  let timerInterval = null;
+
+  function saveAppState(){
+    localStorage.setItem(APP_KEY, JSON.stringify(appState));
+  }
+
+  function currency(n){
+    const num = Number(n || 0);
+    const sign = num < 0 ? '-' : '';
+    return sign + '$' + Math.abs(num).toFixed(0);
+  }
+
+  function getConnectState(){
+    try{
+      return JSON.parse(localStorage.getItem('faceless_connected_state_v1') || '{}');
+    }catch(e){
+      return {};
+    }
+  }
+
+  function switchViewSafe(viewId){
+    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-view') === viewId);
+    });
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById(viewId);
+    if(target) target.classList.add('active');
+    appState.activeView = viewId;
+    saveAppState();
+  }
+  window.switchView = switchViewSafe;
+
+  function renderGoals(){
+    const wrap = document.getElementById('goalSummary');
+    const homeGoal = document.getElementById('homeGoal');
+    const homeGoalType = document.getElementById('homeGoalType');
+    const homeLoss = document.getElementById('homeLoss');
+    const todayBadge = document.getElementById('todayBadge');
+
+    if(wrap){
+      wrap.innerHTML = appState.goals.length ? appState.goals.map(g => `
+        <div class="entryCard">
+          <div class="entryTitle">${g.type.toUpperCase()}</div>
+          <div class="entryMeta">Goal ${currency(g.daily)} · Max Loss ${currency(g.loss)}</div>
+        </div>
+      `).join('') : '<div class="empty">No saved goals yet.</div>';
+    }
+
+    const latest = appState.goals[appState.goals.length - 1];
+    if(latest){
+      if(homeGoal) homeGoal.textContent = currency(latest.daily);
+      if(homeGoalType) homeGoalType.textContent = latest.type.toUpperCase() + ' goal active';
+      if(homeLoss) homeLoss.textContent = currency(latest.loss);
+      if(todayBadge) todayBadge.textContent = latest.type.toUpperCase() + ' goal';
+    } else {
+      if(homeGoal) homeGoal.textContent = '$—';
+      if(homeGoalType) homeGoalType.textContent = 'No goal set';
+      if(homeLoss) homeLoss.textContent = '$—';
+    }
+  }
+
+  window.applyGoalPreset = function(goal, loss){
+    const goalEl = document.getElementById('goalDaily');
+    const lossEl = document.getElementById('goalLoss');
+    if(goalEl) goalEl.value = goal;
+    if(lossEl) lossEl.value = loss;
+  };
+
+  window.saveGoal = function(){
+    const type = document.getElementById('goalType')?.value || 'eval';
+    const daily = parseFloat(document.getElementById('goalDaily')?.value || '0') || 0;
+    const loss = parseFloat(document.getElementById('goalLoss')?.value || '0') || 0;
+    if(!daily || !loss){
+      alert('Enter both Daily Goal and Max Loss.');
+      return;
+    }
+    appState.goals.push({ type, daily, loss, savedAt: Date.now() });
+    saveAppState();
+    renderGoals();
+    alert('Goal saved.');
+  };
+
+  function renderAccounts(){
+    const fundedList = document.getElementById('fundedList');
+    const liveList = document.getElementById('liveList');
+    const accountCount = document.getElementById('accountCount');
+    const journalAccountId = document.getElementById('journalAccountId');
+
+    if(fundedList){
+      fundedList.innerHTML = appState.fundedAccounts.length ? appState.fundedAccounts.map(a => `
+        <div class="entryCard">
+          <div class="entryTitle">${a.id || 'Funded Account'}</div>
+          <div class="entryMeta">${a.firm || 'Firm'} · ${a.size || ''} · ${a.status || 'Active'}</div>
+        </div>
+      `).join('') : '<div class="empty">No funded accounts saved.</div>';
+    }
+
+    if(liveList){
+      liveList.innerHTML = appState.liveAccounts.length ? appState.liveAccounts.map(a => `
+        <div class="entryCard">
+          <div class="entryTitle">${a.id || a.label || 'Live Account'}</div>
+          <div class="entryMeta">${a.broker || 'Broker'} · ${currency(a.balance || 0)} · ${a.status || 'Active'}</div>
+        </div>
+      `).join('') : '<div class="empty">No live accounts saved.</div>';
+    }
+
+    if(accountCount){
+      accountCount.textContent = String(appState.fundedAccounts.length + appState.liveAccounts.length);
+    }
+
+    if(journalAccountId){
+      const current = journalAccountId.value;
+      const opts = ['<option value="">Select account</option>']
+        .concat(appState.fundedAccounts.map(a => `<option value="${a.id}">Funded · ${a.id}</option>`))
+        .concat(appState.liveAccounts.map(a => `<option value="${a.id || a.label}">Live · ${a.id || a.label}</option>`));
+      journalAccountId.innerHTML = opts.join('');
+      if(current) journalAccountId.value = current;
+    }
+  }
+
+  window.clearAccountForm = function(type){
+    const ids = type === 'funded'
+      ? ['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedStatus','fundedNotes']
+      : ['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveStatus','liveNotes'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.value = '';
+    });
+  };
+
+  window.saveAccount = function(type){
+    if(type === 'funded'){
+      const account = {
+        id: document.getElementById('fundedId')?.value || ('FUN-' + (appState.fundedAccounts.length + 1)),
+        firm: document.getElementById('fundedFirm')?.value || '',
+        size: document.getElementById('fundedSize')?.value || '',
+        payoutGoal: document.getElementById('fundedPayoutGoal')?.value || '',
+        drawdown: document.getElementById('fundedDrawdown')?.value || '',
+        payoutTaken: document.getElementById('fundedPayoutTaken')?.value || '',
+        status: document.getElementById('fundedStatus')?.value || 'Active',
+        notes: document.getElementById('fundedNotes')?.value || ''
+      };
+      appState.fundedAccounts.push(account);
+    } else {
+      const account = {
+        id: document.getElementById('liveId')?.value || ('LIVE-' + (appState.liveAccounts.length + 1)),
+        broker: document.getElementById('liveBroker')?.value || '',
+        label: document.getElementById('liveLabel')?.value || '',
+        balance: parseFloat(document.getElementById('liveBalance')?.value || '0') || 0,
+        riskLimit: document.getElementById('liveRiskLimit')?.value || '',
+        goal: document.getElementById('liveGoal')?.value || '',
+        status: document.getElementById('liveStatus')?.value || 'Active',
+        notes: document.getElementById('liveNotes')?.value || ''
+      };
+      appState.liveAccounts.push(account);
+    }
+    saveAppState();
+    renderAccounts();
+    alert((type === 'funded' ? 'Funded' : 'Live') + ' account saved.');
+  };
+
+  function renderJournal(){
+    const list = document.getElementById('journalList');
+    const recent = document.getElementById('recentJournal');
+    const entries = [...appState.journalEntries].reverse();
+
+    const htmlCards = entries.length ? entries.map(j => `
+      <div class="entryCard">
+        <div class="entryTitle">${j.setup} · ${j.accountType.toUpperCase()}</div>
+        <div class="entryMeta">${j.date || ''} · ${j.tag || 'Logged'} · ${currency(j.pnl || 0)}</div>
+      </div>
+    `).join('') : '<div class="empty">No journal entries yet.</div>';
+
+    if(list) list.innerHTML = htmlCards;
+    if(recent) recent.innerHTML = entries.slice(0,4).length ? entries.slice(0,4).map(j => `
+      <div class="entryCard">
+        <div class="entryTitle">${j.setup}</div>
+        <div class="entryMeta">${j.accountType.toUpperCase()} · ${currency(j.pnl || 0)}</div>
+      </div>
+    `).join('') : '<div class="empty">Nothing logged yet.</div>';
+  }
+
+  // wrap existing merged connected saveJournal if present
+  const priorSaveJournal = window.saveJournal;
+  window.saveJournal = function(){
+    const entry = {
+      id: document.getElementById('journalId')?.value || ('JR-' + (appState.journalEntries.length + 1)),
+      date: document.getElementById('journalDate')?.value || new Date().toISOString().slice(0,10),
+      accountType: document.getElementById('journalAccountType')?.value || 'live',
+      accountId: document.getElementById('journalAccountId')?.value || '',
+      pnl: parseFloat(document.getElementById('journalPnl')?.value || '0') || 0,
+      setup: document.getElementById('journalSetup')?.value || '',
+      tag: document.getElementById('journalTag')?.value || '',
+      notes: document.getElementById('journalNotes')?.value || ''
+    };
+    if(!entry.setup){
+      alert('Pick a setup first.');
+      return;
+    }
+    appState.journalEntries.push(entry);
+    saveAppState();
+    renderJournal();
+    if(typeof priorSaveJournal === 'function'){
+      priorSaveJournal();
+    } else {
+      alert('Journal saved.');
+    }
+  };
+
+  window.calculateSizer = function(){
+    const risk = parseFloat(document.getElementById('riskDollar')?.value || '0') || 0;
+    const stop = parseFloat(document.getElementById('stopPoints')?.value || '0') || 0;
+    const instrument = document.getElementById('instrument')?.value || 'MNQ';
+    const map = { MNQ: 2, MES: 5, MGC: 10, MYM: 0.5, NQ: 20, ES: 50 };
+    const perPoint = map[instrument] || 1;
+    const size = (risk > 0 && stop > 0) ? Math.max(1, Math.floor(risk / (stop * perPoint))) : 0;
+    const out = document.getElementById('suggestedSize');
+    if(out) out.textContent = size ? String(size) : '—';
+  };
+
+  function renderTimer(){
+    const clock = document.getElementById('clock');
+    if(!clock) return;
+    const remaining = Math.max(0, appState.timer.remaining || 0);
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    clock.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function tickTimer(){
+    if(!appState.timer.running) return;
+    const now = Date.now();
+    if(!appState.timer.lastTick) appState.timer.lastTick = now;
+    const delta = Math.floor((now - appState.timer.lastTick) / 1000);
+    if(delta > 0){
+      appState.timer.remaining = Math.max(0, (appState.timer.remaining || 0) - delta);
+      appState.timer.lastTick = now;
+      if(appState.timer.remaining <= 0){
+        appState.timer.running = false;
+      }
+      saveAppState();
+      renderTimer();
+    }
+  }
+
+  window.startTimer = function(){
+    appState.timer.total = 2 * 60 * 60;
+    appState.timer.remaining = appState.timer.total;
+    appState.timer.running = true;
+    appState.timer.lastTick = Date.now();
+    saveAppState();
+    renderTimer();
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(tickTimer, 1000);
+  };
+  window.pauseTimer = function(){
+    appState.timer.running = false;
+    saveAppState();
+  };
+  window.resumeTimer = function(){
+    if((appState.timer.remaining || 0) > 0){
+      appState.timer.running = true;
+      appState.timer.lastTick = Date.now();
+      saveAppState();
+    }
+  };
+  window.endTimerEarly = function(){
+    appState.timer.running = false;
+    appState.timer.remaining = 0;
+    saveAppState();
+    renderTimer();
+  };
+
+  function hydrateSavedView(){
+    if(appState.activeView && document.getElementById(appState.activeView)){
+      switchViewSafe(appState.activeView);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    hydrateSavedView();
+    renderGoals();
+    renderAccounts();
+    renderJournal();
+    renderTimer();
+    if(appState.timer.running){
+      if(timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(tickTimer, 1000);
+    }
+
+    // make sure main tabs always work
+    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(tab => {
+      tab.addEventListener('click', function(e){
+        const viewId = this.getAttribute('data-view');
+        const tradeLocked = !!window.__facelessTradeLocked;
+        if(tradeLocked && (viewId === 'strategy' || viewId === 'live')){
+          e.preventDefault();
+          e.stopPropagation();
+          alert('🔒 Trading is locked right now.');
+          return;
+        }
+        switchViewSafe(viewId);
+      }, true);
+    });
+
+    // ensure psych buttons still work visually
+    document.querySelectorAll('#psych .psych-rule').forEach(rule => {
+      rule.style.cursor = 'pointer';
+    });
+  });
+})();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const styleBtn = document.getElementById('styleToggle');
+  const dropdown = document.getElementById('dropdown');
+  const badge = document.getElementById('themeBadge');
+  const body = document.body;
+
+  function setTheme(themeClass){
+    body.classList.remove('theme-soft-purple','theme-bright-purple','theme-soft-bluegreen','theme-bright-bluegreen');
+    body.classList.add(themeClass);
+
+    const labels = {
+      'theme-soft-purple': 'Soft Purple',
+      'theme-bright-purple': 'Bright Purple',
+      'theme-soft-bluegreen': 'Soft Blue-Green',
+      'theme-bright-bluegreen': 'Bright Blue-Green'
+    };
+
+    if(badge) badge.textContent = labels[themeClass] || 'Theme';
+
+    document.querySelectorAll('#dropdown .option[data-theme]').forEach(opt => {
+      opt.classList.toggle('active', opt.getAttribute('data-theme') === themeClass);
+    });
+
+    try{ localStorage.setItem('faceless_theme_choice', themeClass); }catch(e){}
+  }
+
+  try{
+    const savedTheme = localStorage.getItem('faceless_theme_choice');
+    if(savedTheme) setTheme(savedTheme);
+  }catch(e){}
+
+  if(styleBtn && dropdown){
+    styleBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+      this.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
+    });
+
+    dropdown.querySelectorAll('.option[data-theme]').forEach(opt => {
+      opt.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const theme = this.getAttribute('data-theme');
+        setTheme(theme);
+        dropdown.classList.remove('open');
+        if(styleBtn) styleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', function(e){
+      if(!dropdown.contains(e.target) && e.target !== styleBtn && !styleBtn.contains(e.target)){
+        dropdown.classList.remove('open');
+        styleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function getConnectedState(){
+    try{
+      return JSON.parse(localStorage.getItem('faceless_connected_state_v1') || '{}');
+    }catch(e){
+      return {};
+    }
+  }
+
+  function syncSystemUI(){
+    const psychScoreEl = document.getElementById('psychScore');
+    const stateEl = document.getElementById('lockStateText');
+    const reasonEl = document.getElementById('lockReasonText');
+    const tradeCountEl = document.getElementById('lockTradeCount');
+    const lockTabs = document.querySelectorAll('#mainTabs .pill[data-view="strategy"], #mainTabs .pill[data-view="live"]');
+
+    const psychScore = psychScoreEl ? (parseInt((psychScoreEl.textContent || '0').replace(/[^0-9]/g,''),10) || 0) : 0;
+    const c = getConnectedState();
+
+    const totalEntries = Number(c.totalEntries || 0);
+    const fundedPnL = Number(c.fundedPnL || 0);
+    const livePnL = Number(c.livePnL || 0);
+    const forceLocked = !!c.forceLocked;
+    const forceUnlocked = !!c.forceUnlocked;
+
+    let locked = false;
+    let reason = 'Ready to trade.';
+
+    if(forceLocked){
+      locked = true;
+      reason = 'Manual lock is on.';
+    } else if(!forceUnlocked && psychScore < 80){
+      locked = true;
+      reason = 'Complete Psychology checklist to 80% first.';
+    } else if(totalEntries >= 5){
+      locked = true;
+      reason = 'Daily trade cap hit.';
+    } else if(fundedPnL <= -300){
+      locked = true;
+      reason = 'Funded loss floor hit.';
+    } else if(livePnL <= -300){
+      locked = true;
+      reason = 'Live loss floor hit.';
+    }
+
+    window.__facelessTradeLocked = locked;
+
+    if(stateEl) stateEl.textContent = locked ? 'LOCKED' : 'UNLOCKED';
+    if(reasonEl) reasonEl.textContent = reason;
+    if(tradeCountEl) tradeCountEl.textContent = String(totalEntries);
+
+    lockTabs.forEach(tab => tab.classList.toggle('locked', locked));
+  }
+
+  // Keep sync responsive when psych or connected data changes
+  document.querySelectorAll('#psych .psych-rule').forEach(rule => {
+    rule.addEventListener('click', function(){
+      setTimeout(syncSystemUI, 40);
+    });
+  });
+
+  const journalBtn = document.querySelector('.cta[onclick="saveJournal()"], .cta');
+  if(journalBtn){
+    journalBtn.addEventListener('click', function(){
+      setTimeout(syncSystemUI, 80);
+    });
+  }
+
+  document.querySelectorAll('#mainTabs .pill[data-view]').forEach(tab => {
+    tab.addEventListener('click', function(e){
+      const viewId = this.getAttribute('data-view');
+      if(window.__facelessTradeLocked && (viewId === 'strategy' || viewId === 'live')){
+        e.preventDefault();
+        e.stopPropagation();
+        alert('🔒 Trading is locked right now.');
+      }
+    }, true);
+  });
+
+  syncSystemUI();
+  setInterval(syncSystemUI, 1200);
+});
+</script>
+
+
+<script>
+window.addEventListener('load', function(){
+  const splash = document.getElementById('appSplash');
+  if(splash){
+    setTimeout(() => splash.classList.add('hidden'), 900);
+  }
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+});
+</script>
 </body>
 </html>
