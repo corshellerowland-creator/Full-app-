@@ -5408,5 +5408,235 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<style id="journal-history-enhance-css">
+.journalActions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+.journalMiniBtn{
+  border:none;
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:800;
+  cursor:pointer;
+  color:var(--text);
+  background:linear-gradient(180deg,var(--pillA),var(--pillB));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.18);
+}
+.journalMiniBtn.danger{
+  background:linear-gradient(180deg, rgba(255,120,170,.75), rgba(120,30,70,.8));
+}
+#journalList .entryCard,
+#recentJournal .entryCard{
+  cursor:pointer;
+}
+</style>
+
+<script id="journal-history-enhance-js">
+(function(){
+  const APP_KEY = 'faceless_app_state_v3';
+  const LEGACY_KEYS = ['faceless_app_state_v2'];
+
+  function loadState(){
+    let state = null;
+    try{ state = JSON.parse(localStorage.getItem(APP_KEY) || 'null'); }catch(e){ state = null; }
+    if(!state){
+      for(const k of LEGACY_KEYS){
+        try{
+          const oldState = JSON.parse(localStorage.getItem(k) || 'null');
+          if(oldState){ state = oldState; break; }
+        }catch(e){}
+      }
+    }
+    if(!state) return null;
+    ['goals','evalAccounts','fundedAccounts','liveAccounts','journalEntries'].forEach(k => {
+      if(!Array.isArray(state[k])) state[k] = [];
+    });
+    return state;
+  }
+
+  function saveState(state){
+    localStorage.setItem(APP_KEY, JSON.stringify(state));
+  }
+
+  function ensureJournalIdField(){
+    let el = document.getElementById('journalId');
+    if(el) return el;
+    const section = document.getElementById('journal') || document.body;
+    el = document.createElement('input');
+    el.type = 'hidden';
+    el.id = 'journalId';
+    section.appendChild(el);
+    return el;
+  }
+
+  function setValue(id, value){
+    const el = document.getElementById(id);
+    if(el) el.value = value == null ? '' : value;
+  }
+
+  function switchTo(viewId){
+    if(typeof window.switchView === 'function'){
+      window.switchView(viewId);
+      return;
+    }
+    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-view') === viewId);
+    });
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById(viewId);
+    if(target) target.classList.add('active');
+  }
+
+  function renderJournalCardsWithControls(){
+    const state = loadState();
+    if(!state) return;
+    const entries = [...state.journalEntries].sort((a,b) => (b.savedAt || 0) - (a.savedAt || 0));
+
+    const makeCard = (j) => `
+      <div class="entryCard" data-open-journal="${String(j.id)}">
+        <div class="entryTitle">${j.setup || 'No setup'} · ${(j.accountType || '').toUpperCase()}</div>
+        <div class="entryMeta">${j.date || ''} · ${j.tag || 'logged'} · $${Math.abs(Number(j.pnl || 0)).toFixed(0)}</div>
+        <div class="journalActions">
+          <button type="button" class="journalMiniBtn" data-edit-journal="${String(j.id)}">Edit</button>
+          <button type="button" class="journalMiniBtn danger" data-delete-journal="${String(j.id)}">Delete</button>
+        </div>
+      </div>
+    `;
+
+    const journalList = document.getElementById('journalList');
+    if(journalList){
+      journalList.innerHTML = entries.length ? entries.map(makeCard).join('') : '<div class="empty">No journal entries yet.</div>';
+    }
+
+    const recent = document.getElementById('recentJournal');
+    if(recent){
+      recent.innerHTML = entries.slice(0,4).length ? entries.slice(0,4).map(makeCard).join('') : '<div class="empty">Nothing logged yet.</div>';
+    }
+
+    document.querySelectorAll('[data-open-journal]').forEach(card => {
+      card.addEventListener('click', function(e){
+        if(e.target.closest('[data-edit-journal]') || e.target.closest('[data-delete-journal]')) return;
+        const id = this.getAttribute('data-open-journal');
+        openJournalEntry(id);
+      });
+    });
+
+    document.querySelectorAll('[data-edit-journal]').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        openJournalEntry(this.getAttribute('data-edit-journal'));
+      });
+    });
+
+    document.querySelectorAll('[data-delete-journal]').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        deleteJournalEntry(this.getAttribute('data-delete-journal'));
+      });
+    });
+  }
+
+  function openJournalEntry(id){
+    const state = loadState();
+    if(!state) return;
+    const j = state.journalEntries.find(x => String(x.id) === String(id));
+    if(!j) return;
+    window.__journalEditing = true;
+    ensureJournalIdField().value = j.id;
+    setValue('journalDate', j.date);
+    setValue('journalAccountType', j.accountType || 'eval');
+    if(typeof window.refreshJournalAccounts === 'function'){
+      window.refreshJournalAccounts();
+    }
+    setValue('journalAccountId', j.accountId);
+    setValue('journalPnl', j.pnl);
+    setValue('journalSetup', j.setup);
+    setValue('journalTag', j.tag);
+    setValue('journalNotes', j.notes);
+    switchTo('journal');
+  }
+
+  function deleteJournalEntry(id){
+    const state = loadState();
+    if(!state) return;
+    state.journalEntries = state.journalEntries.filter(x => String(x.id) !== String(id));
+    saveState(state);
+    if(typeof window.renderAll === 'function') window.renderAll();
+    renderJournalCardsWithControls();
+  }
+
+  function resetJournalFormSoft(){
+    window.__journalEditing = false;
+    ensureJournalIdField().value = '';
+    setValue('journalDate', new Date().toISOString().slice(0,10));
+    setValue('journalAccountType', 'eval');
+    if(typeof window.refreshJournalAccounts === 'function'){
+      window.refreshJournalAccounts();
+    }
+    setValue('journalAccountId', '');
+    setValue('journalPnl', '');
+    setValue('journalSetup', '');
+    setValue('journalTag', '');
+    setValue('journalNotes', '');
+    const fileInput = document.querySelector('#journal input[type="file"], input[type="file"]');
+    if(fileInput) fileInput.value = '';
+    const preview = document.getElementById('journalPreview');
+    if(preview){
+      preview.removeAttribute('src');
+      preview.style.display = 'none';
+    }
+  }
+
+  function wrapSaveJournal(){
+    if(typeof window.saveJournal !== 'function') return;
+    const original = window.saveJournal;
+    window.saveJournal = function(){
+      ensureJournalIdField();
+      const idEl = ensureJournalIdField();
+      if(!window.__journalEditing || !String(idEl.value || '').trim()){
+        idEl.value = 'JR-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+      }
+      original();
+      resetJournalFormSoft();
+      setTimeout(renderJournalCardsWithControls, 0);
+    };
+
+    const saveBtn = Array.from(document.querySelectorAll('button')).find(btn => /save journal/i.test((btn.textContent || '').trim()));
+    if(saveBtn) saveBtn.onclick = window.saveJournal;
+  }
+
+  function wrapResetJournal(){
+    const resetBtn = document.getElementById('journalResetBtn');
+    if(resetBtn) resetBtn.onclick = resetJournalFormSoft;
+    window.resetJournalForm = resetJournalFormSoft;
+  }
+
+  function init(){
+    ensureJournalIdField();
+    wrapSaveJournal();
+    wrapResetJournal();
+    renderJournalCardsWithControls();
+    window.openJournalEntry = openJournalEntry;
+    window.deleteJournalEntry = deleteJournalEntry;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  }else{
+    init();
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target && e.target.closest('#journalList, #recentJournal')){
+      setTimeout(renderJournalCardsWithControls, 0);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
