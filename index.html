@@ -1282,23 +1282,6 @@ button.option,
 .sessionStable.compact .countdown strong{font-size:14px;}
 .sessionStable.compact .block{display:none;}
 
-
-/* session ultra compact dropdown fix */
-.sessionDetails{display:none;}
-.sessionStable.compact.expanded .sessionDetails{display:block;}
-.sessionStable.compact{
-  cursor:pointer;
-}
-.sessionStable.compact .sessionMainRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.sessionStable.compact .sessionCountdownLine{
-  font-size:13px;
-  margin-top:4px;
-}
-
 </style>
 </head>
 <body class="theme-soft-purple">
@@ -4383,7 +4366,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <script>
 (function(){
-  window.sessionExpanded = false;
   function byId(id){ return document.getElementById(id); }
 
   function applyTheme(themeClass){
@@ -4441,8 +4423,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function mins(h,m){ return h*60 + m; }
-  let sessionExpanded = false;
-
   const sessions = [
     {
       key:'asia',
@@ -4818,10 +4798,11 @@ document.addEventListener('DOMContentLoaded', function(){
       d = {
         flag:'🔥',
         name:'London + NY',
+        sub:'8:00 AM – 11:00 AM',
+        ledClass:'overlap',
+        ledText:'Best Window',
         countdownLabel:'Time left',
-        countdown:fmtCountdown(Math.max(0, 11*3600 - nowSeconds)),
-        best:'8 AM – 11 AM 🔥🔥',
-        meaning:'Highest probability overlap window.'
+        countdown:fmtCountdown(Math.max(0, 11*3600 - nowSeconds))
       };
     } else if(active.length){
       const s = active[0];
@@ -4835,73 +4816,44 @@ document.addEventListener('DOMContentLoaded', function(){
           endSec += 86400;
         }
       }
-
-      let best = '';
-      let meaning = '';
-      if(s.key === 'asia'){
-        best = '7 PM – 11 PM · 1 AM – 3 AM';
-        meaning = 'Build levels and prepare.';
-      } else if(s.key === 'london'){
-        best = '3 AM – 6 AM';
-        meaning = 'Strong directional moves and cleaner breakouts.';
-      } else if(s.key === 'ny'){
-        best = '8 AM – 11 AM · 9:30 AM open volatility';
-        meaning = 'Highest probability trades and biggest moves.';
-      }
-
       d = {
         flag:s.flag,
         name:s.name,
+        sub:fmtClock(s.start) + ' – ' + fmtClock(s.end),
+        ledClass:s.key === 'asia' ? 'waiting' : 'active',
+        ledText:s.key === 'asia' ? 'Setup Session' : (s.key === 'london' ? 'Momentum Session' : 'Power Session'),
         countdownLabel:'Time left',
-        countdown:fmtCountdown(Math.max(0, endSec - currentSec)),
-        best:best,
-        meaning:meaning
+        countdown:fmtCountdown(Math.max(0, endSec - currentSec))
       };
     } else {
       let transitionName = 'Transition';
-      let best = 'Wait for next session';
-      let meaning = 'Lower probability environment.';
-      if(next.key === 'london'){
-        transitionName = 'Pre-London';
-        best = 'Mark levels and wait for London momentum.';
-        meaning = 'Market positioning before London.';
-      } else if(next.key === 'asia'){
-        transitionName = 'Dead Zone';
-        best = 'No trades. Wait for Asia.';
-        meaning = 'Review, journal, and prepare.';
-      }
-
+      if(next.key === 'london') transitionName = 'Pre-London';
+      else if(next.key === 'asia') transitionName = 'Dead Zone';
       d = {
         flag: next.key === 'asia' ? '🌙' : next.flag,
         name: transitionName,
-        countdownLabel:'Next in',
-        countdown: fmtCountdown(next.until),
-        best: best,
-        meaning: meaning
+        sub: 'Between sessions',
+        ledClass: 'waiting',
+        ledText: 'Waiting',
+        countdownLabel: 'Next in',
+        countdown: fmtCountdown(next.until)
       };
     }
 
     container.innerHTML = `
-      <div class="sessionStable compact ${window.sessionExpanded ? 'expanded' : ''}" id="sessionCard">
-        <div class="sessionMainRow">
-          <div>${d.flag}</div>
-          <div style="font-weight:600;">${d.name}</div>
+      <div class="sessionStable compact">
+        <div class="top">
+          <div class="flag">${d.flag}</div>
+          <div class="name">${d.name}</div>
         </div>
-        <div class="sessionCountdownLine">${d.countdownLabel}: ${d.countdown}</div>
-        <div class="sessionDetails">
-          <div style="margin-top:10px;font-size:12px;"><strong>Best:</strong> ${d.best}</div>
-          <div style="margin-top:6px;font-size:12px;"><strong>Meaning:</strong> ${d.meaning}</div>
+        <div class="sub">${d.sub}</div>
+        <div class="led ${d.ledClass}">
+          <span class="dot"></span>
+          <span class="ledTextInline">${d.ledText}</span>
         </div>
+        <div class="countdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
       </div>
     `;
-
-    const card = document.getElementById('sessionCard');
-    if(card){
-      card.onclick = function(){
-        window.sessionExpanded = !window.sessionExpanded;
-        renderCompactSession();
-      };
-    }
   }
 
   function bindTabs(){
@@ -4953,173 +4905,506 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<style id="faceless-final-fix-css">
-#evalList .entryCard,#fundedList .entryCard,#liveList .entryCard,#journalList .entryCard,#recentJournal .entryCard,#strategyStats .entryCard{border-radius:22px !important;padding:16px 18px !important;background:linear-gradient(180deg, rgba(151,97,236,.28), rgba(44,25,86,.38)) !important;border:1px solid rgba(214,174,255,.22) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 26px rgba(0,0,0,.18) !important;}
-#evalList .entryCard,#fundedList .entryCard,#liveList .entryCard,#journalList .entryCard{cursor:pointer;}
-#evalList .entryTitle,#fundedList .entryTitle,#liveList .entryTitle,#journalList .entryTitle,#recentJournal .entryTitle,#strategyStats .entryTitle{font-weight:800 !important;}
-#evalList .entryMeta,#fundedList .entryMeta,#liveList .entryMeta,#journalList .entryMeta,#recentJournal .entryMeta,#strategyStats .entryMeta{opacity:.95;}
+<style id="faceless-sync-v2-css">
+#evalList .entryCard,
+#fundedList .entryCard,
+#liveList .entryCard,
+#journalList .entryCard,
+#recentJournal .entryCard,
+#goalSummary .entryCard,
+#strategyStats .entryCard{
+  border-radius: 24px !important;
+  padding: 16px 18px !important;
+  background: linear-gradient(180deg, rgba(151,97,236,.28), rgba(44,25,86,.38)) !important;
+  border: 1px solid rgba(214,174,255,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 10px 26px rgba(0,0,0,.18) !important;
+}
+#evalList .entryCard,
+#fundedList .entryCard,
+#liveList .entryCard,
+#journalList .entryCard,
+#recentJournal .entryCard{
+  cursor:pointer;
+}
+#evalList .entryTitle,
+#fundedList .entryTitle,
+#liveList .entryTitle,
+#journalList .entryTitle,
+#recentJournal .entryTitle,
+#goalSummary .entryTitle,
+#strategyStats .entryTitle{
+  font-weight:800 !important;
+}
+#evalList .entryMeta,
+#fundedList .entryMeta,
+#liveList .entryMeta,
+#journalList .entryMeta,
+#recentJournal .entryMeta,
+#goalSummary .entryMeta,
+#strategyStats .entryMeta{
+  opacity:.95;
+}
+#journalResetBtn{ margin-left:12px; }
+@media (max-width:480px){ #journalResetBtn{ margin-left:0; margin-top:10px; } }
 </style>
 
-<script id="faceless-final-fix-js">
+<script id="faceless-sync-v2-js">
 (function(){
-const APP_KEY='faceless_app_state_v2', CONNECT_KEY='faceless_connected_state_v1';
-const $=id=>document.getElementById(id);
-const setText=(id,v)=>{const e=$(id); if(e) e.textContent=v;};
-const setValue=(id,v)=>{const e=$(id); if(e) e.value=v==null?'':v;};
-const currency=n=>{const sign=Number(n||0)<0?'-':''; return sign+'$'+Math.abs(Number(n||0)).toFixed(0)};
-const load=(key,fb)=>{try{const raw=localStorage.getItem(key); const x=raw?JSON.parse(raw):{}; return Object.assign({},fb,x)}catch(e){return JSON.parse(JSON.stringify(fb))}};
-const save=(key,v)=>localStorage.setItem(key,JSON.stringify(v));
-function appState(){ const s=load(APP_KEY,{activeView:'home',goals:[],evalAccounts:[],fundedAccounts:[],liveAccounts:[],journalEntries:[],timer:{total:0,remaining:0,running:false,lastTick:0}}); s.goals=s.goals||[]; s.evalAccounts=s.evalAccounts||[]; s.fundedAccounts=s.fundedAccounts||[]; s.liveAccounts=s.liveAccounts||[]; s.journalEntries=s.journalEntries||[]; return s; }
-function connectState(){ return load(CONNECT_KEY,{totalEntries:0,wins:0,losses:0,strategy:{'Supply & Demand':{win:0,loss:0},'ORB':{win:0,loss:0},'EMA/TEMA':{win:0,loss:0},'ICC':{win:0,loss:0}},fundedPnL:0,fundedTrades:0,livePnL:0,liveTrades:0,evalPnL:0,evalTrades:0,dailyPnL:0,weeklyPnL:0,monthlyPnL:0,forceLocked:false,forceUnlocked:false}) }
-function upsert(arr,item){ const i=arr.findIndex(x=>String(x.id)===String(item.id)); if(i>=0) arr[i]=Object.assign({},arr[i],item); else arr.push(item); }
-function switchTo(viewId){ if(typeof window.switchView==='function'){ window.switchView(viewId); return;} document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn=>btn.classList.toggle('active',btn.getAttribute('data-view')===viewId)); document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); const t=$(viewId); if(t) t.classList.add('active'); }
-function applyAccountDefaults(type){ if(type==='eval'){const size=$('evalSize')?.value||''; if(size==='25000'){setValue('evalGoal',1500); setValue('evalDrawdown',1500);} if(size==='50000'){setValue('evalGoal',3000); setValue('evalDrawdown',2000);} } if(type==='funded'){ const size=$('fundedSize')?.value||''; if(size==='25000'){setValue('fundedPayoutGoal',1500); setValue('fundedDrawdown',1500);} if(size==='50000'){setValue('fundedPayoutGoal',3000); setValue('fundedDrawdown',2000);} } }
-function updateRollups(state){ ['eval','funded','live'].forEach(type=>{ const key=type+'Accounts'; state[key]=(state[key]||[]).map(a=>{ const linked=state.journalEntries.filter(j=>String(j.accountType)===type && String(j.accountId)===String(a.id)); return Object.assign({},a,{runningPnl:linked.reduce((s,j)=>s+Number(j.pnl||0),0),tradeCount:linked.length}); }); }); }
-function recalcConnected(state){ const c=connectState(); c.totalEntries=0;c.wins=0;c.losses=0;c.strategy={'Supply & Demand':{win:0,loss:0},'ORB':{win:0,loss:0},'EMA/TEMA':{win:0,loss:0},'ICC':{win:0,loss:0}}; c.fundedPnL=0;c.fundedTrades=0;c.livePnL=0;c.liveTrades=0;c.evalPnL=0;c.evalTrades=0;c.dailyPnL=0;c.weeklyPnL=0;c.monthlyPnL=0; (state.journalEntries||[]).forEach(j=>{ const pnl=Number(j.pnl||0), tag=String(j.tag||'').toLowerCase(), acct=String(j.accountType||'').toLowerCase(), setup=j.setup||''; c.totalEntries++; const win=pnl>0||tag.includes('valid'), loss=pnl<0||tag.includes('failed'); if(win) c.wins++; if(loss) c.losses++; if(setup){ if(!c.strategy[setup]) c.strategy[setup]={win:0,loss:0}; if(win) c.strategy[setup].win++; if(loss) c.strategy[setup].loss++; } if(acct==='funded'){c.fundedPnL+=pnl;c.fundedTrades++;} else if(acct==='live'){c.livePnL+=pnl;c.liveTrades++;} else if(acct==='eval'){c.evalPnL+=pnl;c.evalTrades++;} c.dailyPnL+=pnl;c.weeklyPnL+=pnl;c.monthlyPnL+=pnl; }); save(CONNECT_KEY,c); return c; }
-function bestStrategy(entries){ const map={}; (entries||[]).forEach(j=>{ const k=j.setup||'Unknown'; map[k]=map[k]||{win:0,loss:0}; const pnl=Number(j.pnl||0), tag=String(j.tag||'').toLowerCase(); if(pnl>0||tag.includes('valid')) map[k].win++; else if(pnl<0||tag.includes('failed')) map[k].loss++; }); const rows=Object.entries(map).map(([name,val])=>{const total=val.win+val.loss,rate=total?Math.round(val.win/total*100):0; return {name,win:val.win,loss:val.loss,total,rate}}).filter(x=>x.total>0).sort((a,b)=>b.rate-a.rate||b.total-a.total); return {rows,best:rows[0]||null}; }
-function refreshJournalAccounts(){ const s=appState(); const type=$('journalAccountType')?.value||'eval'; const sel=$('journalAccountId'); if(!sel) return; const current=sel.value; let arr=[]; if(type==='eval') arr=s.evalAccounts; if(type==='funded') arr=s.fundedAccounts; if(type==='live') arr=s.liveAccounts; const labelKey=type==='live'?'label':'id'; sel.innerHTML=['<option value="">Select account</option>'].concat(arr.map(a=>`<option value="${String(a.id)}">${type.charAt(0).toUpperCase()+type.slice(1)} · ${a[labelKey]||a.id}</option>`)).join(''); if(arr.some(a=>String(a.id)===String(current))) sel.value=current; }
-function openAccount(type,id){ const s=appState(); let a=null; if(type==='eval') a=s.evalAccounts.find(x=>String(x.id)===String(id)); if(type==='funded') a=s.fundedAccounts.find(x=>String(x.id)===String(id)); if(type==='live') a=s.liveAccounts.find(x=>String(x.id)===String(id)); if(!a) return; if(type==='eval'){setValue('evalId',a.id);setValue('evalFirm',a.firm);setValue('evalSize',a.size);setValue('evalGoal',a.goal);setValue('evalDrawdown',a.drawdown);setValue('evalDays',a.days);setValue('evalStatus',a.status);setValue('evalNotes',a.notes);} else if(type==='funded'){setValue('fundedId',a.id);setValue('fundedFirm',a.firm);setValue('fundedSize',a.size);setValue('fundedPayoutGoal',a.payoutGoal);setValue('fundedDrawdown',a.drawdown);setValue('fundedPayoutTaken',a.payoutTaken);setValue('fundedStatus',a.status);setValue('fundedNotes',a.notes);} else {setValue('liveId',a.id);setValue('liveBroker',a.broker);setValue('liveLabel',a.label);setValue('liveBalance',a.balance);setValue('liveRiskLimit',a.riskLimit);setValue('liveGoal',a.goal);setValue('liveStatus',a.status);setValue('liveNotes',a.notes);} switchTo(type); }
-function openJournal(id){ const s=appState(); const j=s.journalEntries.find(x=>String(x.id)===String(id)); if(!j) return; setValue('journalId',j.id); setValue('journalDate',j.date); setValue('journalAccountType',j.accountType); refreshJournalAccounts(); setValue('journalAccountId',j.accountId); setValue('journalPnl',j.pnl); setValue('journalSetup',j.setup); setValue('journalTag',j.tag); setValue('journalNotes',j.notes); const prev=$('journalPreview'); if(prev){ if(j.image){prev.src=j.image; prev.style.display='block';} else {prev.removeAttribute('src'); prev.style.display='none';}} switchTo('journal'); }
-function renderAccounts(){ const s=appState(); const mk=(type,a,meta1,meta2)=>`<div class="entryCard" data-open-account="${type}" data-account-id="${String(a.id)}"><div class="entryTitle">${a.id||'Account'}</div><div class="entryMeta">${meta1}</div><div class="entryMeta" style="margin-top:6px">${meta2}</div></div>`; const evalList=$('evalList'); if(evalList) evalList.innerHTML=s.evalAccounts.length?s.evalAccounts.map(a=>mk('eval',a,`${a.firm||'Firm'} · ${a.size||''} · ${a.status||'active'}`,`${currency(a.runningPnl||0)} · ${a.tradeCount||0} trades`)).join(''):'<div class="empty">No evals saved.</div>'; const fundedList=$('fundedList'); if(fundedList) fundedList.innerHTML=s.fundedAccounts.length?s.fundedAccounts.map(a=>mk('funded',a,`${a.firm||'Firm'} · ${a.size||''} · ${a.status||'active'}`,`${currency(a.runningPnl||0)} · ${a.tradeCount||0} trades`)).join(''):'<div class="empty">No funded accounts saved.</div>'; const liveList=$('liveList'); if(liveList) liveList.innerHTML=s.liveAccounts.length?s.liveAccounts.map(a=>mk('live',a,`${a.broker||'Broker'} · ${currency(a.balance||0)} · ${a.status||'active'}`,`${currency(a.runningPnl||0)} · ${a.tradeCount||0} trades`)).join(''):'<div class="empty">No live accounts saved.</div>'; setText('accountCount', String(s.evalAccounts.length+s.fundedAccounts.length+s.liveAccounts.length)); refreshJournalAccounts(); document.querySelectorAll('[data-open-account]').forEach(card=>card.onclick=function(){openAccount(this.dataset.openAccount,this.dataset.accountId)}); }
-function renderJournal(){ const s=appState(); const entries=[...(s.journalEntries||[])].sort((a,b)=>(b.savedAt||0)-(a.savedAt||0)); const card=j=>`<div class="entryCard" data-open-journal="${String(j.id)}"><div class="entryTitle">${j.setup||'No setup'} · ${String(j.accountType||'').toUpperCase()}</div><div class="entryMeta">${j.date||''} · ${j.tag||'logged'} · ${currency(j.pnl||0)}</div></div>`; const list=$('journalList'); if(list) list.innerHTML=entries.length?entries.map(card).join(''):'<div class="empty">No journal entries yet.</div>'; const recent=$('recentJournal'); if(recent) recent.innerHTML=entries.slice(0,4).length?entries.slice(0,4).map(card).join(''):'<div class="empty">Nothing logged yet.</div>'; document.querySelectorAll('[data-open-journal]').forEach(card=>card.onclick=function(){openJournal(this.dataset.openJournal)}); }
-function renderConnected(){ const s=appState(); const c=recalcConnected(s); setText('fundedRunningPnl',currency(c.fundedPnL)); setText('liveRunningPnl',currency(c.livePnL)); setText('fundedTradeCount',String(c.fundedTrades)); setText('liveTradeCount',String(c.liveTrades)); setText('pnlDaily',currency(c.dailyPnL)); setText('pnlWeekly',currency(c.weeklyPnL)); setText('pnlMonthly',currency(c.monthlyPnL)); setText('todayPnl',currency(c.dailyPnL)); setText('statEntries',String(c.totalEntries)); setText('statWinRate',(c.totalEntries?Math.round(c.wins/c.totalEntries*100):0)+'%'); const latest=(s.goals||[])[(s.goals||[]).length-1]; if(latest){ setText('homeGoal',currency(latest.daily)); setText('homeGoalType',String(latest.type||'').toUpperCase()+' goal active'); setText('homeLoss',currency(latest.loss)); setText('todayBadge',String(latest.type||'').toUpperCase()+' goal'); } else { setText('homeGoal','$—'); setText('homeGoalType','No goal set'); setText('homeLoss','$—'); setText('todayBadge','No goal active'); } const info=bestStrategy(s.journalEntries); setText('bestStrategy',info.best?info.best.name:'—'); setText('bestStrategyMeta',info.best?`${info.best.win}W / ${info.best.loss}L · ${info.best.rate}%`:'Waiting for trades'); const wrap=$('strategyStats'); if(wrap) wrap.innerHTML=info.rows.length?info.rows.map(r=>`<div class="entryCard"><div class="entryTitle">${r.name}</div><div class="entryMeta">${r.win}W / ${r.loss}L · ${r.rate}% win rate</div></div>`).join(''):'<div class="empty">No strategy data yet.</div>'; }
-function renderAll(){ const s=appState(); updateRollups(s); save(APP_KEY,s); renderAccounts(); renderJournal(); renderConnected(); refreshJournalAccounts(); }
-function saveAccount(type){ const s=appState(); if(type==='eval'){ upsert(s.evalAccounts,{ id:$('evalId')?.value||('EVAL-'+(s.evalAccounts.length+1)), firm:$('evalFirm')?.value||'', size:$('evalSize')?.value||'', goal:Number($('evalGoal')?.value||0)||0, drawdown:Number($('evalDrawdown')?.value||0)||0, days:Number($('evalDays')?.value||0)||0, status:$('evalStatus')?.value||'active', notes:$('evalNotes')?.value||''}); } else if(type==='funded'){ upsert(s.fundedAccounts,{ id:$('fundedId')?.value||('FUN-'+(s.fundedAccounts.length+1)), firm:$('fundedFirm')?.value||'', size:$('fundedSize')?.value||'', payoutGoal:Number($('fundedPayoutGoal')?.value||0)||0, drawdown:Number($('fundedDrawdown')?.value||0)||0, payoutTaken:Number($('fundedPayoutTaken')?.value||0)||0, status:$('fundedStatus')?.value||'active', notes:$('fundedNotes')?.value||''}); } else { upsert(s.liveAccounts,{ id:$('liveId')?.value||('LIVE-'+(s.liveAccounts.length+1)), broker:$('liveBroker')?.value||'', label:$('liveLabel')?.value||'', balance:Number($('liveBalance')?.value||0)||0, riskLimit:Number($('liveRiskLimit')?.value||0)||0, goal:Number($('liveGoal')?.value||0)||0, status:$('liveStatus')?.value||'active', notes:$('liveNotes')?.value||''}); } updateRollups(s); save(APP_KEY,s); renderAll(); alert(type.charAt(0).toUpperCase()+type.slice(1)+' saved.'); }
-function clearAccountForm(type){ const ids=type==='eval'?['evalId','evalFirm','evalSize','evalGoal','evalDrawdown','evalDays','evalStatus','evalNotes']:type==='funded'?['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedStatus','fundedNotes']:['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveStatus','liveNotes']; ids.forEach(id=>setValue(id,'')); }
-function saveJournal(){ const s=appState(); const prev=$('journalPreview'); const entry={ id:$('journalId')?.value||('JR-'+(s.journalEntries.length+1)), date:$('journalDate')?.value||new Date().toISOString().slice(0,10), accountType:$('journalAccountType')?.value||'eval', accountId:$('journalAccountId')?.value||'', pnl:Number($('journalPnl')?.value||0)||0, setup:$('journalSetup')?.value||'', tag:$('journalTag')?.value||'', notes:$('journalNotes')?.value||'', image:(prev&&prev.src)?prev.src:'', savedAt:Date.now()}; if(!entry.setup){ alert('Pick a setup first.'); return; } upsert(s.journalEntries,entry); updateRollups(s); save(APP_KEY,s); renderAll(); alert('Journal saved.'); }
-function bind(){ window.applyAccountDefaults=applyAccountDefaults; window.saveAccount=saveAccount; window.clearAccountForm=clearAccountForm; window.saveJournal=saveJournal; window.refreshJournalAccounts=refreshJournalAccounts; window.openAccount=openAccount; window.openJournal=openJournal; const es=$('evalSize'), fs=$('fundedSize'), jt=$('journalAccountType'); if(es) es.onchange=()=>applyAccountDefaults('eval'); if(fs) fs.onchange=()=>applyAccountDefaults('funded'); if(jt) jt.onchange=refreshJournalAccounts; document.querySelectorAll('button[onclick="saveAccount(\'eval\')"]').forEach(b=>b.onclick=()=>saveAccount('eval')); document.querySelectorAll('button[onclick="saveAccount(\'funded\')"]').forEach(b=>b.onclick=()=>saveAccount('funded')); document.querySelectorAll('button[onclick="saveAccount(\'live\')"]').forEach(b=>b.onclick=()=>saveAccount('live')); document.querySelectorAll('button[onclick="clearAccountForm(\'eval\')"]').forEach(b=>b.onclick=()=>clearAccountForm('eval')); document.querySelectorAll('button[onclick="clearAccountForm(\'funded\')"]').forEach(b=>b.onclick=()=>clearAccountForm('funded')); document.querySelectorAll('button[onclick="clearAccountForm(\'live\')"]').forEach(b=>b.onclick=()=>clearAccountForm('live')); const btn=document.querySelector('.cta[onclick="saveJournal()"], .cta'); if(btn) btn.onclick=saveJournal; renderAll(); }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind); else bind();
-})();
-</script>
+  const APP_KEY = 'faceless_app_state_v3';
+  const LEGACY_KEYS = ['faceless_app_state_v2'];
+  const blank = {
+    activeView:'home',
+    goals:[],
+    evalAccounts:[],
+    fundedAccounts:[],
+    liveAccounts:[],
+    journalEntries:[],
+    timer:{ total:0, remaining:0, running:false, lastTick:0 }
+  };
 
+  function clone(x){ return JSON.parse(JSON.stringify(x)); }
 
-<style id="faceless-journal-reset-css">
-#journalResetBtn{
-  margin-left:12px;
-}
-@media (max-width: 480px){
-  #journalResetBtn{ margin-left:0; margin-top:10px; }
-}
-</style>
-
-<script id="faceless-journal-reset-js">
-(function(){
-  const APP_KEY = 'faceless_app_state_v2';
   function loadState(){
+    let state = null;
     try{
-      const raw = localStorage.getItem(APP_KEY);
-      if(!raw) return { goals:[], evalAccounts:[], fundedAccounts:[], liveAccounts:[], journalEntries:[] };
-      const s = JSON.parse(raw);
-      s.goals = Array.isArray(s.goals) ? s.goals : [];
-      s.evalAccounts = Array.isArray(s.evalAccounts) ? s.evalAccounts : [];
-      s.fundedAccounts = Array.isArray(s.fundedAccounts) ? s.fundedAccounts : [];
-      s.liveAccounts = Array.isArray(s.liveAccounts) ? s.liveAccounts : [];
-      s.journalEntries = Array.isArray(s.journalEntries) ? s.journalEntries : [];
-      return s;
-    }catch(e){
-      return { goals:[], evalAccounts:[], fundedAccounts:[], liveAccounts:[], journalEntries:[] };
+      state = JSON.parse(localStorage.getItem(APP_KEY) || 'null');
+    }catch(e){ state = null; }
+    if(!state){
+      for(const k of LEGACY_KEYS){
+        try{
+          const oldState = JSON.parse(localStorage.getItem(k) || 'null');
+          if(oldState){ state = oldState; break; }
+        }catch(e){}
+      }
     }
+    state = Object.assign({}, clone(blank), state || {});
+    ['goals','evalAccounts','fundedAccounts','liveAccounts','journalEntries'].forEach(k => {
+      if(!Array.isArray(state[k])) state[k] = [];
+    });
+    if(!state.timer || typeof state.timer !== 'object') state.timer = clone(blank.timer);
+    return state;
   }
-  function saveState(s){
-    localStorage.setItem(APP_KEY, JSON.stringify(s));
+
+  let state = loadState();
+
+  function saveState(){
+    localStorage.setItem(APP_KEY, JSON.stringify(state));
   }
+
+  function upsert(arr, item){
+    const idx = arr.findIndex(x => String(x.id) === String(item.id));
+    if(idx >= 0) arr[idx] = Object.assign({}, arr[idx], item);
+    else arr.push(item);
+  }
+
+  function currency(n){
+    const num = Number(n || 0);
+    const sign = num < 0 ? '-' : '';
+    return sign + '$' + Math.abs(num).toFixed(0);
+  }
+
+  function setText(id, value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  }
+
   function setValue(id, value){
     const el = document.getElementById(id);
     if(el) el.value = value == null ? '' : value;
   }
 
-  function resetJournalForm(){
-    setValue('journalId', '');
-    setValue('journalDate', new Date().toISOString().slice(0,10));
-    setValue('journalAccountType', 'eval');
-    if(typeof window.refreshJournalAccounts === 'function'){
-      window.refreshJournalAccounts();
+  function switchTo(viewId){
+    if(typeof window.switchView === 'function'){
+      window.switchView(viewId);
+      return;
     }
-    setValue('journalAccountId', '');
-    setValue('journalPnl', '');
-    setValue('journalSetup', '');
-    setValue('journalTag', '');
-    setValue('journalNotes', '');
-    const fileInput = document.getElementById('journalImage');
-    if(fileInput) fileInput.value = '';
+    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-view') === viewId);
+    });
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById(viewId);
+    if(target) target.classList.add('active');
+  }
+
+  function applyAccountDefaults(type){
+    if(type === 'eval'){
+      const size = String(document.getElementById('evalSize')?.value || '');
+      if(size === '25000'){
+        setValue('evalGoal', 1500);
+        setValue('evalDrawdown', 1500);
+      }else if(size === '50000'){
+        setValue('evalGoal', 3000);
+        setValue('evalDrawdown', 2000);
+      }
+    }else if(type === 'funded'){
+      const size = String(document.getElementById('fundedSize')?.value || '');
+      if(size === '25000'){
+        setValue('fundedPayoutGoal', 1500);
+        setValue('fundedDrawdown', 1500);
+      }else if(size === '50000'){
+        setValue('fundedPayoutGoal', 3000);
+        setValue('fundedDrawdown', 2000);
+      }
+    }
+  }
+
+  function refreshJournalAccounts(){
+    const select = document.getElementById('journalAccountId');
+    const type = String(document.getElementById('journalAccountType')?.value || 'eval').toLowerCase();
+    if(!select) return;
+    const current = select.value;
+    let arr = [];
+    if(type === 'eval') arr = state.evalAccounts;
+    else if(type === 'funded') arr = state.fundedAccounts;
+    else arr = state.liveAccounts;
+
+    const opts = ['<option value="">Select account</option>'].concat(arr.map(a => {
+      const label = type === 'live' ? (a.id || a.label || 'Live') : (a.id || 'Account');
+      return `<option value="${String(a.id)}">${type.charAt(0).toUpperCase()+type.slice(1)} · ${label}</option>`;
+    }));
+    select.innerHTML = opts.join('');
+    if(arr.some(a => String(a.id) === String(current))) select.value = current;
+  }
+
+  function recalcRollups(){
+    const roll = (arr, type) => arr.map(a => {
+      const linked = state.journalEntries.filter(j => String(j.accountType).toLowerCase() === type && String(j.accountId) === String(a.id));
+      const runningPnl = linked.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
+      const tradeCount = linked.length;
+      const goalNum = type === 'eval' ? Number(a.goal || 0) : (type === 'funded' ? Number(a.payoutGoal || 0) : Number(a.goal || 0));
+      const left = Math.max(0, goalNum - runningPnl);
+      return Object.assign({}, a, { runningPnl, tradeCount, leftToGoal:left });
+    });
+    state.evalAccounts = roll(state.evalAccounts, 'eval');
+    state.fundedAccounts = roll(state.fundedAccounts, 'funded');
+    state.liveAccounts = roll(state.liveAccounts, 'live');
+  }
+
+  function renderGoals(){
+    const wrap = document.getElementById('goalSummary');
+    const latest = state.goals[state.goals.length - 1];
+    if(wrap){
+      wrap.innerHTML = state.goals.length ? state.goals.map(g => `
+        <div class="entryCard">
+          <div class="entryTitle">${String(g.type || '').toUpperCase()}</div>
+          <div class="entryMeta">Goal ${currency(g.daily)} · Max Loss ${currency(g.loss)}</div>
+        </div>`).join('') : '<div class="empty">No saved goals yet.</div>';
+    }
+    if(latest){
+      setText('homeGoal', currency(latest.daily));
+      setText('homeGoalType', String(latest.type || '').toUpperCase() + ' goal active');
+      setText('homeLoss', currency(latest.loss));
+      setText('todayBadge', String(latest.type || '').toUpperCase() + ' goal');
+    }else{
+      setText('homeGoal', '$—');
+      setText('homeGoalType', 'No goal set');
+      setText('homeLoss', '$—');
+      setText('todayBadge', 'No goal active');
+    }
+  }
+
+  function renderAccounts(){
+    recalcRollups();
+
+    const evalList = document.getElementById('evalList');
+    if(evalList){
+      evalList.innerHTML = state.evalAccounts.length ? state.evalAccounts.map(a => `
+        <div class="entryCard" data-open-account="eval" data-account-id="${String(a.id)}">
+          <div class="entryTitle">${a.id || 'Eval Account'}</div>
+          <div class="entryMeta">${a.firm || 'Firm'} · ${a.size || ''} · ${a.status || 'Active'}</div>
+          <div class="entryMeta" style="margin-top:6px">${currency(a.runningPnl || 0)} current · ${currency(a.leftToGoal || 0)} left to pass</div>
+        </div>`).join('') : '<div class="empty">No evals saved.</div>';
+    }
+
+    const fundedList = document.getElementById('fundedList');
+    if(fundedList){
+      fundedList.innerHTML = state.fundedAccounts.length ? state.fundedAccounts.map(a => `
+        <div class="entryCard" data-open-account="funded" data-account-id="${String(a.id)}">
+          <div class="entryTitle">${a.id || 'Funded Account'}</div>
+          <div class="entryMeta">${a.firm || 'Firm'} · ${a.size || ''} · ${a.status || 'Active'}</div>
+          <div class="entryMeta" style="margin-top:6px">${currency(a.runningPnl || 0)} running · ${currency(a.leftToGoal || 0)} left to goal</div>
+        </div>`).join('') : '<div class="empty">No funded accounts saved.</div>';
+    }
+
+    const liveList = document.getElementById('liveList');
+    if(liveList){
+      liveList.innerHTML = state.liveAccounts.length ? state.liveAccounts.map(a => `
+        <div class="entryCard" data-open-account="live" data-account-id="${String(a.id)}">
+          <div class="entryTitle">${a.id || a.label || 'Live Account'}</div>
+          <div class="entryMeta">${a.broker || 'Broker'} · ${currency(a.balance || 0)} · ${a.status || 'Active'}</div>
+          <div class="entryMeta" style="margin-top:6px">${currency(a.runningPnl || 0)} running · ${a.tradeCount || 0} trades</div>
+        </div>`).join('') : '<div class="empty">No live accounts saved.</div>';
+    }
+
+    setText('accountCount', String(state.evalAccounts.length + state.fundedAccounts.length + state.liveAccounts.length));
+    refreshJournalAccounts();
+
+    document.querySelectorAll('[data-open-account]').forEach(card => {
+      card.onclick = function(){
+        openAccount(this.getAttribute('data-open-account'), this.getAttribute('data-account-id'));
+      };
+    });
+  }
+
+  function renderJournal(){
+    const list = document.getElementById('journalList');
+    const recent = document.getElementById('recentJournal');
+    const entries = [...state.journalEntries].sort((a,b) => (b.savedAt || 0) - (a.savedAt || 0));
+    const cards = entries.length ? entries.map(j => `
+      <div class="entryCard" data-open-journal="${String(j.id)}">
+        <div class="entryTitle">${j.setup || 'No setup'} · ${(j.accountType || '').toUpperCase()}</div>
+        <div class="entryMeta">${j.date || ''} · ${j.tag || 'Logged'} · ${currency(j.pnl || 0)}</div>
+      </div>`).join('') : '<div class="empty">No journal entries yet.</div>';
+    if(list) list.innerHTML = cards;
+    if(recent){
+      recent.innerHTML = entries.slice(0,4).length ? entries.slice(0,4).map(j => `
+        <div class="entryCard" data-open-journal="${String(j.id)}">
+          <div class="entryTitle">${j.setup || 'No setup'}</div>
+          <div class="entryMeta">${(j.accountType || '').toUpperCase()} · ${currency(j.pnl || 0)}</div>
+        </div>`).join('') : '<div class="empty">Nothing logged yet.</div>';
+    }
+    document.querySelectorAll('[data-open-journal]').forEach(card => {
+      card.onclick = function(){
+        openJournal(this.getAttribute('data-open-journal'));
+      };
+    });
+  }
+
+  function renderConnected(){
+    recalcRollups();
+    const all = state.journalEntries;
+    const daily = all.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
+    setText('todayPnl', currency(daily));
+    setText('fundedRunningPnl', currency(state.fundedAccounts.reduce((s,a)=>s+Number(a.runningPnl||0),0)));
+    setText('liveRunningPnl', currency(state.liveAccounts.reduce((s,a)=>s+Number(a.runningPnl||0),0)));
+    setText('fundedTradeCount', String(state.fundedAccounts.reduce((s,a)=>s+Number(a.tradeCount||0),0)));
+    setText('liveTradeCount', String(state.liveAccounts.reduce((s,a)=>s+Number(a.tradeCount||0),0)));
+    setText('pnlDaily', currency(daily));
+    setText('pnlWeekly', currency(daily));
+    setText('pnlMonthly', currency(daily));
+
+    const strat = {};
+    all.forEach(j => {
+      const setup = j.setup || 'Unknown';
+      if(!strat[setup]) strat[setup] = {w:0,l:0};
+      const pnl = Number(j.pnl || 0);
+      const tag = String(j.tag || '').toLowerCase();
+      if(pnl > 0 || tag.includes('valid') || tag.includes('win')) strat[setup].w += 1;
+      else if(pnl < 0 || tag.includes('fail') || tag.includes('loss')) strat[setup].l += 1;
+    });
+    const rows = Object.entries(strat).map(([name, v]) => {
+      const total = v.w + v.l;
+      const rate = total ? Math.round((v.w / total) * 100) : 0;
+      return {name, w:v.w, l:v.l, rate, total};
+    }).sort((a,b)=> b.rate - a.rate || b.total - a.total);
+    const best = rows[0];
+    setText('bestStrategy', best ? best.name : '—');
+    setText('bestStrategyMeta', best ? `${best.w}W / ${best.l}L · ${best.rate}%` : 'Waiting for trades');
+
+    const strategyStats = document.getElementById('strategyStats');
+    if(strategyStats){
+      strategyStats.innerHTML = rows.length ? rows.map(r => `
+        <div class="entryCard">
+          <div class="entryTitle">${r.name}</div>
+          <div class="entryMeta">${r.w}W / ${r.l}L · ${r.rate}% win rate</div>
+        </div>`).join('') : '<div class="empty">No strategy data yet.</div>';
+    }
+  }
+
+  function renderAll(){
+    saveState();
+    renderGoals();
+    renderAccounts();
+    renderJournal();
+    renderConnected();
+  }
+
+  function saveEval(){
+    const account = {
+      id: document.getElementById('evalId')?.value || ('EVAL-' + (state.evalAccounts.length + 1)),
+      firm: document.getElementById('evalFirm')?.value || '',
+      size: document.getElementById('evalSize')?.value || '',
+      goal: Number(document.getElementById('evalGoal')?.value || 0) || 0,
+      drawdown: Number(document.getElementById('evalDrawdown')?.value || 0) || 0,
+      days: Number(document.getElementById('evalDays')?.value || 0) || 0,
+      status: document.getElementById('evalStatus')?.value || 'active',
+      notes: document.getElementById('evalNotes')?.value || ''
+    };
+    upsert(state.evalAccounts, account);
+    renderAll();
+    alert('Eval saved.');
+  }
+
+  function saveFunded(){
+    const account = {
+      id: document.getElementById('fundedId')?.value || ('FUN-' + (state.fundedAccounts.length + 1)),
+      firm: document.getElementById('fundedFirm')?.value || '',
+      size: document.getElementById('fundedSize')?.value || '',
+      payoutGoal: Number(document.getElementById('fundedPayoutGoal')?.value || 0) || 0,
+      drawdown: Number(document.getElementById('fundedDrawdown')?.value || 0) || 0,
+      payoutTaken: Number(document.getElementById('fundedPayoutTaken')?.value || 0) || 0,
+      status: document.getElementById('fundedStatus')?.value || 'active',
+      notes: document.getElementById('fundedNotes')?.value || ''
+    };
+    upsert(state.fundedAccounts, account);
+    renderAll();
+    alert('Funded saved.');
+  }
+
+  function saveLive(){
+    const account = {
+      id: document.getElementById('liveId')?.value || ('LIVE-' + (state.liveAccounts.length + 1)),
+      broker: document.getElementById('liveBroker')?.value || '',
+      label: document.getElementById('liveLabel')?.value || '',
+      balance: Number(document.getElementById('liveBalance')?.value || 0) || 0,
+      riskLimit: Number(document.getElementById('liveRiskLimit')?.value || 0) || 0,
+      goal: Number(document.getElementById('liveGoal')?.value || 0) || 0,
+      status: document.getElementById('liveStatus')?.value || 'active',
+      notes: document.getElementById('liveNotes')?.value || ''
+    };
+    upsert(state.liveAccounts, account);
+    renderAll();
+    alert('Live saved.');
+  }
+
+  function clearAccountForm(type){
+    const ids = type === 'eval'
+      ? ['evalId','evalFirm','evalSize','evalGoal','evalDrawdown','evalDays','evalStatus','evalNotes']
+      : type === 'funded'
+      ? ['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedStatus','fundedNotes']
+      : ['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveStatus','liveNotes'];
+    ids.forEach(id => setValue(id,''));
+  }
+
+  function saveJournal(){
+    const entry = {
+      id: document.getElementById('journalId')?.value || ('JR-' + (state.journalEntries.length + 1)),
+      date: document.getElementById('journalDate')?.value || new Date().toISOString().slice(0,10),
+      accountType: (document.getElementById('journalAccountType')?.value || 'eval').toLowerCase(),
+      accountId: document.getElementById('journalAccountId')?.value || '',
+      pnl: Number(document.getElementById('journalPnl')?.value || 0) || 0,
+      setup: document.getElementById('journalSetup')?.value || '',
+      tag: document.getElementById('journalTag')?.value || '',
+      notes: document.getElementById('journalNotes')?.value || '',
+      savedAt: Date.now()
+    };
+    if(!entry.setup){
+      alert('Pick a setup first.');
+      return;
+    }
+    upsert(state.journalEntries, entry);
+    renderAll();
+    alert('Journal saved.');
+  }
+
+  function resetJournalForm(){
+    setValue('journalId','');
+    setValue('journalDate', new Date().toISOString().slice(0,10));
+    setValue('journalAccountType','eval');
+    refreshJournalAccounts();
+    setValue('journalAccountId','');
+    setValue('journalPnl','');
+    setValue('journalSetup','');
+    setValue('journalTag','');
+    setValue('journalNotes','');
     const preview = document.getElementById('journalPreview');
     if(preview){
       preview.removeAttribute('src');
       preview.style.display = 'none';
     }
+    const fileInput = document.querySelector('input[type="file"]');
+    if(fileInput) fileInput.value = '';
   }
 
-  function ensureJournalResetButton(){
-    const saveBtn = Array.from(document.querySelectorAll('button')).find(btn => /save journal/i.test((btn.textContent || '').trim()));
-    if(!saveBtn) return;
-    if(document.getElementById('journalResetBtn')) return;
-    const resetBtn = document.createElement('button');
-    resetBtn.id = 'journalResetBtn';
-    resetBtn.type = 'button';
-    resetBtn.className = saveBtn.className;
-    resetBtn.textContent = 'Reset Form';
-    resetBtn.onclick = resetJournalForm;
-    saveBtn.insertAdjacentElement('afterend', resetBtn);
+  function openAccount(type, id){
+    let a = null;
+    if(type === 'eval') a = state.evalAccounts.find(x => String(x.id) === String(id));
+    if(type === 'funded') a = state.fundedAccounts.find(x => String(x.id) === String(id));
+    if(type === 'live') a = state.liveAccounts.find(x => String(x.id) === String(id));
+    if(!a) return;
+    if(type === 'eval'){
+      setValue('evalId', a.id); setValue('evalFirm', a.firm); setValue('evalSize', a.size);
+      setValue('evalGoal', a.goal); setValue('evalDrawdown', a.drawdown); setValue('evalDays', a.days);
+      setValue('evalStatus', a.status); setValue('evalNotes', a.notes);
+    }else if(type === 'funded'){
+      setValue('fundedId', a.id); setValue('fundedFirm', a.firm); setValue('fundedSize', a.size);
+      setValue('fundedPayoutGoal', a.payoutGoal); setValue('fundedDrawdown', a.drawdown);
+      setValue('fundedPayoutTaken', a.payoutTaken); setValue('fundedStatus', a.status); setValue('fundedNotes', a.notes);
+    }else{
+      setValue('liveId', a.id); setValue('liveBroker', a.broker); setValue('liveLabel', a.label);
+      setValue('liveBalance', a.balance); setValue('liveRiskLimit', a.riskLimit); setValue('liveGoal', a.goal);
+      setValue('liveStatus', a.status); setValue('liveNotes', a.notes);
+    }
+    switchTo(type);
   }
 
-  function bindEvalPersistenceProtection(){
-    const originalSaveJournal = window.saveJournal;
-    if(typeof originalSaveJournal !== 'function') return;
+  function openJournal(id){
+    const j = state.journalEntries.find(x => String(x.id) === String(id));
+    if(!j) return;
+    setValue('journalId', j.id);
+    setValue('journalDate', j.date);
+    setValue('journalAccountType', j.accountType || 'eval');
+    refreshJournalAccounts();
+    setValue('journalAccountId', j.accountId);
+    setValue('journalPnl', j.pnl);
+    setValue('journalSetup', j.setup);
+    setValue('journalTag', j.tag);
+    setValue('journalNotes', j.notes);
+    switchTo('journal');
+  }
 
-    window.saveJournal = function(){
-      const before = loadState();
-      const evalSnapshot = JSON.stringify(before.evalAccounts || []);
-      const fundedSnapshot = JSON.stringify(before.fundedAccounts || []);
-      const liveSnapshot = JSON.stringify(before.liveAccounts || []);
-
-      originalSaveJournal();
-
-      const after = loadState();
-
-      let changed = false;
-      if(JSON.stringify(after.evalAccounts || []) !== evalSnapshot){
-        after.evalAccounts = JSON.parse(evalSnapshot);
-        changed = true
-      }
-      if(JSON.stringify(after.fundedAccounts || []) !== fundedSnapshot){
-        after.fundedAccounts = JSON.parse(fundedSnapshot);
-        changed = true;
-      }
-      if(JSON.stringify(after.liveAccounts || []) !== liveSnapshot){
-        after.liveAccounts = JSON.parse(liveSnapshot);
-        changed = true;
-      }
-
-      if(changed){
-        saveState(after);
-      }
-
-      if(typeof window.renderAll === 'function'){
-        window.renderAll();
-      }
+  function bindButtons(){
+    window.applyAccountDefaults = applyAccountDefaults;
+    window.saveAccount = function(type){
+      if(type === 'eval') return saveEval();
+      if(type === 'funded') return saveFunded();
+      return saveLive();
     };
-  }
+    window.clearAccountForm = clearAccountForm;
+    window.saveJournal = saveJournal;
+    window.resetJournalForm = resetJournalForm;
+    window.openAccount = openAccount;
+    window.openJournal = openJournal;
 
-  function bindSaveJournalButtonAgain(){
-    const saveBtn = Array.from(document.querySelectorAll('button')).find(btn => /save journal/i.test((btn.textContent || '').trim()));
-    if(saveBtn && typeof window.saveJournal === 'function'){
-      saveBtn.onclick = window.saveJournal;
+    const evalSize = document.getElementById('evalSize');
+    const fundedSize = document.getElementById('fundedSize');
+    if(evalSize) evalSize.onchange = () => applyAccountDefaults('eval');
+    if(fundedSize) fundedSize.onchange = () => applyAccountDefaults('funded');
+
+    const journalType = document.getElementById('journalAccountType');
+    if(journalType) journalType.onchange = refreshJournalAccounts;
+
+    document.querySelectorAll('button').forEach(btn => {
+      const txt = (btn.textContent || '').trim().toLowerCase();
+      const on = btn.getAttribute('onclick') || '';
+      if(on.includes("saveAccount('eval'") || txt === 'save eval') btn.onclick = saveEval;
+      if(on.includes("saveAccount('funded'") || txt === 'save funded') btn.onclick = saveFunded;
+      if(on.includes("saveAccount('live'") || txt === 'save live') btn.onclick = saveLive;
+      if(on.includes("clearAccountForm('eval'") || txt === 'clear eval') btn.onclick = () => clearAccountForm('eval');
+      if(on.includes("clearAccountForm('funded'") || txt === 'clear funded' || txt === 'clear') {
+        // only bind the funded clear button inside funded section
+        if(btn.closest('#funded') || btn.closest('[id*="funded"]')) btn.onclick = () => clearAccountForm('funded');
+      }
+      if(on.includes("clearAccountForm('live'") || txt === 'clear live') btn.onclick = () => clearAccountForm('live');
+      if(on.includes('saveJournal()') || txt === 'save journal entry') btn.onclick = saveJournal;
+    });
+
+    const saveJournalBtn = Array.from(document.querySelectorAll('button')).find(btn => /save journal/i.test((btn.textContent || '').trim()));
+    if(saveJournalBtn && !document.getElementById('journalResetBtn')){
+      const resetBtn = document.createElement('button');
+      resetBtn.id = 'journalResetBtn';
+      resetBtn.type = 'button';
+      resetBtn.className = saveJournalBtn.className;
+      resetBtn.textContent = 'Reset Form';
+      resetBtn.onclick = resetJournalForm;
+      saveJournalBtn.insertAdjacentElement('afterend', resetBtn);
     }
   }
 
-  function init(){
-    ensureJournalResetButton();
-    bindEvalPersistenceProtection();
-    bindSaveJournalButtonAgain();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  }else{
-    init();
-  }
-
-  window.resetJournalForm = resetJournalForm;
+  document.addEventListener('DOMContentLoaded', function(){
+    bindButtons();
+    renderAll();
+  });
 })();
 </script>
 
