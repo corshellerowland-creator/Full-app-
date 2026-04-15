@@ -3886,6 +3886,7 @@ document.addEventListener('DOMContentLoaded', function(){
   const defaultState = {
     activeView: 'home',
     goals: [],
+    evalAccounts: [],
     fundedAccounts: [],
     liveAccounts: [],
     journalEntries: [],
@@ -3901,6 +3902,9 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
   let appState = loadAppState();
+  appState.evalAccounts = Array.isArray(appState.evalAccounts) ? appState.evalAccounts : [];
+  appState.fundedAccounts = Array.isArray(appState.fundedAccounts) ? appState.fundedAccounts : [];
+  appState.liveAccounts = Array.isArray(appState.liveAccounts) ? appState.liveAccounts : [];
   let timerInterval = null;
 
   function saveAppState(){
@@ -3984,10 +3988,20 @@ document.addEventListener('DOMContentLoaded', function(){
   };
 
   function renderAccounts(){
+    const evalList = document.getElementById('evalList');
     const fundedList = document.getElementById('fundedList');
     const liveList = document.getElementById('liveList');
     const accountCount = document.getElementById('accountCount');
     const journalAccountId = document.getElementById('journalAccountId');
+
+    if(evalList){
+      evalList.innerHTML = appState.evalAccounts.length ? appState.evalAccounts.map(a => `
+        <div class="entryCard">
+          <div class="entryTitle">${a.id || 'Eval Account'}</div>
+          <div class="entryMeta">${a.firm || 'Firm'} · ${a.size || ''} · ${a.status || 'Active'}</div>
+        </div>
+      `).join('') : '<div class="empty">No evals saved.</div>';
+    }
 
     if(fundedList){
       fundedList.innerHTML = appState.fundedAccounts.length ? appState.fundedAccounts.map(a => `
@@ -4008,58 +4022,122 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     if(accountCount){
-      accountCount.textContent = String(appState.fundedAccounts.length + appState.liveAccounts.length);
+      accountCount.textContent = String(appState.evalAccounts.length + appState.fundedAccounts.length + appState.liveAccounts.length);
     }
 
     if(journalAccountId){
       const current = journalAccountId.value;
       const opts = ['<option value="">Select account</option>']
+        .concat(appState.evalAccounts.map(a => `<option value="${a.id}">Eval · ${a.id}</option>`))
         .concat(appState.fundedAccounts.map(a => `<option value="${a.id}">Funded · ${a.id}</option>`))
         .concat(appState.liveAccounts.map(a => `<option value="${a.id || a.label}">Live · ${a.id || a.label}</option>`));
       journalAccountId.innerHTML = opts.join('');
       if(current) journalAccountId.value = current;
     }
+
+    const fundedRunningPnl = document.getElementById('fundedRunningPnl');
+    const fundedTradeCount = document.getElementById('fundedTradeCount');
+    const liveRunningPnl = document.getElementById('liveRunningPnl');
+    const liveTradeCount = document.getElementById('liveTradeCount');
+    if(fundedRunningPnl) fundedRunningPnl.textContent = currency(appState.journalEntries.filter(j => j.accountType === 'funded').reduce((s,j) => s + (Number(j.pnl)||0), 0));
+    if(fundedTradeCount) fundedTradeCount.textContent = String(appState.journalEntries.filter(j => j.accountType === 'funded').length);
+    if(liveRunningPnl) liveRunningPnl.textContent = currency(appState.journalEntries.filter(j => j.accountType === 'live').reduce((s,j) => s + (Number(j.pnl)||0), 0));
+    if(liveTradeCount) liveTradeCount.textContent = String(appState.journalEntries.filter(j => j.accountType === 'live').length);
   }
 
+  function applyAccountDefaults(type){
+    if(type === 'eval'){
+      const size = document.getElementById('evalSize')?.value || '';
+      const goal = document.getElementById('evalGoal');
+      const dd = document.getElementById('evalDrawdown');
+      if(!goal || !dd) return;
+      if(size === '50000'){
+        goal.value = 3000;
+        dd.value = 2000;
+      } else if(size === '25000'){
+        goal.value = 1500;
+        dd.value = 1500;
+      }
+    } else if(type === 'funded'){
+      const size = document.getElementById('fundedSize')?.value || '';
+      const payout = document.getElementById('fundedPayoutGoal');
+      const dd = document.getElementById('fundedDrawdown');
+      if(!payout || !dd) return;
+      if(size === '50000'){
+        payout.value = 2600;
+        dd.value = 2000;
+      } else if(size === '25000'){
+        payout.value = 1300;
+        dd.value = 1500;
+      }
+    }
+  }
+  window.applyAccountDefaults = applyAccountDefaults;
+
   window.clearAccountForm = function(type){
-    const ids = type === 'funded'
-      ? ['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedStatus','fundedNotes']
-      : ['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveStatus','liveNotes'];
+    const ids = type === 'eval'
+      ? ['evalId','evalFirm','evalSize','evalGoal','evalDrawdown','evalDays','evalStatus','evalNotes']
+      : (type === 'funded'
+        ? ['fundedId','fundedFirm','fundedSize','fundedPayoutGoal','fundedDrawdown','fundedPayoutTaken','fundedStatus','fundedNotes']
+        : ['liveId','liveBroker','liveLabel','liveBalance','liveRiskLimit','liveGoal','liveStatus','liveNotes']);
     ids.forEach(id => {
       const el = document.getElementById(id);
-      if(el) el.value = '';
+      if(!el) return;
+      if(el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = '';
     });
   };
 
   window.saveAccount = function(type){
-    if(type === 'funded'){
+    if(type === 'eval'){
+      const id = document.getElementById('evalId')?.value || ('EVAL-' + (appState.evalAccounts.length + 1));
       const account = {
-        id: document.getElementById('fundedId')?.value || ('FUN-' + (appState.fundedAccounts.length + 1)),
+        id,
+        firm: document.getElementById('evalFirm')?.value || '',
+        size: document.getElementById('evalSize')?.value || '',
+        goal: document.getElementById('evalGoal')?.value || '',
+        drawdown: document.getElementById('evalDrawdown')?.value || '',
+        days: document.getElementById('evalDays')?.value || '',
+        status: document.getElementById('evalStatus')?.value || 'active',
+        notes: document.getElementById('evalNotes')?.value || ''
+      };
+      const idx = appState.evalAccounts.findIndex(a => a.id === id);
+      if(idx >= 0) appState.evalAccounts[idx] = account;
+      else appState.evalAccounts.push(account);
+    } else if(type === 'funded'){
+      const id = document.getElementById('fundedId')?.value || ('FUN-' + (appState.fundedAccounts.length + 1));
+      const account = {
+        id,
         firm: document.getElementById('fundedFirm')?.value || '',
         size: document.getElementById('fundedSize')?.value || '',
         payoutGoal: document.getElementById('fundedPayoutGoal')?.value || '',
         drawdown: document.getElementById('fundedDrawdown')?.value || '',
         payoutTaken: document.getElementById('fundedPayoutTaken')?.value || '',
-        status: document.getElementById('fundedStatus')?.value || 'Active',
+        status: document.getElementById('fundedStatus')?.value || 'active',
         notes: document.getElementById('fundedNotes')?.value || ''
       };
-      appState.fundedAccounts.push(account);
+      const idx = appState.fundedAccounts.findIndex(a => a.id === id);
+      if(idx >= 0) appState.fundedAccounts[idx] = account;
+      else appState.fundedAccounts.push(account);
     } else {
+      const id = document.getElementById('liveId')?.value || ('LIVE-' + (appState.liveAccounts.length + 1));
       const account = {
-        id: document.getElementById('liveId')?.value || ('LIVE-' + (appState.liveAccounts.length + 1)),
+        id,
         broker: document.getElementById('liveBroker')?.value || '',
         label: document.getElementById('liveLabel')?.value || '',
         balance: parseFloat(document.getElementById('liveBalance')?.value || '0') || 0,
         riskLimit: document.getElementById('liveRiskLimit')?.value || '',
         goal: document.getElementById('liveGoal')?.value || '',
-        status: document.getElementById('liveStatus')?.value || 'Active',
+        status: document.getElementById('liveStatus')?.value || 'active',
         notes: document.getElementById('liveNotes')?.value || ''
       };
-      appState.liveAccounts.push(account);
+      const idx = appState.liveAccounts.findIndex(a => a.id === id);
+      if(idx >= 0) appState.liveAccounts[idx] = account;
+      else appState.liveAccounts.push(account);
     }
     saveAppState();
     renderAccounts();
-    alert((type === 'funded' ? 'Funded' : 'Live') + ' account saved.');
+    alert((type === 'eval' ? 'Eval' : type === 'funded' ? 'Funded' : 'Live') + ' account saved.');
   };
 
   function renderJournal(){
@@ -4379,319 +4457,6 @@ document.addEventListener('DOMContentLoaded', function(){
   <button class="themeIconBtn" type="button" data-theme-icon="theme-soft-bluegreen" title="Soft Blue-Green">🌊</button>
   <button class="themeIconBtn" type="button" data-theme-icon="theme-bright-bluegreen" title="Bright Blue-Green">💚</button>
 </div>
-
-
-<script>
-(function(){
-  window.sessionExpanded = false;
-  function byId(id){ return document.getElementById(id); }
-
-  function applyTheme(themeClass){
-    document.body.classList.remove(
-      'theme-soft-purple',
-      'theme-bright-purple',
-      'theme-soft-bluegreen',
-      'theme-bright-bluegreen'
-    );
-    document.body.classList.add(themeClass);
-    try{ localStorage.setItem('faceless_theme_choice', themeClass); }catch(e){}
-    document.querySelectorAll('#styleIconMenu .themeIconBtn').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-theme-icon') === themeClass);
-    });
-  }
-
-  function bindFinalStyleMenu(){
-    const menu = byId('styleIconMenu');
-    if(!menu) return;
-
-    const styleBtn =
-      byId('styleToggle') ||
-      byId('styleCycleBtn') ||
-      Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').trim().startsWith('Style'));
-
-    if(styleBtn){
-      styleBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        menu.classList.toggle('open');
-      };
-    }
-
-    menu.querySelectorAll('[data-theme-icon]').forEach(btn => {
-      btn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        applyTheme(this.getAttribute('data-theme-icon'));
-        menu.classList.remove('open');
-      };
-    });
-
-    document.addEventListener('click', function(e){
-      if(styleBtn && (e.target === styleBtn || styleBtn.contains(e.target) || menu.contains(e.target))) return;
-      menu.classList.remove('open');
-    });
-
-    try{
-      const saved = localStorage.getItem('faceless_theme_choice');
-      if(saved) applyTheme(saved);
-      else applyTheme('theme-soft-purple');
-    }catch(e){
-      applyTheme('theme-soft-purple');
-    }
-  }
-
-  function mins(h,m){ return h*60 + m; }
-  let sessionExpanded = false;
-
-  const sessions = [
-    {
-      key:'asia',
-      name:'Asia Session',
-      flag:'🌏',
-      start:mins(18,0),
-      end:mins(3,0),
-      best:'7 PM – 11 PM · 1 AM – 3 AM',
-      meaning:'Setup session. Build levels and prepare.'
-    },
-    {
-      key:'london',
-      name:'London Session',
-      flag:'🇬🇧',
-      start:mins(3,0),
-      end:mins(11,0),
-      best:'3 AM – 6 AM',
-      meaning:'Momentum session. Strong directional moves and cleaner breakouts.'
-    },
-    {
-      key:'ny',
-      name:'NY Session',
-      flag:'🇺🇸',
-      start:mins(8,0),
-      end:mins(16,0),
-      best:'8 AM – 11 AM 🔥🔥 · 9:30 AM open volatility',
-      meaning:'Power session. Highest probability trades and biggest moves.'
-    }
-  ];
-
-  function inSession(nowMin, s){
-    if(s.start < s.end) return nowMin >= s.start && nowMin < s.end;
-    return nowMin >= s.start || nowMin < s.end;
-  }
-
-  function sessionRange(s){ return fmtClock(s.start) + ' – ' + fmtClock(s.end); }
-
-  function fmtClock(totalMinutes){
-    let h = Math.floor(totalMinutes/60) % 24;
-    let m = totalMinutes % 60;
-    const suffix = h >= 12 ? 'PM' : 'AM';
-    let display = h % 12;
-    if(display === 0) display = 12;
-    return display + ':' + String(m).padStart(2,'0') + ' ' + suffix;
-  }
-
-  function fmtCountdown(totalSeconds){
-    totalSeconds = Math.max(0, totalSeconds);
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  }
-
-  function secondsUntil(nowSeconds, targetSeconds){
-    let diff = targetSeconds - nowSeconds;
-    if(diff < 0) diff += 24 * 3600;
-    return diff;
-  }
-
-  function nextSession(nowMinutes, nowSeconds){
-    return sessions
-      .map(s => ({...s, until: secondsUntil(nowSeconds, s.start * 60)}))
-      .sort((a,b) => a.until - b.until)[0];
-  }
-
-  function ensureSessionContainer(){
-    let container = byId('sessionContainer');
-    if(container) return container;
-
-    const labels = Array.from(document.querySelectorAll('.label, .sectionTitle, div'));
-    const targetLabel = labels.find(el => (el.textContent || '').trim() === 'Session Status');
-    if(!targetLabel) return null;
-    const card = targetLabel.closest('.kpi') || targetLabel.closest('.stat') || targetLabel.parentElement;
-    if(!card) return null;
-
-    card.innerHTML = '<div class="label">Session Status</div><div id="sessionContainer"></div>';
-    return byId('sessionContainer');
-  }
-
-  function computeSessionState(){
-    const now = new Date();
-    const nowMinutes = now.getHours() * 60 + now.getMinutes();
-    const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-
-    const active = sessions.filter(s => inSession(nowMinutes, s));
-    const london = active.find(s => s.key === 'london');
-    const ny = active.find(s => s.key === 'ny');
-    const next = nextSession(nowMinutes, nowSeconds);
-
-    if(london && ny){
-      const overlapEndSeconds = 11 * 3600;
-      return {
-        flag:'🔥',
-        name:'London + NY Overlap',
-        sub:'8:00 AM – 11:00 AM',
-        ledClass:'overlap',
-        ledText:'Best Trading Window',
-        countdownLabel:'Time left',
-        countdown:fmtCountdown(Math.max(0, overlapEndSeconds - nowSeconds)),
-        best:'8 AM – 11 AM 🔥🔥 ← Best of the day',
-        meaning:'Highest probability trades, strongest momentum, best overlap window.'
-      };
-    }
-
-    if(active.length){
-      const s = active[0];
-      let startSec = s.start * 60;
-      let endSec = s.end * 60;
-      let currentSec = nowSeconds;
-
-      if(s.start > s.end){
-        if(currentSec < endSec){
-          currentSec += 24 * 3600;
-          startSec += 24 * 3600;
-          endSec += 24 * 3600;
-        } else {
-          endSec += 24 * 3600;
-        }
-      }
-
-      return {
-        flag:s.flag,
-        name:s.name,
-        sub:sessionRange(s),
-        ledClass:s.key === 'asia' ? 'waiting' : 'active',
-        ledText:s.key === 'asia' ? 'Setup Session' : (s.key === 'london' ? 'Momentum Session' : 'Power Session'),
-        countdownLabel:'Time left',
-        countdown:fmtCountdown(Math.max(0, endSec - currentSec)),
-        best:s.best,
-        meaning:s.meaning
-      };
-    }
-
-    let transitionName = 'Transition Phase';
-    let transitionMeaning = 'Low probability trades right now.';
-    let transitionBest = 'Wait for the next tradable session.';
-    if(next.key === 'london'){
-      transitionName = 'Pre-London Setup';
-      transitionMeaning = 'Market positioning before London. Wait for momentum to build.';
-      transitionBest = 'Mark levels and wait for London momentum.';
-    } else if(next.key === 'ny'){
-      transitionName = 'Transition Phase';
-      transitionMeaning = 'Chop or fake moves are more likely. Wait for NY liquidity and confirmation.';
-      transitionBest = 'Wait for NY open.';
-    } else if(next.key === 'asia'){
-      transitionName = 'Dead Zone';
-      transitionMeaning = 'Low probability environment. Review, journal, and prepare.';
-      transitionBest = 'No trades. Wait for Asia.';
-    }
-
-    return {
-      flag:next.key === 'asia' ? '🌙' : next.flag,
-      name:transitionName,
-      sub:'Between sessions',
-      ledClass:'waiting',
-      ledText:'Waiting',
-      countdownLabel:'Next in',
-      countdown:fmtCountdown(next.until),
-      best:transitionBest,
-      meaning:transitionMeaning
-    };
-  }
-
-  function renderSession(){
-    const container = ensureSessionContainer();
-    if(!container) return;
-
-    const d = computeSessionState();
-    container.innerHTML = `
-      <div class="sessionStable">
-        <div class="top">
-          <div class="flag">${d.flag}</div>
-          <div class="name">${d.name}</div>
-        </div>
-        <div class="sub">${d.sub}</div>
-        <div class="led ${d.ledClass}">
-          <span class="dot"></span>
-          ${d.ledText}
-        </div>
-        <div class="countdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
-        <div class="block">
-          <div class="label">Best</div>
-          <div class="text">${d.best}</div>
-        </div>
-        <div class="block">
-          <div class="label">Meaning</div>
-          <div class="text">${d.meaning}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  function bindTabs(){
-    document.querySelectorAll('#mainTabs .pill[data-view]').forEach(tab => {
-      tab.onclick = function(e){
-        const viewId = this.getAttribute('data-view');
-        if(window.__facelessTradeLocked && (viewId === 'strategy' || viewId === 'live')){
-          e.preventDefault();
-          e.stopPropagation();
-          alert('🔒 Trading is locked right now.');
-          return;
-        }
-        document.querySelectorAll('#mainTabs .pill[data-view]').forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        const target = byId(viewId);
-        if(target) target.classList.add('active');
-        try{ localStorage.setItem('faceless_active_view', viewId); }catch(e){}
-      };
-    });
-
-    try{
-      const savedView = localStorage.getItem('faceless_active_view');
-      if(savedView){
-        const btn = document.querySelector('#mainTabs .pill[data-view="' + savedView + '"]');
-        if(btn) btn.click();
-      }
-    }catch(e){}
-  }
-
-  function bindStrategySubtabs(){
-    const tabs = document.querySelectorAll('[data-merged-strategy]');
-    if(!tabs.length) return;
-    tabs.forEach(btn => {
-      btn.onclick = function(e){
-        e.preventDefault();
-        const key = this.getAttribute('data-merged-strategy');
-        tabs.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        ['merged-icc','merged-ema','merged-sd'].forEach(id => {
-          const pane = byId(id);
-          if(pane) pane.style.display = 'none';
-        });
-        const activePane = byId('merged-' + key);
-        if(activePane) activePane.style.display = 'block';
-      };
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    bindFinalStyleMenu();
-    bindTabs();
-    bindStrategySubtabs();
-    renderSession();
-    setInterval(renderSession, 1000);
-  });
-})();
-</script>
 
 
 <script>
