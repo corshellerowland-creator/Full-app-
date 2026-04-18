@@ -6196,19 +6196,85 @@ document.addEventListener('DOMContentLoaded', function(){
     return { flag: next.key === 'asia' ? '🌙' : next.flag, name: next.key === 'london' ? 'Pre-London' : 'Dead Zone', text:'Next in: ' + fmt(next.until) };
   }
 
+  
+  window.__sessionExpanded = false;
   window.renderCompactSession = function(){
     const container = document.getElementById('sessionContainer');
     if(!container) return;
-    const d = stableSessionData();
+    const now = new Date();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const secNow = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const sessions = [
+      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
+      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
+      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
+    ];
+    const inSession = s => s.start < s.end ? mins >= s.start && mins < s.end : (mins >= s.start || mins < s.end);
+    const active = sessions.filter(inSession);
+    function fmt(totalSeconds){
+      totalSeconds = Math.max(0, totalSeconds);
+      const h = Math.floor(totalSeconds/3600);
+      const m = Math.floor((totalSeconds%3600)/60);
+      const s = totalSeconds%60;
+      return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    }
+
+    let d;
+    if(active.find(s => s.key === 'london') && active.find(s => s.key === 'ny')){
+      d = {
+        flag:'🔥',
+        name:'London + NY',
+        text:'Time left: ' + fmt(Math.max(0, 11*3600 - secNow)),
+        best:'8 AM – 11 AM 🔥🔥',
+        meaning:'Highest probability overlap window.'
+      };
+    } else if(active.length){
+      const s = active[0];
+      let endSec = s.end * 60;
+      let cur = secNow;
+      if(s.start > s.end){
+        if(cur < endSec){ cur += 86400; endSec += 86400; } else { endSec += 86400; }
+      }
+      d = {
+        flag:s.flag,
+        name:s.name,
+        text:'Time left: ' + fmt(Math.max(0, endSec - cur)),
+        best:s.best,
+        meaning:s.meaning
+      };
+    } else {
+      const next = sessions.map(s => ({...s, until: ((s.start*60) - secNow + 86400) % 86400})).sort((a,b)=>a.until-b.until)[0];
+      d = {
+        flag: next.key === 'asia' ? '🌙' : next.flag,
+        name: next.key === 'london' ? 'Pre-London' : 'Dead Zone',
+        text:'Next in: ' + fmt(next.until),
+        best: next.key === 'london' ? 'Mark levels and wait for London momentum.' : 'No trades. Wait for Asia.',
+        meaning: next.key === 'london' ? 'Market positioning before London.' : 'Review, journal, and prepare.'
+      };
+    }
+
     container.innerHTML = `
-      <div class="sessionStable compact">
+      <div class="sessionStable compact ${window.__sessionExpanded ? 'expanded' : ''}" id="sessionStableCard">
         <div class="sessionMainRow" style="display:flex;align-items:center;gap:8px;">
           <div>${d.flag}</div>
           <div style="font-weight:600;">${d.name}</div>
         </div>
         <div class="sessionCountdownLine" style="font-size:13px;margin-top:4px;">${d.text}</div>
+        <div class="expandHint">${window.__sessionExpanded ? 'Tap to collapse' : 'Tap for details'}</div>
+        <div class="sessionDetails">
+          <div style="margin-top:2px;font-size:12px;"><strong>Best:</strong> ${d.best}</div>
+          <div style="margin-top:6px;font-size:12px;"><strong>Meaning:</strong> ${d.meaning}</div>
+        </div>
       </div>
     `;
+
+    const card = document.getElementById('sessionStableCard');
+    if(card){
+      card.onclick = function(){
+        window.__sessionExpanded = !window.__sessionExpanded;
+        window.renderCompactSession();
+      };
+    }
   };
   window.renderSession = window.renderCompactSession;
 
@@ -6219,8 +6285,31 @@ document.addEventListener('DOMContentLoaded', function(){
     window.renderCompactSession();
     setInterval(window.renderCompactSession, 1000);
   });
+  });
 })();
 </script>
+
+
+<style id="session-stable-expand-css">
+#sessionContainer .sessionStable.compact{
+  cursor:pointer !important;
+}
+#sessionContainer .sessionDetails{
+  display:none;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+#sessionContainer .sessionStable.compact.expanded .sessionDetails{
+  display:block !important;
+}
+#sessionContainer .expandHint{
+  margin-top:8px;
+  font-size:11px;
+  color:#d8cbff;
+  opacity:.9;
+}
+</style>
 
 </body>
 </html>
