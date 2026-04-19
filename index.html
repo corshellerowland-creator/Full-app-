@@ -1633,6 +1633,41 @@ body {
 #mainTabs .pill{flex:0 0 auto !important;white-space:nowrap !important;}
 </style>
 
+
+<style id="oai-journal-fix">
+/* kill leftover spacer under hero */
+.dashboard > .row:first-of-type{
+  display:none !important;
+}
+
+/* journal layout spacing */
+#journal .form-grid{
+  gap:14px !important;
+}
+#journal .form-group{
+  margin-bottom:10px !important;
+}
+
+/* fix right column spacing */
+#journal .form-grid > div{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+/* ensure inputs full width */
+#journal select,
+#journal input,
+#journal textarea{
+  width:100% !important;
+}
+
+/* spacing between rows */
+#journal .form-grid + .form-grid{
+  margin-top:10px;
+}
+</style>
+
 </head>
 <body class="theme-soft-purple">
 <div class="shell">
@@ -7507,6 +7542,40 @@ loadPnL();
   document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('load', boot);
   setInterval(updatePnl, 1000);
+})();
+</script>
+
+
+<script id="oai-journal-fix-js">
+(function(){
+  function fixPnlField(){
+    const journal = document.getElementById('journal');
+    if(!journal) return;
+
+    const groups = journal.querySelectorAll('.form-group, .field, div');
+    groups.forEach(g=>{
+      const label = g.querySelector('label');
+      const input = g.querySelector('input, select');
+
+      if(input && !label && input.type !== 'file'){
+        const txt = (input.placeholder || '').toLowerCase();
+        if(txt.includes('pnl') || txt.includes('amount') || input.name === 'pnl'){
+          const newLabel = document.createElement('label');
+          newLabel.textContent = 'PnL';
+          newLabel.style.fontSize = '14px';
+          newLabel.style.marginBottom = '4px';
+          g.insertBefore(newLabel, input);
+        }
+      }
+    });
+  }
+
+  function boot(){
+    fixPnlField();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
 })();
 </script>
 
