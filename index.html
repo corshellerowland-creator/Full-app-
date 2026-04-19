@@ -1534,7 +1534,6 @@ body {
   white-space: nowrap !important;
 }
 </style>
-
 <style id="oai-pnl-final-fix">
 /* remove the dead spacer under hero */
 .dashboard > .row:first-of-type,
@@ -1633,38 +1632,47 @@ body {
 #mainTabs .pill{flex:0 0 auto !important;white-space:nowrap !important;}
 </style>
 
+<style id="oai-spacer-journal-final">
+/* remove dead top spacer for real */
+.shell > .row { display:none !important; }
+.dashboard { margin-bottom: 12px !important; }
 
-<style id="oai-journal-fix">
-/* kill leftover spacer under hero */
-.dashboard > .row:first-of-type{
-  display:none !important;
+/* journal layout: keep existing fields, just make them read correctly */
+#journal .grid2{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:14px 16px !important;
+  align-items:start !important;
 }
-
-/* journal layout spacing */
-#journal .form-grid{
-  gap:14px !important;
+#journal .grid2[style]{
+  margin-top:14px !important;
 }
-#journal .form-group{
-  margin-bottom:10px !important;
+#journal .fieldLabel{
+  display:block !important;
+  margin:0 0 8px 0 !important;
+  line-height:1.2 !important;
 }
-
-/* fix right column spacing */
-#journal .form-grid > div{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
+#journal .grid2 > div{
+  min-width:0 !important;
 }
-
-/* ensure inputs full width */
-#journal select,
-#journal input,
-#journal textarea{
+#journal .field,
+#journal select.field,
+#journal input.field,
+#journal textarea.field{
   width:100% !important;
+  display:block !important;
+}
+#journal textarea.field{
+  min-height:120px !important;
+}
+#journal .section{
+  overflow:visible !important;
 }
 
-/* spacing between rows */
-#journal .form-grid + .form-grid{
-  margin-top:10px;
+/* add a touch more breathing room around the account/pnl row */
+#journal #journalAccountId,
+#journal #journalPnl{
+  margin-top:0 !important;
 }
 </style>
 
@@ -1688,13 +1696,7 @@ body {
 </div>
 </div>
 </div>
-<div class="row">
-<div class="card">
-<div class="label">Today PnL</div>
-<div class="value" id="todayPnl">$0</div>
-<div class="pill" id="todayBadge">No goal active</div>
-</div>
-</div>
+
 </div>
 <div class="tabs" id="mainTabs">
 <button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
@@ -7391,7 +7393,6 @@ loadPnL();
   setTimeout(boot, 200);
 })();
 </script>
-
 <script id="oai-pnl-final-fix-js">
 (function(){
   function money(n){
@@ -7545,37 +7546,23 @@ loadPnL();
 })();
 </script>
 
-
-<script id="oai-journal-fix-js">
+<script id="oai-spacer-journal-final-js">
 (function(){
-  function fixPnlField(){
+  function removeObviousBlankInjectedJournalCells(){
     const journal = document.getElementById('journal');
     if(!journal) return;
-
-    const groups = journal.querySelectorAll('.form-group, .field, div');
-    groups.forEach(g=>{
-      const label = g.querySelector('label');
-      const input = g.querySelector('input, select');
-
-      if(input && !label && input.type !== 'file'){
-        const txt = (input.placeholder || '').toLowerCase();
-        if(txt.includes('pnl') || txt.includes('amount') || input.name === 'pnl'){
-          const newLabel = document.createElement('label');
-          newLabel.textContent = 'PnL';
-          newLabel.style.fontSize = '14px';
-          newLabel.style.marginBottom = '4px';
-          g.insertBefore(newLabel, input);
-        }
+    // Only remove totally empty div wrappers that sit directly in grid2 rows
+    journal.querySelectorAll('.grid2 > div').forEach(cell => {
+      const hasLabel = !!cell.querySelector('.fieldLabel');
+      const hasField = !!cell.querySelector('.field, input, select, textarea');
+      const text = (cell.textContent || '').trim();
+      if(!hasLabel && !hasField && !text){
+        cell.remove();
       }
     });
   }
-
-  function boot(){
-    fixPnlField();
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  window.addEventListener('load', boot);
+  document.addEventListener('DOMContentLoaded', removeObviousBlankInjectedJournalCells);
+  window.addEventListener('load', removeObviousBlankInjectedJournalCells);
 })();
 </script>
 
