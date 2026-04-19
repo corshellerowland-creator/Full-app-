@@ -1435,8 +1435,8 @@ button.option,
 </style>
 
 
-<style id="oai-final-home-session-fix">
-/* final layout: session stays top, today pnl moves under command center */
+<style id="oai-careful-fix">
+/* careful home fixes */
 .dashboard > .row:first-of-type{
   display:block !important;
 }
@@ -1444,16 +1444,8 @@ button.option,
   width:100% !important;
   max-width:none !important;
 }
-.dashboard > .row:first-of-type > .card:first-child{
-  display:none !important; /* hide original top today pnl slot after we move the real card */
-}
-.dashboard > .row:first-of-type > .card:last-child{
-  display:block !important;
-  width:100% !important;
-  max-width:none !important;
-}
 
-/* session should be open and full width */
+/* session should own the top row after pnl moves */
 #sessionContainer,
 #sessionContainer .sessionStable{
   width:100% !important;
@@ -1462,55 +1454,50 @@ button.option,
 #sessionContainer .sessionStable{
   border-radius:20px !important;
   padding:16px !important;
+  background:linear-gradient(180deg, rgba(25,14,50,.85), rgba(10,6,20,.95)) !important;
 }
 #sessionContainer .top{
   display:flex !important;
   align-items:center !important;
-  gap:12px !important;
-  margin-bottom:8px !important;
+  gap:10px !important;
+  margin-bottom:6px !important;
 }
-#sessionContainer .sub{
+#sessionContainer .flag{font-size:24px !important;}
+#sessionContainer .name{font-size:18px !important;font-weight:900 !important;}
+#sessionContainer .sub{font-size:13px !important;color:#d8cbff !important;margin-bottom:10px !important;}
+#sessionContainer .led{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  padding:10px 14px !important;
+  border-radius:999px !important;
+  font-weight:800 !important;
   margin-bottom:10px !important;
 }
-#sessionContainer .countdown{
-  margin-top:10px !important;
+#sessionContainer .dot{
+  width:10px !important;
+  height:10px !important;
+  border-radius:999px !important;
+  animation:pulse 1.4s infinite !important;
 }
-#sessionContainer .block{
-  display:block !important;
-  margin-top:12px !important;
-}
+#sessionContainer .active{background:#143b2f !important;color:#dfffee !important;}
+#sessionContainer .waiting{background:#4a3a12 !important;color:#fff3bf !important;}
+#sessionContainer .overlap{background:#3a1f6e !important;color:#f1e4ff !important;}
+#sessionContainer .closed{background:#3b2228 !important;color:#ffd7de !important;}
+#sessionContainer .active .dot{background:#66ffc7 !important;}
+#sessionContainer .waiting .dot{background:#ffd75f !important;}
+#sessionContainer .overlap .dot{background:linear-gradient(135deg,#c87cff,#6affc8) !important;}
+#sessionContainer .closed .dot{background:#ff8797 !important;}
+#sessionContainer .countdown{margin-top:10px !important;font-size:13px !important;}
+#sessionContainer .block{display:block !important;margin-top:10px !important;}
+#sessionContainer .label{font-size:11px !important;color:#d8cbff !important;}
+#sessionContainer .text{font-size:13px !important;font-weight:700 !important;}
 #sessionContainer .sessionDetails,
 #sessionContainer .expandHint{
   display:none !important;
 }
-#sessionContainer .sessionStable.compact,
-#sessionContainer .sessionStable.compact.expanded{
-  cursor:default !important;
-}
-#sessionContainer .sessionStable.compact .block,
-#sessionContainer .sessionStable.compact.expanded .block{
-  display:block !important;
-}
-#sessionContainer .sessionStable.compact .countdown,
-#sessionContainer .sessionStable.compact.expanded .countdown{
-  margin-top:10px !important;
-}
 
-/* tab row clean */
-#mainTabs{
-  overflow-x:auto !important;
-  overflow-y:hidden !important;
-  -webkit-overflow-scrolling:touch !important;
-  scrollbar-width:none !important;
-  white-space:nowrap !important;
-}
-#mainTabs::-webkit-scrollbar{display:none !important;}
-#mainTabs .pill{
-  flex:0 0 auto !important;
-  white-space:nowrap !important;
-}
-
-/* today pnl card moved under command center */
+/* move today pnl under command center */
 #todayPnlMovedWrap{
   margin-top:16px !important;
 }
@@ -1521,6 +1508,17 @@ button.option,
 #todayPnl.positive{ color:#69ff8b !important; }
 #todayPnl.negative{ color:#ff6b6b !important; }
 #todayPnl.neutral{ color:inherit !important; }
+
+/* clean tabs */
+#mainTabs{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  white-space:nowrap !important;
+}
+#mainTabs::-webkit-scrollbar{display:none !important;}
+#mainTabs .pill{flex:0 0 auto !important;white-space:nowrap !important;}
 </style>
 
 </head>
@@ -1555,7 +1553,7 @@ button.option,
 </div>
 <div class="tabs" id="mainTabs">
 <button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
-<button class="pill" data-view="psych">Psychology</button></div>
+<button class="pill" data-view="psych">Psychology</button><div class="pnl-nav">PnL</div></div>
 <div class="app-content">
 <section class="view active" id="home">
 <div class="section"><h2 class="sectionTitle">Command Center</h2><div class="kpiGrid"><div class="kpi"><div class="label">Active Goal</div><div class="num" id="homeGoal">$—</div><div class="muted" id="homeGoalType">No goal set</div></div><div class="kpi"><div class="label">Max Loss</div><div class="num" id="homeLoss">$—</div><div class="muted">Used by lock rules</div></div><div class="kpi"><div class="label">Best Strategy</div><div class="num" id="bestStrategy" style="font-size:18px">—</div><div class="muted" id="bestStrategyMeta">Waiting for trades</div></div><div class="kpi"><div class="label">Accounts</div><div class="num" id="accountCount">0</div><div class="muted">Eval + Funded + Live</div></div></div></div>
@@ -7065,19 +7063,19 @@ loadPnL();
 </script>
 
 
-<script id="oai-final-home-session-fix-js">
+<script id="oai-careful-fix-js">
 (function(){
   function weekendClosed(now){
     const day = now.getDay(); // 0 Sun ... 5 Fri 6 Sat
     const mins = now.getHours() * 60 + now.getMinutes();
-    if(day === 5 && mins >= 18*60) return true; // Friday after 6 PM
-    if(day === 6) return true; // Saturday
-    if(day === 0 && mins < 18*60) return true; // Sunday before 6 PM
+    if(day === 5 && mins >= 18*60) return true;
+    if(day === 6) return true;
+    if(day === 0 && mins < 18*60) return true;
     return false;
   }
 
   function fmtClock(totalMinutes){
-    let h = Math.floor(totalMinutes/60) % 24;
+    let h = Math.floor(totalMinutes / 60) % 24;
     let m = totalMinutes % 60;
     const suffix = h >= 12 ? 'PM' : 'AM';
     let display = h % 12;
@@ -7086,7 +7084,7 @@ loadPnL();
   }
 
   function fmtCountdown(totalSeconds){
-    totalSeconds = Math.max(0, totalSeconds);
+    totalSeconds = Math.max(0, Math.floor(totalSeconds));
     const h = Math.floor(totalSeconds / 3600);
     const m = Math.floor((totalSeconds % 3600) / 60);
     const s = totalSeconds % 60;
@@ -7096,16 +7094,42 @@ loadPnL();
   function secondsUntilSundayOpen(now){
     const open = new Date(now);
     const day = now.getDay();
-    const diffDays = (7 - day) % 7;
-    open.setDate(now.getDate() + diffDays);
+    const addDays = (7 - day) % 7;
+    open.setDate(now.getDate() + addDays);
     open.setHours(18,0,0,0);
-    if(open <= now){
-      open.setDate(open.getDate() + 7);
-    }
-    return Math.floor((open - now) / 1000);
+    if(open <= now) open.setDate(open.getDate() + 7);
+    return (open - now) / 1000;
   }
 
-  function renderSessionFixed(){
+  function moveTodayPnlUnderCommandCenter(){
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const home = document.getElementById('home');
+    if(!todayCard || !home) return;
+
+    const commandCenter = home.querySelector('.section');
+    if(!commandCenter) return;
+
+    let wrap = document.getElementById('todayPnlMovedWrap');
+    if(!wrap){
+      wrap = document.createElement('div');
+      wrap.id = 'todayPnlMovedWrap';
+      wrap.className = 'section';
+      commandCenter.insertAdjacentElement('afterend', wrap);
+    }
+    if(todayCard.parentElement !== wrap){
+      wrap.appendChild(todayCard);
+    }
+
+    const topRow = document.querySelector('.dashboard > .row');
+    if(topRow){
+      const cards = topRow.querySelectorAll('.card');
+      if(cards.length && !cards[0].querySelector('#todayPnl')){
+        cards[0].style.display = 'none';
+      }
+    }
+  }
+
+  function renderStableSession(){
     const container = document.getElementById('sessionContainer');
     if(!container) return;
 
@@ -7119,7 +7143,7 @@ loadPnL();
             <div class="name">Market Closed</div>
           </div>
           <div class="sub">Friday 6:00 PM – Sunday 6:00 PM</div>
-          <div class="led waiting">
+          <div class="led closed">
             <span class="dot"></span>
             Weekend Closed
           </div>
@@ -7140,21 +7164,18 @@ loadPnL();
     const minsNow = now.getHours() * 60 + now.getMinutes();
     const secNow = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
     const sessions = [
-      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
-      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
-      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
+      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Setup session. Build levels and prepare.' },
+      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Momentum session. Strong directional moves and cleaner breakouts.' },
+      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM 🔥🔥 · 9:30 AM open volatility', meaning:'Power session. Highest probability trades and biggest moves.' }
     ];
     const inSession = s => s.start < s.end ? minsNow >= s.start && minsNow < s.end : (minsNow >= s.start || minsNow < s.end);
     const active = sessions.filter(inSession);
-
-    function nextSession(){
-      return sessions
-        .map(s => ({...s, until: ((s.start*60) - secNow + 86400) % 86400}))
-        .sort((a,b)=>a.until-b.until)[0];
-    }
+    const london = active.find(s => s.key === 'london');
+    const ny = active.find(s => s.key === 'ny');
+    const next = sessions.map(s => ({...s, until: ((s.start * 60) - secNow + 86400) % 86400})).sort((a,b) => a.until - b.until)[0];
 
     let d;
-    if(active.find(s => s.key === 'london') && active.find(s => s.key === 'ny')){
+    if(london && ny){
       d = {
         flag:'🔥',
         name:'London + NY Overlap',
@@ -7185,17 +7206,16 @@ loadPnL();
         meaning:s.meaning
       };
     } else {
-      const next = nextSession();
       d = {
         flag: next.key === 'asia' ? '🌙' : next.flag,
-        name: next.key === 'london' ? 'Pre-London Setup' : (next.key === 'ny' ? 'Transition Phase' : 'Dead Zone'),
+        name: next.key === 'london' ? 'Pre-London' : (next.key === 'ny' ? 'Transition Phase' : 'Dead Zone'),
         sub:'Between sessions',
         ledClass:'waiting',
         ledText:'Waiting',
         countdownLabel:'Next in',
         countdown:fmtCountdown(next.until),
         best: next.key === 'london' ? 'Mark levels and wait for London momentum.' : (next.key === 'ny' ? 'Wait for NY open.' : 'No trades. Wait for Asia.'),
-        meaning: next.key === 'london' ? 'Market positioning before London.' : (next.key === 'ny' ? 'Chop or fake moves are more likely. Wait for NY liquidity and confirmation.' : 'Low probability environment. Review, journal, and prepare.')
+        meaning: next.key === 'london' ? 'Market positioning before London.' : (next.key === 'ny' ? 'Wait for NY liquidity and confirmation.' : 'Review, journal, and prepare.')
       };
     }
 
@@ -7223,25 +7243,13 @@ loadPnL();
     `;
   }
 
-  function moveTodayPnlUnderCommandCenter(){
-    const todayCard = document.getElementById('todayPnl')?.closest('.card');
-    const home = document.getElementById('home');
-    if(!todayCard || !home) return;
-
-    const sections = home.querySelectorAll('.section');
-    if(!sections.length) return;
-    const commandCenter = sections[0];
-
-    let wrap = document.getElementById('todayPnlMovedWrap');
-    if(!wrap){
-      wrap = document.createElement('div');
-      wrap.id = 'todayPnlMovedWrap';
-      wrap.className = 'section';
-      commandCenter.insertAdjacentElement('afterend', wrap);
-    }
-    if(todayCard.parentElement !== wrap){
-      wrap.appendChild(todayCard);
-    }
+  function cleanTabs(){
+    const tabs = document.getElementById('mainTabs');
+    if(!tabs) return;
+    tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
+    Array.from(tabs.childNodes).forEach(node => {
+      if(node.nodeType === 3 && /PnL/.test(node.textContent || '')) node.textContent = '';
+    });
   }
 
   function colorTodayPnl(){
@@ -7249,33 +7257,22 @@ loadPnL();
     if(!el) return;
     const txt = (el.textContent || '').trim().replace(/,/g,'');
     let n = 0;
-    if(txt.startsWith('-$')) n = -parseFloat(txt.slice(2)) || 0;
+    if(txt.startsWith('-$')) n = -(parseFloat(txt.slice(2)) || 0);
     else if(txt.startsWith('$')) n = parseFloat(txt.slice(1)) || 0;
     el.classList.remove('positive','negative','neutral');
     el.classList.add(n > 0 ? 'positive' : n < 0 ? 'negative' : 'neutral');
   }
 
-  function cleanTabs(){
-    const tabs = document.getElementById('mainTabs');
-    if(!tabs) return;
-    tabs.querySelectorAll('.pnl-nav').forEach(n => n.remove());
-    Array.from(tabs.childNodes).forEach(node => {
-      if(node.nodeType === 3 && /PnL/.test(node.textContent || '')) node.textContent = '';
-    });
-  }
-
-  function bootFinalFixes(){
+  function carefulFixBoot(){
     cleanTabs();
     moveTodayPnlUnderCommandCenter();
-    renderSessionFixed();
+    renderStableSession();
     colorTodayPnl();
   }
 
-  document.addEventListener('DOMContentLoaded', bootFinalFixes);
-  window.addEventListener('load', bootFinalFixes);
-  setInterval(function(){
-    bootFinalFixes();
-  }, 1000);
+  document.addEventListener('DOMContentLoaded', carefulFixBoot);
+  window.addEventListener('load', carefulFixBoot);
+  setInterval(carefulFixBoot, 250);
 })();
 </script>
 
