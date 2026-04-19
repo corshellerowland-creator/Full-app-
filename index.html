@@ -1341,30 +1341,90 @@ button.option,
 
 </style>
 
-<style id="oai-final-patch">
-/* remove the big dead gap under hero by collapsing the wrapper directly under it */
-.hero{
-  margin-bottom: 8px !important;
-}
-.hero + .row{
+<style id="oai-final-stable-fix">
+/* keep hero tight; remove dead row under it */
+.shell > .row{
   display:none !important;
-  height:0 !important;
-  min-height:0 !important;
-  max-height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
 }
-.dashboard{
-  padding-bottom:14px !important;
-}
-.dashboard::after{
-  content:none !important;
+.hero{
+  margin-bottom: 10px !important;
 }
 
-/* keep tabs close to hero */
+/* stable session card placed under hero */
+#sessionTopSection{
+  margin-top: 10px !important;
+}
+#sessionTopSection .sectionTitle{
+  margin-bottom: 12px !important;
+}
+#sessionTopSection .sessionCard{
+  border-radius: 24px;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 10px 28px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.02);
+}
+#sessionTopSection .sessionTop{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+#sessionTopSection .sessionFlag{
+  font-size:28px;
+  line-height:1;
+}
+#sessionTopSection .sessionName{
+  font-size:18px;
+  font-weight:900;
+}
+#sessionTopSection .sessionSub{
+  margin-top:6px;
+  color: #eadcff;
+  font-size: 14px;
+}
+#sessionTopSection .sessionPill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  border:1px solid rgba(255,255,255,.12);
+}
+#sessionTopSection .sessionPill .dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  display:inline-block;
+}
+#sessionTopSection .waiting{ background: linear-gradient(180deg, rgba(131,104,31,.80), rgba(77,58,11,.86)); color:#fff0c2; }
+#sessionTopSection .waiting .dot{ background:#ffd458; }
+#sessionTopSection .active{ background: linear-gradient(180deg, rgba(19,94,67,.82), rgba(13,74,54,.90)); color:#dcfff1; }
+#sessionTopSection .active .dot{ background:#68f7c1; }
+#sessionTopSection .overlap{ background: linear-gradient(180deg, rgba(111,64,173,.82), rgba(67,35,118,.90)); color:#f0e3ff; }
+#sessionTopSection .overlap .dot{ background:#db9cff; }
+#sessionTopSection .closed{ background: linear-gradient(180deg, rgba(111,59,72,.82), rgba(76,34,45,.90)); color:#ffe0e6; }
+#sessionTopSection .closed .dot{ background:#ff8fa4; }
+#sessionTopSection .sessionCountdown{
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 900;
+}
+#sessionTopSection .sessionMeta{
+  margin-top: 12px;
+  font-size: 14px;
+  color: #eadcff;
+  line-height: 1.45;
+}
+#sessionTopSection .sessionMeta strong{
+  color:#fff8ff;
+}
+
+/* tabs cleanup */
 #mainTabs{
-  margin-top:8px !important;
+  margin-top: 12px !important;
   overflow-x:auto !important;
   overflow-y:hidden !important;
   -webkit-overflow-scrolling:touch !important;
@@ -1377,7 +1437,19 @@ button.option,
   white-space:nowrap !important;
 }
 
-/* journal spacing fix only: keep the real pnl field, just make the row read correctly */
+/* move Today PnL to home, under Command Center */
+#todayPnlHomeSection{
+  margin-top: 12px !important;
+}
+#todayPnlHomeSection .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#todayPnlHomeSection .value.positive{ color:#6aff8f !important; }
+#todayPnlHomeSection .value.negative{ color:#ff8686 !important; }
+#todayPnlHomeSection .value.neutral{ color:transparent; background:linear-gradient(90deg,#ffffff 0%, #ffe3ff 42%, #dff8ff 100%); -webkit-background-clip:text; background-clip:text; }
+
+/* journal row reads correctly */
 #journal .grid2{
   display:grid !important;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
@@ -1387,10 +1459,6 @@ button.option,
 #journal .fieldLabel{
   display:block !important;
   margin:0 0 8px 0 !important;
-  line-height:1.2 !important;
-}
-#journal .grid2 > div{
-  min-width:0 !important;
 }
 #journal .field,
 #journal select.field,
@@ -1398,9 +1466,6 @@ button.option,
 #journal textarea.field{
   width:100% !important;
   display:block !important;
-}
-#journal textarea.field{
-  min-height:120px !important;
 }
 </style>
 
@@ -1430,8 +1495,6 @@ button.option,
 <div class="value" id="todayPnl">$0</div>
 <div class="pill" id="todayBadge">No goal active</div>
 </div>
-<div class="card">
-<div class="label">Session Status</div><div id="sessionContainer"></div></div>
 </div>
 </div>
 <div class="tabs" id="mainTabs">
@@ -3571,7 +3634,49 @@ updateUI(); renderJournalList();
 <div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
 <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div class="accountList" id="strategyStats"></div></div></section>
 <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
-<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
+<section class="view" id="pnl">
+<div class="section pnl-screen">
+<div class="pnl-wrap">
+<div class="pnl-title">Today's PnL (resets daily)</div>
+<div class="pnl-main">
+<div class="pnl-row">
+<div class="pnl-head">Profit / Loss</div>
+<div class="pnl-head pnl-daily" id="pnlDailyBig">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Net</div>
+<div class="pnl-value" id="pnlNet">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Points</div>
+<div class="pnl-value" id="pnlPointsBig">+0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Withdrawn</div>
+<div class="pnl-value" id="pnlWithdrawn">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Trade Count / Win %</div>
+<div class="pnl-value" id="pnlTradeWin">0 / 00.0%</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Journal Sync</div>
+<div class="pnl-value" id="pnlJournalSync">OK</div>
+</div>
+</div>
+<div class="bottom-grid">
+<div class="mini">
+<div class="mini-row"><div class="mini-label">Daily</div><div class="mini-value" id="pnlDaily">$0.00</div></div>
+<div class="mini-row"><div class="mini-label">Monthly</div><div class="mini-value" id="pnlMonthly">$0.00</div></div>
+</div>
+<div class="mini">
+<div class="mini-row"><div class="mini-label">Weekly</div><div class="mini-value" id="pnlWeekly">$0.00</div></div>
+<div class="mini-row"><div class="mini-label">Win %</div><div class="mini-value" id="pnlProgress">00.0%</div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"/></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly=""/></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
 <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
 </div>
@@ -6697,26 +6802,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-<style id="session-stable-expand-css">
-#sessionContainer .sessionStable.compact{
-  cursor:pointer !important;
-}
-#sessionContainer .sessionDetails{
-  display:none;
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-#sessionContainer .sessionStable.compact.expanded .sessionDetails{
-  display:block !important;
-}
-#sessionContainer .expandHint{
-  margin-top:8px;
-  font-size:11px;
-  color:#d8cbff;
-  opacity:.9;
-}
-</style>
 <script>
 // DAILY RESET LOGIC (5:30 PM)
 function getTradingDay(){
@@ -6759,10 +6844,12 @@ function loadPnL(){
 loadPnL();
 </script>
 
-<script id="oai-final-patch-js">
+<script id="oai-final-stable-fix-js">
 (function(){
+  function byId(id){ return document.getElementById(id); }
+
   function cleanGhostPnl(){
-    const tabs = document.getElementById('mainTabs');
+    const tabs = byId('mainTabs');
     if(!tabs) return;
     tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
     Array.from(tabs.parentNode ? tabs.parentNode.childNodes : []).forEach(node => {
@@ -6775,69 +6862,338 @@ loadPnL();
     });
   }
 
-  function labelJournalPnl(){
-    const journal = document.getElementById('journal');
-    if(!journal) return;
+  function ensureSessionSection(){
+    const shell = document.querySelector('.shell');
+    const dashboard = shell ? shell.querySelector('.dashboard') : null;
+    if(!shell || !dashboard) return null;
 
-    // Find the account type / pnl row and relabel the second field if it has lost its visible label.
-    const cells = Array.from(journal.querySelectorAll('.grid2 > div'));
-    cells.forEach((cell, idx) => {
-      const input = cell.querySelector('input.field, input, select.field, select');
-      const label = cell.querySelector('.fieldLabel, label');
-      if(!input) return;
+    let section = byId('sessionTopSection');
+    if(section) return section;
 
-      const placeholder = (input.getAttribute('placeholder') || '').toLowerCase();
-      const name = (input.getAttribute('name') || '').toLowerCase();
-      const id = (input.getAttribute('id') || '').toLowerCase();
-
-          });
+    section = document.createElement('div');
+    section.id = 'sessionTopSection';
+    section.className = 'section';
+    section.innerHTML = '<h2 class="sectionTitle">Session Status</h2><div class="sessionCard" id="sessionTopCard"></div>';
+    dashboard.insertAdjacentElement('afterend', section);
+    return section;
   }
 
-  function fixJournalPnlLabel(){
-    const journal = document.getElementById('journal');
-    if(!journal) return;
+  function weekendClosed(now){
+    const day = now.getDay(); // 0 Sun, 5 Fri, 6 Sat
+    const mins = now.getHours() * 60 + now.getMinutes();
+    return (day === 5 && mins >= 18*60) || day === 6 || (day === 0 && mins < 18*60);
+  }
 
-    // Try direct match first
-    let pnlInput = journal.querySelector('#journalPnl, input[name="pnl"], input[id*="pnl" i], input[placeholder*="pnl" i]');
-    if(!pnlInput){
-      // fallback: the text/number input in the right cell under Account Type
-      const grid = journal.querySelector('.grid2');
-      if(grid){
-        const cells = Array.from(grid.children);
-        for(const cell of cells){
-          const input = cell.querySelector('input.field, input');
-          const select = cell.querySelector('select.field, select');
-          const label = cell.querySelector('.fieldLabel, label');
-          if(input && !select && (!label || !/pnl/i.test(label.textContent || ''))){
-            pnlInput = input;
-          }
-        }
+  function fmtClock(totalMinutes){
+    let h = Math.floor(totalMinutes/60) % 24;
+    const m = totalMinutes % 60;
+    const suffix = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + String(m).padStart(2,'0') + ' ' + suffix;
+  }
+
+  function fmtCountdown(totalSeconds){
+    totalSeconds = Math.max(0, Math.floor(totalSeconds));
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+
+  function secondsUntilSundayOpen(now){
+    const open = new Date(now);
+    const day = now.getDay();
+    const addDays = (7 - day) % 7;
+    open.setDate(now.getDate() + addDays);
+    open.setHours(18,0,0,0);
+    if(open <= now) open.setDate(open.getDate() + 7);
+    return (open - now) / 1000;
+  }
+
+  function computeSessionData(){
+    const now = new Date();
+
+    if(weekendClosed(now)){
+      return {
+        flag:'🌙',
+        name:'Market Closed',
+        sub:'Friday 6:00 PM – Sunday 6:00 PM',
+        cls:'closed',
+        pill:'Weekend Closed',
+        countdownLabel:'Reopens in',
+        countdown: fmtCountdown(secondsUntilSundayOpen(now)),
+        best:'Study charts, journal, and prepare for Sunday open.',
+        meaning:'Study time. Futures are closed for the weekend.'
+      };
+    }
+
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const secNow = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const sessions = [
+      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, pill:'Setup Session', cls:'waiting', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
+      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, pill:'Momentum Session', cls:'active', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
+      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, pill:'Power Session', cls:'active', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
+    ];
+    const inSession = s => s.start < s.end ? mins >= s.start && mins < s.end : (mins >= s.start || mins < s.end);
+    const active = sessions.filter(inSession);
+    const london = active.find(s => s.key === 'london');
+    const ny = active.find(s => s.key === 'ny');
+    const next = sessions
+      .map(s => ({...s, until: (((s.start * 60) - secNow) + 86400) % 86400}))
+      .sort((a,b) => a.until - b.until)[0];
+
+    if(london && ny){
+      return {
+        flag:'🔥',
+        name:'London + NY Overlap',
+        sub:'8:00 AM – 11:00 AM',
+        cls:'overlap',
+        pill:'Best Trading Window',
+        countdownLabel:'Time left',
+        countdown: fmtCountdown(Math.max(0, 11*3600 - secNow)),
+        best:'8 AM – 11 AM 🔥🔥',
+        meaning:'Highest probability overlap window.'
+      };
+    }
+
+    if(active.length){
+      const s = active[0];
+      let endSec = s.end * 60;
+      let cur = secNow;
+      if(s.start > s.end){
+        if(cur < endSec){ cur += 86400; endSec += 86400; }
+        else { endSec += 86400; }
       }
+      return {
+        flag:s.flag,
+        name:s.name,
+        sub:fmtClock(s.start) + ' – ' + fmtClock(s.end),
+        cls:s.cls,
+        pill:s.pill,
+        countdownLabel:'Time left',
+        countdown: fmtCountdown(Math.max(0, endSec - cur)),
+        best:s.best,
+        meaning:s.meaning
+      };
     }
-    if(!pnlInput) return;
 
-    const parent = pnlInput.parentElement;
-    if(!parent) return;
+    return {
+      flag: next.key === 'asia' ? '🌙' : next.flag,
+      name: next.key === 'london' ? 'Pre-London' : (next.key === 'ny' ? 'Transition Phase' : 'Dead Zone'),
+      sub:'Between sessions',
+      cls:'waiting',
+      pill:'Waiting',
+      countdownLabel:'Next in',
+      countdown: fmtCountdown(next.until),
+      best: next.key === 'london' ? 'Mark levels and wait for London momentum.' : (next.key === 'ny' ? 'Wait for NY open.' : 'No trades. Wait for Asia.'),
+      meaning: next.key === 'london' ? 'Market positioning before London.' : (next.key === 'ny' ? 'Wait for NY liquidity and confirmation.' : 'Review, journal, and prepare.')
+    };
+  }
 
-    let label = parent.querySelector('.fieldLabel, label');
-    if(!label){
-      label = document.createElement('div');
-      label.className = 'fieldLabel';
-      label.textContent = 'PnL';
-      parent.insertBefore(label, pnlInput);
-    } else if(!/pnl/i.test(label.textContent || '')){
-      label.textContent = 'PnL';
+  function renderStableSession(){
+    ensureSessionSection();
+    const card = byId('sessionTopCard');
+    if(!card) return;
+    const d = computeSessionData();
+    card.innerHTML = `
+      <div class="sessionTop">
+        <div class="sessionFlag">${d.flag}</div>
+        <div>
+          <div class="sessionName">${d.name}</div>
+          <div class="sessionSub">${d.sub}</div>
+        </div>
+      </div>
+      <div class="sessionPill ${d.cls}"><span class="dot"></span>${d.pill}</div>
+      <div class="sessionCountdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
+      <div class="sessionMeta"><strong>Best:</strong> ${d.best}</div>
+      <div class="sessionMeta"><strong>Meaning:</strong> ${d.meaning}</div>
+    `;
+  }
+
+  function ensureTodayPnlHome(){
+    const home = byId('home');
+    const todayEl = byId('todayPnl');
+    const badgeEl = byId('todayBadge');
+    if(!home || !todayEl || !badgeEl) return;
+
+    const originalCard = todayEl.closest('.card');
+    if(!originalCard) return;
+
+    let section = byId('todayPnlHomeSection');
+    if(!section){
+      section = document.createElement('div');
+      section.id = 'todayPnlHomeSection';
+      section.className = 'section';
+      section.innerHTML = '<h2 class="sectionTitle">Today PnL</h2>';
+      const firstSection = home.querySelector('.section');
+      if(firstSection) firstSection.insertAdjacentElement('afterend', section);
+      else home.prepend(section);
     }
+    if(originalCard.parentElement !== section){
+      section.appendChild(originalCard);
+    }
+
+    const shellRow = document.querySelector('.shell > .row');
+    if(shellRow) shellRow.remove();
+  }
+
+  function readState(){
+    const keys = [
+      'faceless_app_state_v2',
+      'faceless_app_state_v3',
+      'faceless_app_state_v4',
+      'faceless_trader_state',
+      'facelessTraderState'
+    ];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) continue;
+        const parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object') return parsed;
+      }catch(e){}
+    }
+    return { journalEntries: [] };
+  }
+
+  function tradingDayStart(now){
+    const d = new Date(now);
+    const start = new Date(d);
+    start.setHours(17,30,0,0);
+    if(d < start) start.setDate(start.getDate() - 1);
+    return start.getTime();
+  }
+
+  function weekStart(now){
+    const d = new Date(now);
+    d.setHours(17,30,0,0);
+    const offset = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - offset);
+    return d.getTime();
+  }
+
+  function monthStart(now){
+    return new Date(now.getFullYear(), now.getMonth(), 1, 17, 30, 0, 0).getTime();
+  }
+
+  function collectEntries(state){
+    const buckets = [
+      state.journalEntries, state.entries, state.liveEntries, state.trades, state.tradeEntries
+    ].filter(Array.isArray);
+    const merged = [];
+    buckets.forEach(arr => arr.forEach(item => merged.push(item)));
+    return merged;
+  }
+
+  function entryTs(entry){
+    return Number(entry.savedAt || entry.updatedAt || entry.createdAt || entry.timestamp || entry.dateMs || 0);
+  }
+
+  function entryPnl(entry){
+    const direct = Number(entry.pnl ?? entry.net ?? entry.netPnl ?? entry.profitLoss ?? 0);
+    if(!Number.isNaN(direct) && direct !== 0) return direct;
+    const profit = Number(entry.profit ?? entry.todayProfit ?? 0);
+    const loss = Number(entry.loss ?? entry.todayLoss ?? 0);
+    if(profit || loss) return profit - loss;
+    const pointsWon = Number(entry.pointsWon ?? 0);
+    const pointsLost = Number(entry.pointsLost ?? 0);
+    const netPoints = Number(entry.netPoints ?? (pointsWon - pointsLost) ?? 0);
+    const contracts = Number(entry.contracts ?? entry.numContracts ?? 1);
+    const pointValue = Number(entry.pointValue ?? entry.dollarsPerPoint ?? 2);
+    return netPoints * contracts * pointValue;
+  }
+
+  function entryPoints(entry){
+    return Number(entry.netPoints ?? ((Number(entry.pointsWon||0)) - (Number(entry.pointsLost||0))) ?? 0);
+  }
+
+  function money(n){
+    const v = Number(n || 0);
+    const sign = v < 0 ? '-$' : '$';
+    return sign + Math.abs(v).toFixed(2);
+  }
+
+  function signedNum(n){
+    const v = Number(n || 0);
+    return (v >= 0 ? '+' : '') + v.toFixed(2);
+  }
+
+  function computePnlStats(){
+    const state = readState();
+    const entries = collectEntries(state);
+    const now = new Date();
+    const day = tradingDayStart(now), week = weekStart(now), month = monthStart(now);
+
+    let daily=0, weekly=0, monthly=0, withdrawn=0, points=0, wins=0, losses=0;
+    entries.forEach(e => {
+      const t = entryTs(e);
+      const pnl = entryPnl(e);
+      const wd = Number(e.withdrawn ?? e.withdraw ?? 0);
+      const pts = entryPoints(e);
+      if(t >= day){
+        daily += pnl;
+        withdrawn += wd;
+        points += pts;
+        if(pnl > 0) wins += 1;
+        else if(pnl < 0) losses += 1;
+      }
+      if(t >= week) weekly += pnl;
+      if(t >= month) monthly += pnl;
+    });
+
+    const totalTrades = wins + losses;
+    const winRate = totalTrades ? (wins / totalTrades) * 100 : 0;
+    return { daily, weekly, monthly, withdrawn, points, totalTrades, winRate };
+  }
+
+  function syncTodayAndPnlTab(){
+    const s = computePnlStats();
+
+    const today = byId('todayPnl');
+    const badge = byId('todayBadge');
+    if(today){
+      today.textContent = (s.daily < 0 ? '-$' : '$') + Math.abs(s.daily).toFixed(0);
+      today.classList.remove('positive','negative','neutral');
+      today.classList.add(s.daily > 0 ? 'positive' : s.daily < 0 ? 'negative' : 'neutral');
+    }
+    if(badge){
+      badge.textContent = s.totalTrades ? (s.winRate.toFixed(1) + '% win') : 'No trades today';
+    }
+
+    const set = (id, text) => { const el = byId(id); if(el) el.textContent = text; };
+    const paint = (id, n, moneyMode=true) => {
+      const el = byId(id);
+      if(!el) return;
+      el.textContent = moneyMode ? money(n) : signedNum(n);
+      el.classList.remove('positive','negative','neutral');
+      el.classList.add(n > 0 ? 'positive' : n < 0 ? 'negative' : 'neutral');
+    };
+
+    paint('pnlDailyBig', s.daily, true);
+    paint('pnlNet', s.daily, true);
+    paint('pnlPointsBig', s.points, false);
+    paint('pnlWithdrawn', s.withdrawn, true);
+    paint('pnlDaily', s.daily, true);
+    paint('pnlWeekly', s.weekly, true);
+    paint('pnlMonthly', s.monthly, true);
+    set('pnlTradeWin', s.totalTrades + ' / ' + s.winRate.toFixed(1) + '%');
+    set('pnlProgress', s.winRate.toFixed(1) + '%');
+    set('pnlJournalSync', 'OK');
   }
 
   function boot(){
     cleanGhostPnl();
-    fixJournalPnlLabel();
+    ensureTodayPnlHome();
+    renderStableSession();
+    syncTodayAndPnlTab();
   }
 
   document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('load', boot);
-  setTimeout(boot, 250);
+  setInterval(function(){
+    renderStableSession();
+    syncTodayAndPnlTab();
+  }, 1000);
 })();
 </script>
 
