@@ -1341,25 +1341,134 @@ button.option,
 
 </style>
 
-
-
-
-
-
-
-<style id="oai-clean-session-fix">
-#sessionContainer .sessionStable,
-#sessionContainer .sessionStable.compact{
+<style id="oai-final-fixes">
+/* move top pnl out so session can stretch */
+.hero + .row,
+.dashboard > .row {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.dashboard > .row > .card:first-child{
+  order:1;
+}
+.dashboard > .row > .card:last-child{
+  order:2;
+  width:100%;
+}
+#sessionContainer, #sessionContainer .sessionStable{
   width:100% !important;
   max-width:none !important;
-  cursor:default !important;
 }
-#sessionContainer .sessionDetails{
-  display:block !important;
+#sessionContainer .sessionStable{
+  border-radius:18px !important;
 }
-#sessionContainer .expandHint{
+#sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+#todayPnl.positive{ color:#6aff8f !important; }
+#todayPnl.negative{ color:#ff6b6b !important; }
+#todayPnl.neutral{ color:inherit !important; }
+</style>
+
+
+<style id="oai-clean-pass">
+/* final top layout */
+#topHomeStack{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  margin-top:14px !important;
+}
+#topHomeStack .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #todayPnlCard{
+  order:1;
+}
+#topHomeStack #sessionStatusCard{
+  order:2;
+}
+#topHomeStack #sessionStatusCard #sessionContainer,
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  border-radius:18px !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+
+/* clean tab row */
+.dashboard{
+  overflow-x:hidden !important;
+}
+#mainTabs{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  padding:0 16px 4px 0 !important;
+  margin-top:12px !important;
+  gap:10px !important;
+}
+#mainTabs::-webkit-scrollbar{
   display:none !important;
 }
+#mainTabs .pill{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+</style>
+
+
+<style id="oai-session-stabilizer">
+#todayPnlMovedWrap{margin-top:16px!important;}
+#todayPnlMovedWrap .card{width:100%!important;max-width:none!important;}
+#todayPnl.positive{color:#69ff8b!important;}
+#todayPnl.negative{color:#ff6b6b!important;}
+#todayPnl.neutral{color:inherit!important;}
+
+#sessionContainer,.sessionStable{width:100%!important;max-width:none!important;}
+#sessionContainer .sessionStable{
+  border-radius:20px!important;
+  padding:16px!important;
+}
+#sessionContainer .top{display:flex!important;align-items:center!important;gap:10px!important;margin-bottom:6px!important;}
+#sessionContainer .flag{font-size:24px!important;}
+#sessionContainer .name{font-size:18px!important;font-weight:900!important;}
+#sessionContainer .sub{font-size:13px!important;color:#d8cbff!important;margin-bottom:10px!important;}
+#sessionContainer .led{display:inline-flex!important;align-items:center!important;gap:8px!important;padding:10px 14px!important;border-radius:999px!important;font-weight:800!important;margin-bottom:10px!important;}
+#sessionContainer .dot{width:10px!important;height:10px!important;border-radius:999px!important;}
+#sessionContainer .active{background:#143b2f!important;color:#dfffee!important;}
+#sessionContainer .waiting{background:#4a3a12!important;color:#fff3bf!important;}
+#sessionContainer .overlap{background:#3a1f6e!important;color:#f1e4ff!important;}
+#sessionContainer .closed{background:#3b2228!important;color:#ffd7de!important;}
+#sessionContainer .active .dot{background:#66ffc7!important;}
+#sessionContainer .waiting .dot{background:#ffd75f!important;}
+#sessionContainer .overlap .dot{background:linear-gradient(135deg,#c87cff,#6affc8)!important;}
+#sessionContainer .closed .dot{background:#ff8797!important;}
+#sessionContainer .countdown{margin-top:10px!important;font-size:13px!important;}
+#sessionContainer .block{display:block!important;margin-top:10px!important;}
+#sessionContainer .label{font-size:11px!important;color:#d8cbff!important;}
+#sessionContainer .text{font-size:13px!important;font-weight:700!important;}
+#sessionContainer .expandHint,.sessionDetails{display:none!important;}
+#mainTabs{overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;white-space:nowrap!important;}
+#mainTabs::-webkit-scrollbar{display:none!important;}
+#mainTabs .pill{flex:0 0 auto!important;white-space:nowrap!important;}
 </style>
 
 </head>
@@ -6716,19 +6825,326 @@ function loadPnL(){
 
 loadPnL();
 </script>
-
-
-
-
-
-
-<script id="oai-clean-session-fix-js">
-document.addEventListener("DOMContentLoaded", function(){
-  const card = document.getElementById('sessionStableCard');
-  if(card){
-    card.onclick = null;
+<script id="oai-final-logic">
+(function(){
+  function getTradingDayStart(now){
+    const d = new Date(now);
+    const start = new Date(d);
+    start.setHours(17,30,0,0);
+    if(d < start){
+      start.setDate(start.getDate()-1);
+    }
+    return start;
   }
-});
+
+  function readState(){
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(parsed && parsed.journalEntries) return parsed;
+        }
+      }catch(e){}
+    }
+    return {journalEntries:[], goals:[]};
+  }
+
+  function fmtMoney(n){
+    const sign = n < 0 ? '-$' : '$';
+    return sign + Math.abs(Number(n || 0)).toFixed(0);
+  }
+
+  function computeTodayStats(){
+    const state = readState();
+    const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+    const start = getTradingDayStart(new Date()).getTime();
+
+    const todays = entries.filter(j => {
+      const t = Number(j.savedAt || j.updatedAt || 0);
+      if(!t) return false;
+      return t >= start;
+    });
+
+    const pnl = todays.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
+
+    let wins = 0, losses = 0;
+    todays.forEach(j => {
+      const pnlVal = Number(j.pnl || 0);
+      const tag = String(j.tag || '').toLowerCase();
+      if(pnlVal > 0 || tag.includes('valid') || tag.includes('win')) wins += 1;
+      else if(pnlVal < 0 || tag.includes('fail') || tag.includes('loss')) losses += 1;
+    });
+
+    const total = wins + losses;
+    const winRate = total ? Math.round((wins / total) * 100) : 0;
+
+    return { pnl, wins, losses, total, winRate, todays, state };
+  }
+
+  function syncTodayPnl(){
+    const todayEl = document.getElementById('todayPnl');
+    const badgeEl = document.getElementById('todayBadge');
+    const pnlDaily = document.getElementById('pnlDaily');
+
+    if(!todayEl) return;
+
+    const stats = computeTodayStats();
+    todayEl.textContent = fmtMoney(stats.pnl);
+    todayEl.classList.remove('positive','negative','neutral');
+    todayEl.classList.add(stats.pnl > 0 ? 'positive' : stats.pnl < 0 ? 'negative' : 'neutral');
+
+    if(badgeEl){
+      if(stats.total){
+        badgeEl.textContent = stats.winRate + '% win';
+      } else {
+        badgeEl.textContent = 'No trades today';
+      }
+    }
+
+    if(pnlDaily){
+      pnlDaily.textContent = fmtMoney(stats.pnl);
+    }
+  }
+
+  function resetTodayOnlyIfNeeded(){
+    const markerKey = 'faceless_today_marker_v1';
+    const now = new Date();
+    const start = getTradingDayStart(now);
+    const marker = start.toISOString();
+    const saved = localStorage.getItem(markerKey);
+    if(saved === marker) return;
+
+    localStorage.setItem(markerKey, marker);
+
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) continue;
+        const state = JSON.parse(raw);
+        if(!state || !Array.isArray(state.journalEntries)) continue;
+        // do not delete entries; daily reset means display resets by trading-day filter
+        localStorage.setItem(key, JSON.stringify(state));
+      }catch(e){}
+    }
+  }
+
+  function moveTodayCardIfNeeded(){
+    const dashboard = document.querySelector('.dashboard');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const home = document.getElementById('home');
+    const command = home ? home.querySelector('.section') : null;
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const sessionCard = document.getElementById('sessionContainer')?.closest('.card');
+
+    if(!dashboard || !row || !todayCard || !sessionCard) return;
+
+    // Keep both near top, but stacked so session stretches.
+    row.style.display = 'flex';
+    row.style.flexDirection = 'column';
+    row.style.gap = '12px';
+
+    todayCard.style.width = '100%';
+    sessionCard.style.width = '100%';
+  }
+
+  function boot(){
+    resetTodayOnlyIfNeeded();
+    moveTodayCardIfNeeded();
+    syncTodayPnl();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setInterval(syncTodayPnl, 1000);
+})();
+</script>
+
+
+<script id="oai-clean-pass-js">
+(function(){
+  function finalTopAndTabsCleanup(){
+    const dashboard = document.querySelector('.dashboard');
+    const hero = dashboard ? dashboard.querySelector('.hero') : null;
+    const tabs = document.getElementById('mainTabs');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const todayCard = document.getElementById('todayPnl') ? document.getElementById('todayPnl').closest('.card') : null;
+    const sessionCard = document.getElementById('sessionContainer') ? document.getElementById('sessionContainer').closest('.card') : null;
+
+    if(dashboard && hero && tabs && todayCard && sessionCard){
+      let stack = document.getElementById('topHomeStack');
+      if(!stack){
+        stack = document.createElement('div');
+        stack.id = 'topHomeStack';
+        hero.insertAdjacentElement('afterend', stack);
+      }
+
+      if(todayCard.parentElement !== stack){
+        todayCard.id = 'todayPnlCard';
+        stack.appendChild(todayCard);
+      }
+      if(sessionCard.parentElement !== stack){
+        sessionCard.id = 'sessionStatusCard';
+        stack.appendChild(sessionCard);
+      }
+
+      if(row && row.parentElement){
+        row.remove();
+      }
+    }
+
+    if(tabs){
+      // remove accidental stray text nodes around tabs
+      Array.from(tabs.parentNode.childNodes).forEach(node => {
+        if(node.nodeType === 3 && node.textContent && node.textContent.trim() === 'PnL'){
+          node.textContent = '';
+        }
+      });
+      tabs.scrollLeft = 0;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', finalTopAndTabsCleanup);
+  window.addEventListener('load', finalTopAndTabsCleanup);
+  setTimeout(finalTopAndTabsCleanup, 250);
+})();
+</script>
+
+
+<script id="oai-session-stabilizer-js">
+(function(){
+  function weekendClosed(now){
+    const day = now.getDay();
+    const mins = now.getHours()*60 + now.getMinutes();
+    return (day === 5 && mins >= 18*60) || day === 6 || (day === 0 && mins < 18*60);
+  }
+  function fmtClock(totalMinutes){
+    let h = Math.floor(totalMinutes/60)%24, m = totalMinutes%60;
+    const suffix = h >= 12 ? 'PM' : 'AM';
+    let display = h % 12; if(display === 0) display = 12;
+    return display + ':' + String(m).padStart(2,'0') + ' ' + suffix;
+  }
+  function fmtCountdown(totalSeconds){
+    totalSeconds = Math.max(0, Math.floor(totalSeconds));
+    const h = Math.floor(totalSeconds/3600), m = Math.floor((totalSeconds%3600)/60), s = totalSeconds%60;
+    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+  function secondsUntilSundayOpen(now){
+    const open = new Date(now);
+    const day = now.getDay();
+    const addDays = (7 - day) % 7;
+    open.setDate(now.getDate() + addDays);
+    open.setHours(18,0,0,0);
+    if(open <= now) open.setDate(open.getDate() + 7);
+    return (open - now)/1000;
+  }
+  function getStableSessionData(){
+    const now = new Date();
+    if(weekendClosed(now)){
+      return {
+        flag:'🌙', name:'Market Closed', sub:'Friday 6:00 PM – Sunday 6:00 PM',
+        ledClass:'closed', ledText:'Weekend Closed', countdownLabel:'Reopens in',
+        countdown:fmtCountdown(secondsUntilSundayOpen(now)),
+        best:'Study charts, journal, and prepare for Sunday open.',
+        meaning:'Study time. Futures are closed for the weekend.'
+      };
+    }
+    const mins = now.getHours()*60 + now.getMinutes();
+    const secNow = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+    const sessions = [
+      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
+      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
+      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
+    ];
+    const inSession = s => s.start < s.end ? mins >= s.start && mins < s.end : (mins >= s.start || mins < s.end);
+    const active = sessions.filter(inSession);
+    const london = active.find(s=>s.key==='london'), ny = active.find(s=>s.key==='ny');
+    const next = sessions.map(s => ({...s, until: ((s.start*60)-secNow+86400)%86400})).sort((a,b)=>a.until-b.until)[0];
+    if(london && ny){
+      return {flag:'🔥',name:'London + NY Overlap',sub:'8:00 AM – 11:00 AM',ledClass:'overlap',ledText:'Best Trading Window',countdownLabel:'Time left',countdown:fmtCountdown(Math.max(0,11*3600-secNow)),best:'8 AM – 11 AM 🔥🔥',meaning:'Highest probability overlap window.'};
+    }
+    if(active.length){
+      const s = active[0];
+      let endSec = s.end*60, cur = secNow;
+      if(s.start > s.end){ if(cur < endSec){ cur += 86400; endSec += 86400; } else { endSec += 86400; } }
+      return {flag:s.flag,name:s.name,sub:fmtClock(s.start)+' – '+fmtClock(s.end),ledClass:s.key==='asia'?'waiting':'active',ledText:s.label,countdownLabel:'Time left',countdown:fmtCountdown(Math.max(0,endSec-cur)),best:s.best,meaning:s.meaning};
+    }
+    return {flag:next.key==='asia'?'🌙':next.flag,name:next.key==='london'?'Pre-London':(next.key==='ny'?'Transition Phase':'Dead Zone'),sub:'Between sessions',ledClass:'waiting',ledText:'Waiting',countdownLabel:'Next in',countdown:fmtCountdown(next.until),best:next.key==='london'?'Mark levels and wait for London momentum.':(next.key==='ny'?'Wait for NY open.':'No trades. Wait for Asia.'),meaning:next.key==='london'?'Market positioning before London.':(next.key==='ny'?'Wait for NY liquidity and confirmation.':'Review, journal, and prepare.')};
+  }
+  function renderStableSession(){
+    const container = document.getElementById('sessionContainer');
+    if(!container) return;
+    const d = getStableSessionData();
+    const wanted = `
+      <div class="sessionStable">
+        <div class="top"><div class="flag">${d.flag}</div><div class="name">${d.name}</div></div>
+        <div class="sub">${d.sub}</div>
+        <div class="led ${d.ledClass}"><span class="dot"></span>${d.ledText}</div>
+        <div class="countdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
+        <div class="block"><div class="label">Best</div><div class="text">${d.best}</div></div>
+        <div class="block"><div class="label">Meaning</div><div class="text">${d.meaning}</div></div>
+      </div>`;
+    if(container.innerHTML.trim() !== wanted.trim()){
+      container.innerHTML = wanted;
+    }
+  }
+  function moveTodayPnl(){
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const home = document.getElementById('home');
+    if(!todayCard || !home) return;
+    const command = home.querySelector('.section');
+    if(!command) return;
+    let wrap = document.getElementById('todayPnlMovedWrap');
+    if(!wrap){
+      wrap = document.createElement('div');
+      wrap.id = 'todayPnlMovedWrap';
+      wrap.className = 'section';
+      command.insertAdjacentElement('afterend', wrap);
+    }
+    if(todayCard.parentElement !== wrap) wrap.appendChild(todayCard);
+    const topRow = document.querySelector('.dashboard > .row');
+    if(topRow){
+      topRow.querySelectorAll('.card').forEach(card=>{
+        if(!card.querySelector('#sessionContainer') && !card.querySelector('#todayPnl')) card.style.display='none';
+      });
+    }
+  }
+  function colorTodayPnl(){
+    const el = document.getElementById('todayPnl');
+    if(!el) return;
+    const txt = (el.textContent||'').trim().replace(/,/g,'');
+    let n = 0;
+    if(txt.startsWith('-$')) n = -(parseFloat(txt.slice(2))||0);
+    else if(txt.startsWith('$')) n = parseFloat(txt.slice(1))||0;
+    el.classList.remove('positive','negative','neutral');
+    el.classList.add(n>0?'positive':n<0?'negative':'neutral');
+  }
+  function cleanTabs(){
+    const tabs = document.getElementById('mainTabs');
+    if(!tabs) return;
+    tabs.querySelectorAll('.pnl-nav').forEach(el=>el.remove());
+    Array.from(tabs.childNodes).forEach(node=>{
+      if(node.nodeType===3 && /PnL/.test(node.textContent||'')) node.textContent='';
+    });
+  }
+  function boot(){
+    moveTodayPnl();
+    cleanTabs();
+    colorTodayPnl();
+    renderStableSession();
+    const container = document.getElementById('sessionContainer');
+    if(container && !container.__oaiObserver){
+      const obs = new MutationObserver(()=>renderStableSession());
+      obs.observe(container,{childList:true,subtree:true});
+      container.__oaiObserver = obs;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setInterval(()=>{ colorTodayPnl(); renderStableSession(); }, 1000);
+})();
 </script>
 
 </body>
