@@ -1314,6 +1314,31 @@ button.option,
   padding:14px;
   text-align:center;
 }
+
+/* final session fix */
+#sessionContainer{width:100%;}
+#sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+  border-radius:18px !important;
+}
+#sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+#sessionContainer .sessionDetails{
+  display:block !important;
+}
+#sessionContainer .expandHint{
+  display:none !important;
+}
+#sessionContainer .block{
+  display:block !important;
+}
+
 </style>
 </head>
 <body class="theme-soft-purple">
@@ -6581,28 +6606,21 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     container.innerHTML = `
-      <div class="sessionStable compact ${window.__sessionExpanded ? 'expanded' : ''}" id="sessionStableCard">
-        <div class="sessionMainRow" style="display:flex;align-items:center;gap:8px;">
-          <div>${d.flag}</div>
-          <div style="font-weight:600;">${d.name}</div>
+      <div class="sessionStable" id="sessionStableCard">
+        <div class="sessionMainRow" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+            <div>${d.flag}</div>
+            <div style="font-weight:600;">${d.name}</div>
+          </div>
+          <div class="sessionCountdownLine" style="font-size:13px;text-align:right;white-space:nowrap;">${d.text}</div>
         </div>
-        <div class="sessionCountdownLine" style="font-size:13px;margin-top:4px;">${d.text}</div>
-        <div class="expandHint">${window.__sessionExpanded ? 'Tap to collapse' : 'Tap for details'}</div>
-        <div class="sessionDetails">
+        <div class="sessionDetails" style="display:block;margin-top:8px;">
           <div style="margin-top:2px;font-size:12px;"><strong>Best:</strong> ${d.best}</div>
           <div style="margin-top:6px;font-size:12px;"><strong>Meaning:</strong> ${d.meaning}</div>
         </div>
       </div>
     `;
-
-    const card = document.getElementById('sessionStableCard');
-    if(card){
-      card.onclick = function(){
-        window.__sessionExpanded = !window.__sessionExpanded;
-        window.renderCompactSession();
-      };
-    }
-  };
+};
   window.renderSession = window.renderCompactSession;
 
   document.addEventListener('DOMContentLoaded', function(){
@@ -6635,8 +6653,7 @@ document.addEventListener('DOMContentLoaded', function(){
   opacity:.9;
 }
 </style>
-<div class="pnl-tab">$0
-0% win</div><script>
+<script>
 // DAILY RESET LOGIC (5:30 PM)
 function getTradingDay(){
   const now = new Date();
