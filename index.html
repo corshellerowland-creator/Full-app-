@@ -1501,7 +1501,6 @@ button.option,
   white-space:nowrap !important;
 }
 </style>
-
 <style id="oai-white-bottom-pnl-fix">
 html, body {
   min-height: 100vh !important;
@@ -1534,6 +1533,104 @@ body {
   flex: 0 0 auto !important;
   white-space: nowrap !important;
 }
+</style>
+
+<style id="oai-pnl-final-fix">
+/* remove the dead spacer under hero */
+.dashboard > .row:first-of-type,
+.hero + .row{
+  display:none !important;
+}
+.app-content{
+  margin-top:12px !important;
+}
+
+/* restore PnL tab to full panel */
+#pnl .pnl-wrap{
+  border-radius:28px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(84,218,255,.12), transparent 22%),
+    radial-gradient(circle at 80% 100%, rgba(198,108,255,.10), transparent 26%),
+    linear-gradient(180deg, rgba(20,11,36,.92), rgba(8,6,16,.98));
+  box-shadow:0 18px 42px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.02);
+}
+#pnl .pnl-title{
+  font-size:16px;
+  font-weight:700;
+  color:#efe8ff;
+  margin-bottom:12px;
+}
+#pnl .pnl-main{
+  border-radius:20px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg, rgba(36,18,64,.70), rgba(18,10,34,.90));
+}
+#pnl .pnl-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+#pnl .pnl-row:last-child{border-bottom:0;}
+#pnl .pnl-head{
+  font-size:22px;
+  font-weight:800;
+}
+#pnl .pnl-label{
+  font-size:18px;
+  color:#efe8ff;
+}
+#pnl .pnl-value{
+  font-size:18px;
+  font-weight:800;
+  color:#a9d6ff;
+}
+#pnl .bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+#pnl .mini{
+  border-radius:20px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg, rgba(40,30,90,.66), rgba(18,12,44,.88));
+}
+#pnl .mini-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  padding:6px 0;
+}
+#pnl .mini-label{
+  font-size:16px;
+  color:#e9ddff;
+}
+#pnl .mini-value{
+  font-size:18px;
+  font-weight:800;
+  color:#9dd8ff;
+}
+#pnl .positive{ color:#82f7ae !important; }
+#pnl .negative{ color:#ff8a8a !important; }
+#pnl .neutral{ color:#a9d6ff !important; }
+
+/* keep tab row clean */
+#mainTabs{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  white-space:nowrap !important;
+}
+#mainTabs::-webkit-scrollbar{display:none !important;}
+#mainTabs .pill{flex:0 0 auto !important;white-space:nowrap !important;}
 </style>
 
 </head>
@@ -3701,7 +3798,49 @@ updateUI(); renderJournalList();
 <div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel"> </div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
 <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div class="accountList" id="strategyStats"></div></div></section>
 <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
-<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle"> </h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
+<section class="view" id="pnl">
+<div class="section pnl-screen">
+<div class="pnl-wrap">
+<div class="pnl-title">Today's PnL (resets daily)</div>
+<div class="pnl-main">
+<div class="pnl-row">
+<div class="pnl-head">Profit / Loss</div>
+<div class="pnl-head pnl-daily" id="pnlDailyBig">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Net</div>
+<div class="pnl-value" id="pnlNet">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Points</div>
+<div class="pnl-value" id="pnlPointsBig">+0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Withdrawn</div>
+<div class="pnl-value" id="pnlWithdrawn">$0.00</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Trade Count / Win %</div>
+<div class="pnl-value" id="pnlTradeWin">0 / 00.0%</div>
+</div>
+<div class="pnl-row">
+<div class="pnl-label">Journal Sync</div>
+<div class="pnl-value" id="pnlJournalSync">OK</div>
+</div>
+</div>
+<div class="bottom-grid">
+<div class="mini">
+<div class="mini-row"><div class="mini-label">Daily</div><div class="mini-value" id="pnlDaily">$0.00</div></div>
+<div class="mini-row"><div class="mini-label">Monthly</div><div class="mini-value" id="pnlMonthly">$0.00</div></div>
+</div>
+<div class="mini">
+<div class="mini-row"><div class="mini-label">Weekly</div><div class="mini-value" id="pnlWeekly">$0.00</div></div>
+<div class="mini-row"><div class="mini-label">Win %</div><div class="mini-value" id="pnlProgress">00.0%</div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"/></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly=""/></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
 <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
 </div>
@@ -7179,7 +7318,6 @@ loadPnL();
   setInterval(boot, 1000);
 })();
 </script>
-
 <script id="oai-white-bottom-pnl-fix-js">
 (function(){
   function cleanGhostPnl(){
@@ -7216,6 +7354,159 @@ loadPnL();
   document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('load', boot);
   setTimeout(boot, 200);
+})();
+</script>
+
+<script id="oai-pnl-final-fix-js">
+(function(){
+  function money(n){
+    const v = Number(n || 0);
+    const sign = v < 0 ? '-$' : '$';
+    return sign + Math.abs(v).toFixed(2);
+  }
+  function signedNum(n){
+    const v = Number(n || 0);
+    return (v >= 0 ? '+' : '') + v.toFixed(2);
+  }
+  function readState(){
+    const keys = [
+      'faceless_app_state_v4',
+      'faceless_app_state_v3',
+      'faceless_app_state_v2',
+      'facelessTraderState',
+      'faceless_trader_state'
+    ];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) continue;
+        const parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object') return parsed;
+      }catch(e){}
+    }
+    return {};
+  }
+  function entryTs(entry){
+    return Number(entry.savedAt || entry.updatedAt || entry.createdAt || entry.timestamp || entry.dateMs || 0);
+  }
+  function entryPnl(entry){
+    const direct = Number(entry.pnl ?? entry.net ?? entry.netPnl ?? entry.profitLoss ?? 0);
+    if(!Number.isNaN(direct) && direct !== 0) return direct;
+    const profit = Number(entry.profit ?? entry.todayProfit ?? 0);
+    const loss = Number(entry.loss ?? entry.todayLoss ?? 0);
+    if(profit || loss) return profit - loss;
+    const pointsWon = Number(entry.pointsWon ?? 0);
+    const pointsLost = Number(entry.pointsLost ?? 0);
+    const netPoints = Number(entry.netPoints ?? (pointsWon - pointsLost) ?? 0);
+    const contracts = Number(entry.contracts ?? entry.numContracts ?? 1);
+    const pointValue = Number(entry.pointValue ?? entry.dollarsPerPoint ?? 2);
+    return netPoints * contracts * pointValue;
+  }
+  function collectEntries(state){
+    const buckets = [
+      state.journalEntries, state.entries, state.liveEntries, state.trades, state.tradeEntries
+    ].filter(Array.isArray);
+    const merged = [];
+    buckets.forEach(arr => arr.forEach(item => merged.push(item)));
+    return merged;
+  }
+  function tradingDayStart(now){
+    const d = new Date(now);
+    const start = new Date(d);
+    start.setHours(17,30,0,0);
+    if(d < start) start.setDate(start.getDate() - 1);
+    return start.getTime();
+  }
+  function weeklyStart(now){
+    const d = new Date(now);
+    d.setHours(17,30,0,0);
+    const offset = (d.getDay() + 6) % 7; // Monday-based
+    d.setDate(d.getDate() - offset);
+    return d.getTime();
+  }
+  function monthlyStart(now){
+    const d = new Date(now.getFullYear(), now.getMonth(), 1, 17, 30, 0, 0);
+    return d.getTime();
+  }
+  function stats(){
+    const state = readState();
+    const entries = collectEntries(state);
+    const now = new Date();
+    const dayStart = tradingDayStart(now);
+    const weekStart = weeklyStart(now);
+    const monthStart = monthlyStart(now);
+
+    let daily=0, weekly=0, monthly=0, withdrawn=0, points=0, wins=0, losses=0;
+    entries.forEach(e => {
+      const t = entryTs(e);
+      const pnl = entryPnl(e);
+      const wd = Number(e.withdrawn ?? e.withdraw ?? 0);
+      const pts = Number(e.netPoints ?? ((Number(e.pointsWon||0)) - (Number(e.pointsLost||0))) ?? 0);
+
+      if(t >= dayStart){
+        daily += pnl;
+        withdrawn += wd;
+        points += pts;
+        if(pnl > 0) wins += 1;
+        else if(pnl < 0) losses += 1;
+      }
+      if(t >= weekStart) weekly += pnl;
+      if(t >= monthStart) monthly += pnl;
+    });
+
+    const totalTrades = wins + losses;
+    const winRate = totalTrades ? (wins / totalTrades) * 100 : 0;
+    return { daily, weekly, monthly, withdrawn, points, totalTrades, winRate };
+  }
+  function paintValue(el, n, moneyMode=true){
+    if(!el) return;
+    el.textContent = moneyMode ? money(n) : signedNum(n);
+    el.classList.remove('positive','negative','neutral');
+    el.classList.add(n > 0 ? 'positive' : n < 0 ? 'negative' : 'neutral');
+  }
+  function updatePnl(){
+    const s = stats();
+    paintValue(document.getElementById('pnlDailyBig'), s.daily, true);
+    paintValue(document.getElementById('pnlNet'), s.daily, true);
+    paintValue(document.getElementById('pnlPointsBig'), s.points, false);
+    paintValue(document.getElementById('pnlWithdrawn'), s.withdrawn, true);
+    paintValue(document.getElementById('pnlDaily'), s.daily, true);
+    paintValue(document.getElementById('pnlWeekly'), s.weekly, true);
+    paintValue(document.getElementById('pnlMonthly'), s.monthly, true);
+
+    const tradeWin = document.getElementById('pnlTradeWin');
+    if(tradeWin){
+      tradeWin.textContent = `${s.totalTrades} / ${s.winRate.toFixed(1)}%`;
+    }
+    const prog = document.getElementById('pnlProgress');
+    if(prog){
+      prog.textContent = s.winRate.toFixed(1) + '%';
+    }
+    const sync = document.getElementById('pnlJournalSync');
+    if(sync){
+      sync.textContent = 'OK';
+    }
+  }
+  function cleanGhostPnl(){
+    const tabs = document.getElementById('mainTabs');
+    if(!tabs) return;
+    const btn = tabs.querySelector('.pill[data-view="pnl"]');
+    if(btn && !(btn.textContent || '').trim()){
+      btn.textContent = 'PnL';
+    }
+    tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
+    Array.from(tabs.parentNode ? tabs.parentNode.childNodes : []).forEach(node => {
+      if(node !== tabs && node.nodeType === 3 && (node.textContent || '').trim() === 'PnL') node.textContent = '';
+      if(node !== tabs && node.nodeType === 1 && (node.textContent || '').trim() === 'PnL' && !node.matches('.pill,[data-view]')) node.remove();
+    });
+  }
+  function boot(){
+    cleanGhostPnl();
+    updatePnl();
+  }
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setInterval(updatePnl, 1000);
 })();
 </script>
 
