@@ -1471,6 +1471,30 @@ button.option,
 #mainTabs .pill{flex:0 0 auto!important;white-space:nowrap!important;}
 </style>
 
+
+<style id="oai-finish-fix">
+#todayPnlMovedWrap{
+  display:block !important;
+  width:100% !important;
+  max-width:none !important;
+  margin-top:16px !important;
+}
+#todayPnlMovedWrap .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#sessionContainer .block{
+  display:block !important;
+  margin-top:10px !important;
+}
+#sessionContainer .label{
+  display:block !important;
+}
+#sessionContainer .text{
+  display:block !important;
+}
+</style>
+
 </head>
 <body class="theme-soft-purple">
 <div class="shell">
@@ -7013,18 +7037,15 @@ loadPnL();
 </script>
 
 
-<script id="oai-session-stabilizer-js">
+
+
+
+<script id="oai-finish-fix-js">
 (function(){
   function weekendClosed(now){
     const day = now.getDay();
     const mins = now.getHours()*60 + now.getMinutes();
     return (day === 5 && mins >= 18*60) || day === 6 || (day === 0 && mins < 18*60);
-  }
-  function fmtClock(totalMinutes){
-    let h = Math.floor(totalMinutes/60)%24, m = totalMinutes%60;
-    const suffix = h >= 12 ? 'PM' : 'AM';
-    let display = h % 12; if(display === 0) display = 12;
-    return display + ':' + String(m).padStart(2,'0') + ' ' + suffix;
   }
   function fmtCountdown(totalSeconds){
     totalSeconds = Math.max(0, Math.floor(totalSeconds));
@@ -7040,110 +7061,90 @@ loadPnL();
     if(open <= now) open.setDate(open.getDate() + 7);
     return (open - now)/1000;
   }
-  function getStableSessionData(){
-    const now = new Date();
-    if(weekendClosed(now)){
-      return {
-        flag:'🌙', name:'Market Closed', sub:'Friday 6:00 PM – Sunday 6:00 PM',
-        ledClass:'closed', ledText:'Weekend Closed', countdownLabel:'Reopens in',
-        countdown:fmtCountdown(secondsUntilSundayOpen(now)),
-        best:'Study charts, journal, and prepare for Sunday open.',
-        meaning:'Study time. Futures are closed for the weekend.'
-      };
-    }
-    const mins = now.getHours()*60 + now.getMinutes();
-    const secNow = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
-    const sessions = [
-      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
-      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
-      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
-    ];
-    const inSession = s => s.start < s.end ? mins >= s.start && mins < s.end : (mins >= s.start || mins < s.end);
-    const active = sessions.filter(inSession);
-    const london = active.find(s=>s.key==='london'), ny = active.find(s=>s.key==='ny');
-    const next = sessions.map(s => ({...s, until: ((s.start*60)-secNow+86400)%86400})).sort((a,b)=>a.until-b.until)[0];
-    if(london && ny){
-      return {flag:'🔥',name:'London + NY Overlap',sub:'8:00 AM – 11:00 AM',ledClass:'overlap',ledText:'Best Trading Window',countdownLabel:'Time left',countdown:fmtCountdown(Math.max(0,11*3600-secNow)),best:'8 AM – 11 AM 🔥🔥',meaning:'Highest probability overlap window.'};
-    }
-    if(active.length){
-      const s = active[0];
-      let endSec = s.end*60, cur = secNow;
-      if(s.start > s.end){ if(cur < endSec){ cur += 86400; endSec += 86400; } else { endSec += 86400; } }
-      return {flag:s.flag,name:s.name,sub:fmtClock(s.start)+' – '+fmtClock(s.end),ledClass:s.key==='asia'?'waiting':'active',ledText:s.label,countdownLabel:'Time left',countdown:fmtCountdown(Math.max(0,endSec-cur)),best:s.best,meaning:s.meaning};
-    }
-    return {flag:next.key==='asia'?'🌙':next.flag,name:next.key==='london'?'Pre-London':(next.key==='ny'?'Transition Phase':'Dead Zone'),sub:'Between sessions',ledClass:'waiting',ledText:'Waiting',countdownLabel:'Next in',countdown:fmtCountdown(next.until),best:next.key==='london'?'Mark levels and wait for London momentum.':(next.key==='ny'?'Wait for NY open.':'No trades. Wait for Asia.'),meaning:next.key==='london'?'Market positioning before London.':(next.key==='ny'?'Wait for NY liquidity and confirmation.':'Review, journal, and prepare.')};
-  }
-  function renderStableSession(){
-    const container = document.getElementById('sessionContainer');
-    if(!container) return;
-    const d = getStableSessionData();
-    const wanted = `
-      <div class="sessionStable">
-        <div class="top"><div class="flag">${d.flag}</div><div class="name">${d.name}</div></div>
-        <div class="sub">${d.sub}</div>
-        <div class="led ${d.ledClass}"><span class="dot"></span>${d.ledText}</div>
-        <div class="countdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
-        <div class="block"><div class="label">Best</div><div class="text">${d.best}</div></div>
-        <div class="block"><div class="label">Meaning</div><div class="text">${d.meaning}</div></div>
-      </div>`;
-    if(container.innerHTML.trim() !== wanted.trim()){
-      container.innerHTML = wanted;
-    }
-  }
-  function moveTodayPnl(){
-    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+  function ensureTodayPnlUnderCommandCenter(){
     const home = document.getElementById('home');
-    if(!todayCard || !home) return;
-    const command = home.querySelector('.section');
-    if(!command) return;
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    if(!home || !todayCard) return;
+
+    const sections = home.querySelectorAll('.section');
+    if(!sections.length) return;
+    const commandCenter = sections[0];
+
     let wrap = document.getElementById('todayPnlMovedWrap');
     if(!wrap){
       wrap = document.createElement('div');
       wrap.id = 'todayPnlMovedWrap';
       wrap.className = 'section';
-      command.insertAdjacentElement('afterend', wrap);
+      commandCenter.insertAdjacentElement('afterend', wrap);
     }
-    if(todayCard.parentElement !== wrap) wrap.appendChild(todayCard);
+    if(todayCard.parentElement !== wrap){
+      wrap.appendChild(todayCard);
+    }
+
+    // hide the old empty top card slot if still present
     const topRow = document.querySelector('.dashboard > .row');
     if(topRow){
       topRow.querySelectorAll('.card').forEach(card=>{
-        if(!card.querySelector('#sessionContainer') && !card.querySelector('#todayPnl')) card.style.display='none';
+        if(!card.querySelector('#sessionContainer') && !card.querySelector('#todayPnl')){
+          card.style.display = 'none';
+        }
       });
     }
   }
-  function colorTodayPnl(){
-    const el = document.getElementById('todayPnl');
-    if(!el) return;
-    const txt = (el.textContent||'').trim().replace(/,/g,'');
-    let n = 0;
-    if(txt.startsWith('-$')) n = -(parseFloat(txt.slice(2))||0);
-    else if(txt.startsWith('$')) n = parseFloat(txt.slice(1))||0;
-    el.classList.remove('positive','negative','neutral');
-    el.classList.add(n>0?'positive':n<0?'negative':'neutral');
-  }
-  function cleanTabs(){
-    const tabs = document.getElementById('mainTabs');
-    if(!tabs) return;
-    tabs.querySelectorAll('.pnl-nav').forEach(el=>el.remove());
-    Array.from(tabs.childNodes).forEach(node=>{
-      if(node.nodeType===3 && /PnL/.test(node.textContent||'')) node.textContent='';
-    });
-  }
-  function boot(){
-    moveTodayPnl();
-    cleanTabs();
-    colorTodayPnl();
-    renderStableSession();
+
+  function ensureWeekendStudyBlocks(){
     const container = document.getElementById('sessionContainer');
-    if(container && !container.__oaiObserver){
-      const obs = new MutationObserver(()=>renderStableSession());
-      obs.observe(container,{childList:true,subtree:true});
-      container.__oaiObserver = obs;
+    if(!container) return;
+    const now = new Date();
+    if(!weekendClosed(now)) return;
+
+    const stable = container.querySelector('.sessionStable');
+    if(!stable) return;
+
+    // Keep current closed layout, just ensure Best / Meaning are present and visible
+    let bestBlock = stable.querySelector('.block.best-block');
+    if(!bestBlock){
+      bestBlock = document.createElement('div');
+      bestBlock.className = 'block best-block';
+      bestBlock.innerHTML = '<div class="label">Best</div><div class="text">Study charts, journal, and prepare for Sunday open.</div>';
+      stable.appendChild(bestBlock);
+    } else {
+      const label = bestBlock.querySelector('.label') || document.createElement('div');
+      const text = bestBlock.querySelector('.text') || document.createElement('div');
+      label.className = 'label';
+      label.textContent = 'Best';
+      text.className = 'text';
+      text.textContent = 'Study charts, journal, and prepare for Sunday open.';
+      if(!bestBlock.contains(label)) bestBlock.appendChild(label);
+      if(!bestBlock.contains(text)) bestBlock.appendChild(text);
+    }
+
+    let meaningBlock = stable.querySelector('.block.meaning-block');
+    if(!meaningBlock){
+      meaningBlock = document.createElement('div');
+      meaningBlock.className = 'block meaning-block';
+      meaningBlock.innerHTML = '<div class="label">Meaning</div><div class="text">Study time. Futures are closed for the weekend.</div>';
+      stable.appendChild(meaningBlock);
+    } else {
+      const label = meaningBlock.querySelector('.label') || document.createElement('div');
+      const text = meaningBlock.querySelector('.text') || document.createElement('div');
+      label.className = 'label';
+      label.textContent = 'Meaning';
+      text.className = 'text';
+      text.textContent = 'Study time. Futures are closed for the weekend.';
+      if(!meaningBlock.contains(label)) meaningBlock.appendChild(label);
+      if(!meaningBlock.contains(text)) meaningBlock.appendChild(text);
     }
   }
+
+  function boot(){
+    ensureTodayPnlUnderCommandCenter();
+    ensureWeekendStudyBlocks();
+  }
+
   document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('load', boot);
-  setInterval(()=>{ colorTodayPnl(); renderStableSession(); }, 1000);
+  setInterval(boot, 1000);
 })();
 </script>
 
