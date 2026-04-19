@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Faceless Trader</title>
 <style>
 
@@ -1300,42 +1301,26 @@ button.option,
 @media (max-width:390px){.liveTrackerGrid,.liveTrackerActions{grid-template-columns:1fr}}
 
 
-/* OAI home top fixes */
-.dashboard > .row:first-of-type{
+/* session full width fix */
+.sessionMainRow {
+  width:100% !important;
   display:flex !important;
-  flex-direction:column !important;
-  gap:12px !important;
+  justify-content:space-between !important;
+  align-items:center !important;
 }
-.dashboard > .row:first-of-type > .card{
+
+/* pnl tab */
+.pnl-tab {
+  padding:14px;
+  text-align:center;
+}
+
+/* final session fix */
+#sessionContainer{width:100%;}
+#sessionContainer .sessionStable{
   width:100% !important;
   max-width:none !important;
-  flex:none !important;
-}
-.dashboard > .row:first-of-type > .card:first-child{
-  order:1 !important;
-}
-.dashboard > .row:first-of-type > .card:last-child{
-  order:2 !important;
-}
-#sessionContainer,
-#sessionContainer .sessionStable,
-#sessionContainer .sessionStable.compact{
-  width:100% !important;
-  max-width:none !important;
-}
-#sessionContainer .sessionStable,
-#sessionContainer .sessionStable.compact{
   border-radius:18px !important;
-}
-#sessionContainer .sessionStable.compact{
-  cursor:default !important;
-}
-#sessionContainer .sessionDetails{
-  display:block !important;
-  margin-top:10px !important;
-}
-#sessionContainer .expandHint{
-  display:none !important;
 }
 #sessionContainer .sessionMainRow{
   width:100% !important;
@@ -1344,16 +1329,101 @@ button.option,
   align-items:flex-start !important;
   gap:12px !important;
 }
-#sessionContainer .sessionCountdownLine{
-  text-align:right !important;
-  white-space:nowrap !important;
+#sessionContainer .sessionDetails{
+  display:block !important;
+}
+#sessionContainer .expandHint{
+  display:none !important;
+}
+#sessionContainer .block{
+  display:block !important;
+}
+
+</style>
+
+<style id="oai-final-fixes">
+/* move top pnl out so session can stretch */
+.hero + .row,
+.dashboard > .row {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.dashboard > .row > .card:first-child{
+  order:1;
+}
+.dashboard > .row > .card:last-child{
+  order:2;
+  width:100%;
+}
+#sessionContainer, #sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#sessionContainer .sessionStable{
+  border-radius:18px !important;
+}
+#sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+#todayPnl.positive{ color:#6aff8f !important; }
+#todayPnl.negative{ color:#ff6b6b !important; }
+#todayPnl.neutral{ color:inherit !important; }
+</style>
+
+
+<style id="oai-clean-pass">
+/* final top layout */
+#topHomeStack{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  margin-top:14px !important;
+}
+#topHomeStack .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #todayPnlCard{
+  order:1;
+}
+#topHomeStack #sessionStatusCard{
+  order:2;
+}
+#topHomeStack #sessionStatusCard #sessionContainer,
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  border-radius:18px !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+
+/* clean tab row */
+.dashboard{
+  overflow-x:hidden !important;
 }
 #mainTabs{
+  display:flex !important;
+  flex-wrap:nowrap !important;
   overflow-x:auto !important;
   overflow-y:hidden !important;
   -webkit-overflow-scrolling:touch !important;
   scrollbar-width:none !important;
-  white-space:nowrap !important;
+  padding:0 16px 4px 0 !important;
+  margin-top:12px !important;
+  gap:10px !important;
 }
 #mainTabs::-webkit-scrollbar{
   display:none !important;
@@ -1362,186 +1432,245 @@ button.option,
   flex:0 0 auto !important;
   white-space:nowrap !important;
 }
-#todayPnl.positive{
-  color:#69ff8b !important;
+</style>
+
+
+<style id="oai-final-home-session-fix">
+/* final layout: session stays top, today pnl moves under command center */
+.dashboard > .row:first-of-type{
+  display:block !important;
 }
-#todayPnl.negative{
-  color:#ff6b6b !important;
+.dashboard > .row:first-of-type > .card{
+  width:100% !important;
+  max-width:none !important;
 }
-#todayPnl.neutral{
-  color:inherit !important;
+.dashboard > .row:first-of-type > .card:first-child{
+  display:none !important; /* hide original top today pnl slot after we move the real card */
+}
+.dashboard > .row:first-of-type > .card:last-child{
+  display:block !important;
+  width:100% !important;
+  max-width:none !important;
 }
 
+/* session should be open and full width */
+#sessionContainer,
+#sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#sessionContainer .sessionStable{
+  border-radius:20px !important;
+  padding:16px !important;
+}
+#sessionContainer .top{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  margin-bottom:8px !important;
+}
+#sessionContainer .sub{
+  margin-bottom:10px !important;
+}
+#sessionContainer .countdown{
+  margin-top:10px !important;
+}
+#sessionContainer .block{
+  display:block !important;
+  margin-top:12px !important;
+}
+#sessionContainer .sessionDetails,
+#sessionContainer .expandHint{
+  display:none !important;
+}
+#sessionContainer .sessionStable.compact,
+#sessionContainer .sessionStable.compact.expanded{
+  cursor:default !important;
+}
+#sessionContainer .sessionStable.compact .block,
+#sessionContainer .sessionStable.compact.expanded .block{
+  display:block !important;
+}
+#sessionContainer .sessionStable.compact .countdown,
+#sessionContainer .sessionStable.compact.expanded .countdown{
+  margin-top:10px !important;
+}
+
+/* tab row clean */
+#mainTabs{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  white-space:nowrap !important;
+}
+#mainTabs::-webkit-scrollbar{display:none !important;}
+#mainTabs .pill{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+
+/* today pnl card moved under command center */
+#todayPnlMovedWrap{
+  margin-top:16px !important;
+}
+#todayPnlMovedWrap .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#todayPnl.positive{ color:#69ff8b !important; }
+#todayPnl.negative{ color:#ff6b6b !important; }
+#todayPnl.neutral{ color:inherit !important; }
 </style>
+
 </head>
 <body class="theme-soft-purple">
 <div class="shell">
-  <div class="dashboard">
-    <div class="hero">
-      <div class="hero-inner">
-        <h1 class="title">Faceless Trader</h1>
-        <p class="subtitle">ICC look + full app engine + journal syncing</p>
-        <div class="hero-note">✦ Premium dashboard live</div>
-      </div>
-      <div class="style-wrap">
-        <button class="style-btn" id="styleToggle" type="button"><span class="btn-label"><span class="mini-dot"></span> Style</span><span class="caret">▾</span></button>
-        <button class="ghost-cycle" id="styleCycleBtn" type="button" aria-hidden="true" tabindex="-1"></button>
-        
-          <button class="option soft-purple active" data-theme="theme-soft-purple" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌙 Soft Purple</span></span><span class="check">✓</span></button>
-          <button class="option bright-purple" data-theme="theme-bright-purple" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌈 Bright Purple</span></span><span class="check">✓</span></button>
-          <button class="option soft-bluegreen" data-theme="theme-soft-bluegreen" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌊 Soft Blue-Green</span></span><span class="check">✓</span></button>
-          <button class="option bright-bluegreen" data-theme="theme-bright-bluegreen" type="button"><span class="option-left"><span class="theme-dot"></span><span>☀️ Bright Blue-Green</span></span><span class="check">✓</span></button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="card">
-        <div class="label">Today PnL</div>
-        <div class="value" id="todayPnl">$0</div>
-        <div class="pill" id="todayBadge">No goal active</div>
-      </div>
-      <div class="card">
-        <div class="label">Session Status</div><div id="sessionContainer"></div></div>
-      </div>
-    </div>
-
-    <div class="tabs" id="mainTabs">
-      <button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
-    <button class="pill" data-view="psych">Psychology</button></div>
-
-    <div class="app-content">
+<div class="dashboard">
+<div class="hero">
+<div class="hero-inner">
+<h1 class="title">Faceless Trader</h1>
+<p class="subtitle">ICC look + full app engine + journal syncing</p>
+<div class="hero-note">✦ Premium dashboard live</div>
+</div>
+<div class="style-wrap">
+<button class="style-btn" id="styleToggle" type="button"><span class="btn-label"><span class="mini-dot"></span> Style</span><span class="caret">▾</span></button>
+<button aria-hidden="true" class="ghost-cycle" id="styleCycleBtn" tabindex="-1" type="button"></button>
+<button class="option soft-purple active" data-theme="theme-soft-purple" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌙 Soft Purple</span></span><span class="check">✓</span></button>
+<button class="option bright-purple" data-theme="theme-bright-purple" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌈 Bright Purple</span></span><span class="check">✓</span></button>
+<button class="option soft-bluegreen" data-theme="theme-soft-bluegreen" type="button"><span class="option-left"><span class="theme-dot"></span><span>🌊 Soft Blue-Green</span></span><span class="check">✓</span></button>
+<button class="option bright-bluegreen" data-theme="theme-bright-bluegreen" type="button"><span class="option-left"><span class="theme-dot"></span><span>☀️ Bright Blue-Green</span></span><span class="check">✓</span></button>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="card">
+<div class="label">Today PnL</div>
+<div class="value" id="todayPnl">$0</div>
+<div class="pill" id="todayBadge">No goal active</div>
+</div>
+<div class="card">
+<div class="label">Session Status</div><div id="sessionContainer"></div></div>
+</div>
+</div>
+<div class="tabs" id="mainTabs">
+<button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
+<button class="pill" data-view="psych">Psychology</button></div>
+<div class="app-content">
 <section class="view active" id="home">
-    <div class="section"><h2 class="sectionTitle">Command Center</h2><div class="kpiGrid"><div class="kpi"><div class="label">Active Goal</div><div class="num" id="homeGoal">$—</div><div class="muted" id="homeGoalType">No goal set</div></div><div class="kpi"><div class="label">Max Loss</div><div class="num" id="homeLoss">$—</div><div class="muted">Used by lock rules</div></div><div class="kpi"><div class="label">Best Strategy</div><div class="num" style="font-size:18px" id="bestStrategy">—</div><div class="muted" id="bestStrategyMeta">Waiting for trades</div></div><div class="kpi"><div class="label">Accounts</div><div class="num" id="accountCount">0</div><div class="muted">Eval + Funded + Live</div></div></div></div>
-    <div class="section"><h2 class="sectionTitle">Quick Access</h2><div class="homeQuick"><button class="quickBtn" onclick="switchView('journal')">Open Journal</button><button class="quickBtn" onclick="switchView('strategy')">Open Strategy</button><button class="quickBtn" onclick="switchView('eval')">Open Eval</button><button class="quickBtn" onclick="switchView('pnl')">Open PnL</button></div></div>
-    <div class="section"><h2 class="sectionTitle">Recent Journal</h2><div id="recentJournal" class="journalList"></div></div>
-  </section>
-
-  <section class="view" id="goals">
-    <div class="section"><h2 class="sectionTitle">Goals</h2><div class="fieldLabel">Account Type</div><select class="field" id="goalType"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select><div class="grid2" style="margin-top:10px"><button class="btn" onclick="applyGoalPreset(150,75)">Conservative</button><button class="btn" onclick="applyGoalPreset(300,150)">Standard</button></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="goalDaily" type="number"></div><div><div class="fieldLabel">Max Loss</div><input class="field" id="goalLoss" type="number"></div></div><button class="cta" onclick="saveGoal()">Save Goal</button></div>
-    <div class="section"><h2 class="sectionTitle">Saved Goals</h2><div id="goalSummary" class="accountList"></div></div>
-  </section>
-
-  
-  <section class="view" id="plan">
-    <div class="section">
-      <h2 class="sectionTitle">Plan</h2>
-      <div class="muted">Fresh pre-trade plan. Nothing saves here.</div>
-
-      <div class="fieldLabel" style="margin-top:10px">Mental State</div>
-      <select class="field" id="planMental">
-        <option value="">Select</option>
-        <option>Calm / Focused</option>
-        <option>Anxious / Impatient</option>
-      </select>
-
-      <div class="grid2" style="margin-top:10px">
-        <div>
-          <div class="fieldLabel">Ticker</div>
-          <select class="field" id="planTicker">
-            <option>MNQ</option>
-            <option>MES</option>
-            <option>MGC</option>
-            <option>MYM</option>
-          </select>
-        </div>
-        <div>
-          <div class="fieldLabel">Contracts</div>
-          <select class="field" id="planContracts">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-        <div>
-          <div class="fieldLabel">Daily Goal</div>
-          <select class="field" id="planGoal">
-            <option>125</option>
-            <option>250</option>
-            <option>300</option>
-            <option>500</option>
-            <option>750</option>
-            <option>1000</option>
-          </select>
-        </div>
-        <div>
-          <div class="fieldLabel">Risk Reward</div>
-          <select class="field" id="planRR">
-            <option>1:1</option>
-            <option>1:2</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="fieldLabel" style="margin-top:10px">Stop Size (points)</div>
-      <input class="field" id="planStop" type="number" min="0" step="0.25" placeholder="Example: 5" />
-
-      <div class="btnrow">
-        <button class="btn" type="button" id="planResetBtn">Reset</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2 class="sectionTitle">Plan Summary</h2>
-      <div class="kpiGrid">
-        <div class="kpi">
-          <div class="label">$/Point</div>
-          <div class="num" id="planPerPoint">$0</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Risk</div>
-          <div class="num" id="planRisk">$0</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Target</div>
-          <div class="num" id="planTarget">$0</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Wins Needed</div>
-          <div class="num" id="planWins">0</div>
-        </div>
-      </div>
-      <div class="kpiGrid" style="margin-top:10px">
-        <div class="kpi">
-          <div class="label">Status</div>
-          <div class="num" id="planStatus" style="font-size:18px">Waiting</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Mental Check</div>
-          <div class="num" id="planMentalOut" style="font-size:18px">—</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  
-  <section class="view" id="strategy">
-    <div class="section">
-      <h2 class="sectionTitle">Strategy</h2>
-      <div class="muted">Old strategy placeholders removed. ICC, EMA, and Supply &amp; Demand are now separate under this tab.</div>
-
-      <div class="strategyTabs" id="mergedStrategyTabs">
-        <button class="pill active" data-merged-strategy="icc">ICC</button>
-        <button class="pill" data-merged-strategy="ema">EMA / TEMA</button>
-        <button class="pill" data-merged-strategy="sd">Supply &amp; Demand</button>
-      </div>
-
-      <div class="mergedStrategyPane active" id="merged-icc" style="margin-top:14px;">
-        <iframe
-          title="ICC Strategy"
-          class="strategyFrame" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;"
-          srcdoc="&lt;!DOCTYPE html&gt;
+<div class="section"><h2 class="sectionTitle">Command Center</h2><div class="kpiGrid"><div class="kpi"><div class="label">Active Goal</div><div class="num" id="homeGoal">$—</div><div class="muted" id="homeGoalType">No goal set</div></div><div class="kpi"><div class="label">Max Loss</div><div class="num" id="homeLoss">$—</div><div class="muted">Used by lock rules</div></div><div class="kpi"><div class="label">Best Strategy</div><div class="num" id="bestStrategy" style="font-size:18px">—</div><div class="muted" id="bestStrategyMeta">Waiting for trades</div></div><div class="kpi"><div class="label">Accounts</div><div class="num" id="accountCount">0</div><div class="muted">Eval + Funded + Live</div></div></div></div>
+<div class="section"><h2 class="sectionTitle">Quick Access</h2><div class="homeQuick"><button class="quickBtn" onclick="switchView('journal')">Open Journal</button><button class="quickBtn" onclick="switchView('strategy')">Open Strategy</button><button class="quickBtn" onclick="switchView('eval')">Open Eval</button><button class="quickBtn" onclick="switchView('pnl')">Open PnL</button></div></div>
+<div class="section"><h2 class="sectionTitle">Recent Journal</h2><div class="journalList" id="recentJournal"></div></div>
+</section>
+<section class="view" id="goals">
+<div class="section"><h2 class="sectionTitle">Goals</h2><div class="fieldLabel">Account Type</div><select class="field" id="goalType"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select><div class="grid2" style="margin-top:10px"><button class="btn" onclick="applyGoalPreset(150,75)">Conservative</button><button class="btn" onclick="applyGoalPreset(300,150)">Standard</button></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="goalDaily" type="number"/></div><div><div class="fieldLabel">Max Loss</div><input class="field" id="goalLoss" type="number"/></div></div><button class="cta" onclick="saveGoal()">Save Goal</button></div>
+<div class="section"><h2 class="sectionTitle">Saved Goals</h2><div class="accountList" id="goalSummary"></div></div>
+</section>
+<section class="view" id="plan">
+<div class="section">
+<h2 class="sectionTitle">Plan</h2>
+<div class="muted">Fresh pre-trade plan. Nothing saves here.</div>
+<div class="fieldLabel" style="margin-top:10px">Mental State</div>
+<select class="field" id="planMental">
+<option value="">Select</option>
+<option>Calm / Focused</option>
+<option>Anxious / Impatient</option>
+</select>
+<div class="grid2" style="margin-top:10px">
+<div>
+<div class="fieldLabel">Ticker</div>
+<select class="field" id="planTicker">
+<option>MNQ</option>
+<option>MES</option>
+<option>MGC</option>
+<option>MYM</option>
+</select>
+</div>
+<div>
+<div class="fieldLabel">Contracts</div>
+<select class="field" id="planContracts">
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+</select>
+</div>
+</div>
+<div class="grid2" style="margin-top:10px">
+<div>
+<div class="fieldLabel">Daily Goal</div>
+<select class="field" id="planGoal">
+<option>125</option>
+<option>250</option>
+<option>300</option>
+<option>500</option>
+<option>750</option>
+<option>1000</option>
+</select>
+</div>
+<div>
+<div class="fieldLabel">Risk Reward</div>
+<select class="field" id="planRR">
+<option>1:1</option>
+<option>1:2</option>
+</select>
+</div>
+</div>
+<div class="fieldLabel" style="margin-top:10px">Stop Size (points)</div>
+<input class="field" id="planStop" min="0" placeholder="Example: 5" step="0.25" type="number"/>
+<div class="btnrow">
+<button class="btn" id="planResetBtn" type="button">Reset</button>
+</div>
+</div>
+<div class="section">
+<h2 class="sectionTitle">Plan Summary</h2>
+<div class="kpiGrid">
+<div class="kpi">
+<div class="label">$/Point</div>
+<div class="num" id="planPerPoint">$0</div>
+</div>
+<div class="kpi">
+<div class="label">Risk</div>
+<div class="num" id="planRisk">$0</div>
+</div>
+<div class="kpi">
+<div class="label">Target</div>
+<div class="num" id="planTarget">$0</div>
+</div>
+<div class="kpi">
+<div class="label">Wins Needed</div>
+<div class="num" id="planWins">0</div>
+</div>
+</div>
+<div class="kpiGrid" style="margin-top:10px">
+<div class="kpi">
+<div class="label">Status</div>
+<div class="num" id="planStatus" style="font-size:18px">Waiting</div>
+</div>
+<div class="kpi">
+<div class="label">Mental Check</div>
+<div class="num" id="planMentalOut" style="font-size:18px">—</div>
+</div>
+</div>
+</div>
+</section>
+<section class="view" id="strategy">
+<div class="section">
+<h2 class="sectionTitle">Strategy</h2>
+<div class="muted">Old strategy placeholders removed. ICC, EMA, and Supply &amp; Demand are now separate under this tab.</div>
+<div class="strategyTabs" id="mergedStrategyTabs">
+<button class="pill active" data-merged-strategy="icc">ICC</button>
+<button class="pill" data-merged-strategy="ema">EMA / TEMA</button>
+<button class="pill" data-merged-strategy="sd">Supply &amp; Demand</button>
+</div>
+<div class="mergedStrategyPane active" id="merged-icc" style="margin-top:14px;">
+<iframe class="strategyFrame" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot; /&gt;
@@ -1938,20 +2067,20 @@ button.option,
 &lt;/div&gt;
 
 &lt;script&gt;
-const STORAGE_KEY = &#x27;faceless_strategy_journal_v1&#x27;;
-let journalEntries = JSON.parse(localStorage.getItem(STORAGE_KEY) || &#x27;[]&#x27;);
-const strategyTabs = document.querySelectorAll(&#x27;[data-strategy]&#x27;);
+const STORAGE_KEY = 'faceless_strategy_journal_v1';
+let journalEntries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+const strategyTabs = document.querySelectorAll('[data-strategy]');
 strategyTabs.forEach(btn =&gt; {
-  btn.addEventListener(&#x27;click&#x27;, () =&gt; {
-    strategyTabs.forEach(b =&gt; b.classList.remove(&#x27;active&#x27;));
-    btn.classList.add(&#x27;active&#x27;);
-    const isICC = btn.dataset.strategy === &#x27;icc&#x27;;
-    document.getElementById(&#x27;iccView&#x27;).classList.toggle(&#x27;active&#x27;, isICC);
-    document.getElementById(&#x27;emaView&#x27;).classList.toggle(&#x27;active&#x27;, !isICC);
-    window.scrollTo({top:0, behavior:&#x27;smooth&#x27;});
+  btn.addEventListener('click', () =&gt; {
+    strategyTabs.forEach(b =&gt; b.classList.remove('active'));
+    btn.classList.add('active');
+    const isICC = btn.dataset.strategy === 'icc';
+    document.getElementById('iccView').classList.toggle('active', isICC);
+    document.getElementById('emaView').classList.toggle('active', !isICC);
+    window.scrollTo({top:0, behavior:'smooth'});
   });
 });
-strategyTabs[0].classList.add(&#x27;active&#x27;);
+strategyTabs[0].classList.add('active');
 
 const iccData = {
   bias: {
@@ -2069,49 +2198,49 @@ const emaState = { strategy:&quot;ema&quot;, direction:&quot;Long&quot;, activeP
 Object.values(emaData).forEach(phase =&gt; phase.items.forEach(item =&gt; emaState.checked[item.key] = false));
 const emaPhaseOrder = [&quot;setup&quot;,&quot;indication&quot;,&quot;correction&quot;,&quot;entry&quot;];
 
-let iccPreviewData = &#x27;&#x27;;
-let emaPreviewData = &#x27;&#x27;;
+let iccPreviewData = '';
+let emaPreviewData = '';
 
 function saveJournalStorage(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(journalEntries));
 }
 function renderJournalList(){
-  const list = document.getElementById(&#x27;journalList&#x27;);
+  const list = document.getElementById('journalList');
   if(!journalEntries.length){
-    list.innerHTML = &#x27;&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved ICC and EMA trades will appear here.&lt;/div&gt;&lt;/div&gt;&#x27;;
+    list.innerHTML = '&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved ICC and EMA trades will appear here.&lt;/div&gt;&lt;/div&gt;';
     return;
   }
   list.innerHTML = journalEntries.slice().reverse().map((entry, idx) =&gt; `
     &lt;div class=&quot;entryCard&quot;&gt;
       &lt;div class=&quot;entryTop&quot;&gt;
         &lt;div&gt;
-          &lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result || &#x27;Unlogged&#x27;}&lt;/div&gt;
+          &lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result || 'Unlogged'}&lt;/div&gt;
           &lt;div class=&quot;entryMeta&quot;&gt;${entry.modeOrDirection} • ${entry.sessionOrStatus} • ${entry.score}&lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;smallBadge&quot;&gt;${entry.date}&lt;/div&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry || &#x27;-&#x27;} · SL: ${entry.sl || &#x27;-&#x27;} · TP: ${entry.tp || &#x27;-&#x27;}&lt;/div&gt;
-      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note || &#x27;No note added.&#x27;}&lt;/div&gt;
-      ${entry.image ? `&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;` : &#x27;&#x27;}
+      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry || '-'} · SL: ${entry.sl || '-'} · TP: ${entry.tp || '-'}&lt;/div&gt;
+      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note || 'No note added.'}&lt;/div&gt;
+      ${entry.image ? `&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;` : ''}
     &lt;/div&gt;
-  `).join(&#x27;&#x27;);
+  `).join('');
 }
 function bindPreview(inputId, imgId, setter){
-  document.getElementById(inputId).addEventListener(&#x27;change&#x27;, e =&gt; {
+  document.getElementById(inputId).addEventListener('change', e =&gt; {
     const file = e.target.files &amp;&amp; e.target.files[0];
     const img = document.getElementById(imgId);
-    if(!file){ setter(&#x27;&#x27;); img.style.display=&#x27;none&#x27;; img.src=&#x27;&#x27;; return; }
+    if(!file){ setter(''); img.style.display='none'; img.src=''; return; }
     const reader = new FileReader();
     reader.onload = () =&gt; {
       setter(reader.result);
       img.src = reader.result;
-      img.style.display = &#x27;block&#x27;;
+      img.style.display = 'block';
     };
     reader.readAsDataURL(file);
   });
 }
-bindPreview(&#x27;iccScreenshotField&#x27;,&#x27;iccPreview&#x27;,v=&gt;iccPreviewData=v);
-bindPreview(&#x27;emaScreenshotField&#x27;,&#x27;emaPreview&#x27;,v=&gt;emaPreviewData=v);
+bindPreview('iccScreenshotField','iccPreview',v=&gt;iccPreviewData=v);
+bindPreview('emaScreenshotField','emaPreview',v=&gt;emaPreviewData=v);
 
 function openGenericPhase(stateObj, dataObj, phaseKey){
   stateObj.activePhase = phaseKey;
@@ -2132,8 +2261,8 @@ function openGenericPhase(stateObj, dataObj, phaseKey){
       &lt;/div&gt;`;
     div.onclick = () =&gt; {
       stateObj.checked[item.key] = !stateObj.checked[item.key];
-      if (stateObj.strategy === &#x27;icc&#x27;) updateICCUI();
-      if (stateObj.strategy === &#x27;ema&#x27;) updateEMAUI();
+      if (stateObj.strategy === 'icc') updateICCUI();
+      if (stateObj.strategy === 'ema') updateEMAUI();
       openGenericPhase(stateObj, dataObj, phaseKey);
     };
     checklist.appendChild(div);
@@ -2325,23 +2454,23 @@ document.getElementById(&quot;reviewRulesBtn&quot;).onclick = () =&gt; warningPo
 warningPopup.addEventListener(&quot;click&quot;, e =&gt; { if (e.target.id === &quot;warningPopup&quot;) warningPopup.classList.remove(&quot;show&quot;); });
 
 document.getElementById(&quot;journalItTop&quot;).onclick = () =&gt; {
-  document.querySelector(&#x27;#iccView .section&#x27;).scrollIntoView({behavior:&#x27;smooth&#x27;, block:&#x27;start&#x27;});
+  document.querySelector('#iccView .section').scrollIntoView({behavior:'smooth', block:'start'});
 };
 document.getElementById(&quot;emaJournalTop&quot;).onclick = () =&gt; {
-  document.querySelector(&#x27;#emaView .section&#x27;).scrollIntoView({behavior:&#x27;smooth&#x27;, block:&#x27;start&#x27;});
+  document.querySelector('#emaView .section').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
-document.getElementById(&#x27;saveICCTradeBtn&#x27;).onclick = () =&gt; {
+document.getElementById('saveICCTradeBtn').onclick = () =&gt; {
   const entry = {
-    strategy: &#x27;ICC&#x27;,
-    modeOrDirection: document.getElementById(&#x27;iccModeField&#x27;).value,
-    sessionOrStatus: document.getElementById(&#x27;iccSessionField&#x27;).value,
-    score: document.getElementById(&#x27;iccScoreField&#x27;).value,
-    entry: document.getElementById(&#x27;iccEntryField&#x27;).value,
-    sl: document.getElementById(&#x27;iccSlField&#x27;).value,
-    tp: document.getElementById(&#x27;iccTpField&#x27;).value,
-    result: document.getElementById(&#x27;iccResultField&#x27;).value,
-    note: document.getElementById(&#x27;iccLessonField&#x27;).value,
+    strategy: 'ICC',
+    modeOrDirection: document.getElementById('iccModeField').value,
+    sessionOrStatus: document.getElementById('iccSessionField').value,
+    score: document.getElementById('iccScoreField').value,
+    entry: document.getElementById('iccEntryField').value,
+    sl: document.getElementById('iccSlField').value,
+    tp: document.getElementById('iccTpField').value,
+    result: document.getElementById('iccResultField').value,
+    note: document.getElementById('iccLessonField').value,
     image: iccPreviewData,
     date: new Date().toLocaleDateString()
   };
@@ -2350,17 +2479,17 @@ document.getElementById(&#x27;saveICCTradeBtn&#x27;).onclick = () =&gt; {
   renderJournalList();
 };
 
-document.getElementById(&#x27;saveEMATradeBtn&#x27;).onclick = () =&gt; {
+document.getElementById('saveEMATradeBtn').onclick = () =&gt; {
   const entry = {
-    strategy: &#x27;EMA / TEMA&#x27;,
-    modeOrDirection: document.getElementById(&#x27;emaDirectionField&#x27;).value,
-    sessionOrStatus: document.getElementById(&#x27;emaStatusField&#x27;).value,
-    score: document.getElementById(&#x27;emaScoreField&#x27;).value,
-    entry: document.getElementById(&#x27;emaEntryField&#x27;).value,
-    sl: document.getElementById(&#x27;emaSlField&#x27;).value,
-    tp: document.getElementById(&#x27;emaTpField&#x27;).value,
-    result: document.getElementById(&#x27;emaResultField&#x27;).value,
-    note: document.getElementById(&#x27;emaLessonField&#x27;).value,
+    strategy: 'EMA / TEMA',
+    modeOrDirection: document.getElementById('emaDirectionField').value,
+    sessionOrStatus: document.getElementById('emaStatusField').value,
+    score: document.getElementById('emaScoreField').value,
+    entry: document.getElementById('emaEntryField').value,
+    sl: document.getElementById('emaSlField').value,
+    tp: document.getElementById('emaTpField').value,
+    result: document.getElementById('emaResultField').value,
+    note: document.getElementById('emaLessonField').value,
     image: emaPreviewData,
     date: new Date().toLocaleDateString()
   };
@@ -2375,24 +2504,20 @@ renderJournalList();
 &lt;/script&gt;
 
 &lt;script&gt;
-document.addEventListener(&#x27;DOMContentLoaded&#x27;, function(){
-  var icc = document.getElementById(&#x27;iccView&#x27;);
-  var ema = document.getElementById(&#x27;emaView&#x27;);
-  if (icc) icc.classList.add(&#x27;active&#x27;);
-  if (ema) ema.classList.remove(&#x27;active&#x27;);
+document.addEventListener('DOMContentLoaded', function(){
+  var icc = document.getElementById('iccView');
+  var ema = document.getElementById('emaView');
+  if (icc) icc.classList.add('active');
+  if (ema) ema.classList.remove('active');
 });
 &lt;/script&gt;
 
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe>
-      </div>
-
-      <div class="mergedStrategyPane" id="merged-ema" style="display:none;margin-top:14px;">
-        <iframe
-          title="EMA Strategy"
-          class="strategyFrame" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;"
-          srcdoc="&lt;!DOCTYPE html&gt;
+" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;" title="ICC Strategy"></iframe>
+</div>
+<div class="mergedStrategyPane" id="merged-ema" style="display:none;margin-top:14px;">
+<iframe class="strategyFrame" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot; /&gt;
@@ -2789,20 +2914,20 @@ document.addEventListener(&#x27;DOMContentLoaded&#x27;, function(){
 &lt;/div&gt;
 
 &lt;script&gt;
-const STORAGE_KEY = &#x27;faceless_strategy_journal_v1&#x27;;
-let journalEntries = JSON.parse(localStorage.getItem(STORAGE_KEY) || &#x27;[]&#x27;);
-const strategyTabs = document.querySelectorAll(&#x27;[data-strategy]&#x27;);
+const STORAGE_KEY = 'faceless_strategy_journal_v1';
+let journalEntries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+const strategyTabs = document.querySelectorAll('[data-strategy]');
 strategyTabs.forEach(btn =&gt; {
-  btn.addEventListener(&#x27;click&#x27;, () =&gt; {
-    strategyTabs.forEach(b =&gt; b.classList.remove(&#x27;active&#x27;));
-    btn.classList.add(&#x27;active&#x27;);
-    const isICC = btn.dataset.strategy === &#x27;icc&#x27;;
-    document.getElementById(&#x27;iccView&#x27;).classList.toggle(&#x27;active&#x27;, isICC);
-    document.getElementById(&#x27;emaView&#x27;).classList.toggle(&#x27;active&#x27;, !isICC);
-    window.scrollTo({top:0, behavior:&#x27;smooth&#x27;});
+  btn.addEventListener('click', () =&gt; {
+    strategyTabs.forEach(b =&gt; b.classList.remove('active'));
+    btn.classList.add('active');
+    const isICC = btn.dataset.strategy === 'icc';
+    document.getElementById('iccView').classList.toggle('active', isICC);
+    document.getElementById('emaView').classList.toggle('active', !isICC);
+    window.scrollTo({top:0, behavior:'smooth'});
   });
 });
-strategyTabs[0].classList.add(&#x27;active&#x27;);
+strategyTabs[0].classList.add('active');
 
 const iccData = {
   bias: {
@@ -2920,49 +3045,49 @@ const emaState = { strategy:&quot;ema&quot;, direction:&quot;Long&quot;, activeP
 Object.values(emaData).forEach(phase =&gt; phase.items.forEach(item =&gt; emaState.checked[item.key] = false));
 const emaPhaseOrder = [&quot;setup&quot;,&quot;indication&quot;,&quot;correction&quot;,&quot;entry&quot;];
 
-let iccPreviewData = &#x27;&#x27;;
-let emaPreviewData = &#x27;&#x27;;
+let iccPreviewData = '';
+let emaPreviewData = '';
 
 function saveJournalStorage(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(journalEntries));
 }
 function renderJournalList(){
-  const list = document.getElementById(&#x27;journalList&#x27;);
+  const list = document.getElementById('journalList');
   if(!journalEntries.length){
-    list.innerHTML = &#x27;&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved ICC and EMA trades will appear here.&lt;/div&gt;&lt;/div&gt;&#x27;;
+    list.innerHTML = '&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved ICC and EMA trades will appear here.&lt;/div&gt;&lt;/div&gt;';
     return;
   }
   list.innerHTML = journalEntries.slice().reverse().map((entry, idx) =&gt; `
     &lt;div class=&quot;entryCard&quot;&gt;
       &lt;div class=&quot;entryTop&quot;&gt;
         &lt;div&gt;
-          &lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result || &#x27;Unlogged&#x27;}&lt;/div&gt;
+          &lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result || 'Unlogged'}&lt;/div&gt;
           &lt;div class=&quot;entryMeta&quot;&gt;${entry.modeOrDirection} • ${entry.sessionOrStatus} • ${entry.score}&lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;smallBadge&quot;&gt;${entry.date}&lt;/div&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry || &#x27;-&#x27;} · SL: ${entry.sl || &#x27;-&#x27;} · TP: ${entry.tp || &#x27;-&#x27;}&lt;/div&gt;
-      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note || &#x27;No note added.&#x27;}&lt;/div&gt;
-      ${entry.image ? `&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;` : &#x27;&#x27;}
+      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry || '-'} · SL: ${entry.sl || '-'} · TP: ${entry.tp || '-'}&lt;/div&gt;
+      &lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note || 'No note added.'}&lt;/div&gt;
+      ${entry.image ? `&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;` : ''}
     &lt;/div&gt;
-  `).join(&#x27;&#x27;);
+  `).join('');
 }
 function bindPreview(inputId, imgId, setter){
-  document.getElementById(inputId).addEventListener(&#x27;change&#x27;, e =&gt; {
+  document.getElementById(inputId).addEventListener('change', e =&gt; {
     const file = e.target.files &amp;&amp; e.target.files[0];
     const img = document.getElementById(imgId);
-    if(!file){ setter(&#x27;&#x27;); img.style.display=&#x27;none&#x27;; img.src=&#x27;&#x27;; return; }
+    if(!file){ setter(''); img.style.display='none'; img.src=''; return; }
     const reader = new FileReader();
     reader.onload = () =&gt; {
       setter(reader.result);
       img.src = reader.result;
-      img.style.display = &#x27;block&#x27;;
+      img.style.display = 'block';
     };
     reader.readAsDataURL(file);
   });
 }
-bindPreview(&#x27;iccScreenshotField&#x27;,&#x27;iccPreview&#x27;,v=&gt;iccPreviewData=v);
-bindPreview(&#x27;emaScreenshotField&#x27;,&#x27;emaPreview&#x27;,v=&gt;emaPreviewData=v);
+bindPreview('iccScreenshotField','iccPreview',v=&gt;iccPreviewData=v);
+bindPreview('emaScreenshotField','emaPreview',v=&gt;emaPreviewData=v);
 
 function openGenericPhase(stateObj, dataObj, phaseKey){
   stateObj.activePhase = phaseKey;
@@ -2983,8 +3108,8 @@ function openGenericPhase(stateObj, dataObj, phaseKey){
       &lt;/div&gt;`;
     div.onclick = () =&gt; {
       stateObj.checked[item.key] = !stateObj.checked[item.key];
-      if (stateObj.strategy === &#x27;icc&#x27;) updateICCUI();
-      if (stateObj.strategy === &#x27;ema&#x27;) updateEMAUI();
+      if (stateObj.strategy === 'icc') updateICCUI();
+      if (stateObj.strategy === 'ema') updateEMAUI();
       openGenericPhase(stateObj, dataObj, phaseKey);
     };
     checklist.appendChild(div);
@@ -3176,23 +3301,23 @@ document.getElementById(&quot;reviewRulesBtn&quot;).onclick = () =&gt; warningPo
 warningPopup.addEventListener(&quot;click&quot;, e =&gt; { if (e.target.id === &quot;warningPopup&quot;) warningPopup.classList.remove(&quot;show&quot;); });
 
 document.getElementById(&quot;journalItTop&quot;).onclick = () =&gt; {
-  document.querySelector(&#x27;#iccView .section&#x27;).scrollIntoView({behavior:&#x27;smooth&#x27;, block:&#x27;start&#x27;});
+  document.querySelector('#iccView .section').scrollIntoView({behavior:'smooth', block:'start'});
 };
 document.getElementById(&quot;emaJournalTop&quot;).onclick = () =&gt; {
-  document.querySelector(&#x27;#emaView .section&#x27;).scrollIntoView({behavior:&#x27;smooth&#x27;, block:&#x27;start&#x27;});
+  document.querySelector('#emaView .section').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
-document.getElementById(&#x27;saveICCTradeBtn&#x27;).onclick = () =&gt; {
+document.getElementById('saveICCTradeBtn').onclick = () =&gt; {
   const entry = {
-    strategy: &#x27;ICC&#x27;,
-    modeOrDirection: document.getElementById(&#x27;iccModeField&#x27;).value,
-    sessionOrStatus: document.getElementById(&#x27;iccSessionField&#x27;).value,
-    score: document.getElementById(&#x27;iccScoreField&#x27;).value,
-    entry: document.getElementById(&#x27;iccEntryField&#x27;).value,
-    sl: document.getElementById(&#x27;iccSlField&#x27;).value,
-    tp: document.getElementById(&#x27;iccTpField&#x27;).value,
-    result: document.getElementById(&#x27;iccResultField&#x27;).value,
-    note: document.getElementById(&#x27;iccLessonField&#x27;).value,
+    strategy: 'ICC',
+    modeOrDirection: document.getElementById('iccModeField').value,
+    sessionOrStatus: document.getElementById('iccSessionField').value,
+    score: document.getElementById('iccScoreField').value,
+    entry: document.getElementById('iccEntryField').value,
+    sl: document.getElementById('iccSlField').value,
+    tp: document.getElementById('iccTpField').value,
+    result: document.getElementById('iccResultField').value,
+    note: document.getElementById('iccLessonField').value,
     image: iccPreviewData,
     date: new Date().toLocaleDateString()
   };
@@ -3201,17 +3326,17 @@ document.getElementById(&#x27;saveICCTradeBtn&#x27;).onclick = () =&gt; {
   renderJournalList();
 };
 
-document.getElementById(&#x27;saveEMATradeBtn&#x27;).onclick = () =&gt; {
+document.getElementById('saveEMATradeBtn').onclick = () =&gt; {
   const entry = {
-    strategy: &#x27;EMA / TEMA&#x27;,
-    modeOrDirection: document.getElementById(&#x27;emaDirectionField&#x27;).value,
-    sessionOrStatus: document.getElementById(&#x27;emaStatusField&#x27;).value,
-    score: document.getElementById(&#x27;emaScoreField&#x27;).value,
-    entry: document.getElementById(&#x27;emaEntryField&#x27;).value,
-    sl: document.getElementById(&#x27;emaSlField&#x27;).value,
-    tp: document.getElementById(&#x27;emaTpField&#x27;).value,
-    result: document.getElementById(&#x27;emaResultField&#x27;).value,
-    note: document.getElementById(&#x27;emaLessonField&#x27;).value,
+    strategy: 'EMA / TEMA',
+    modeOrDirection: document.getElementById('emaDirectionField').value,
+    sessionOrStatus: document.getElementById('emaStatusField').value,
+    score: document.getElementById('emaScoreField').value,
+    entry: document.getElementById('emaEntryField').value,
+    sl: document.getElementById('emaSlField').value,
+    tp: document.getElementById('emaTpField').value,
+    result: document.getElementById('emaResultField').value,
+    note: document.getElementById('emaLessonField').value,
     image: emaPreviewData,
     date: new Date().toLocaleDateString()
   };
@@ -3226,24 +3351,20 @@ renderJournalList();
 &lt;/script&gt;
 
 &lt;script&gt;
-document.addEventListener(&#x27;DOMContentLoaded&#x27;, function(){
-  var icc = document.getElementById(&#x27;iccView&#x27;);
-  var ema = document.getElementById(&#x27;emaView&#x27;);
-  if (icc) icc.classList.remove(&#x27;active&#x27;);
-  if (ema) ema.classList.add(&#x27;active&#x27;);
+document.addEventListener('DOMContentLoaded', function(){
+  var icc = document.getElementById('iccView');
+  var ema = document.getElementById('emaView');
+  if (icc) icc.classList.remove('active');
+  if (ema) ema.classList.add('active');
 });
 &lt;/script&gt;
 
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe>
-      </div>
-
-      <div class="mergedStrategyPane" id="merged-sd" style="display:none;margin-top:14px;">
-        <iframe
-          title="Supply and Demand Strategy"
-          class="strategyFrame" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;"
-          srcdoc="&lt;!DOCTYPE html&gt;
+" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;" title="EMA Strategy"></iframe>
+</div>
+<div class="mergedStrategyPane" id="merged-sd" style="display:none;margin-top:14px;">
+<iframe class="strategyFrame" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot; /&gt;
@@ -3375,9 +3496,9 @@ textarea.field{min-height:88px;resize:vertical}
 &lt;/div&gt;
 
 &lt;script&gt;
-const STORAGE_KEY=&#x27;snd_icc_style_journal_v2&#x27;;
-let journalEntries=JSON.parse(localStorage.getItem(STORAGE_KEY)||&#x27;[]&#x27;);
-let previewData=&#x27;&#x27;;
+const STORAGE_KEY='snd_icc_style_journal_v2';
+let journalEntries=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let previewData='';
 const data={
  zone:{title:&quot;Zone Quality&quot;,sub:&quot;Phase 1 • Is the zone actually worth trading?&quot;,rule:&quot;A strong zone should be fresh, obvious, and backed by displacement.&quot;,danger:&quot;If the zone is messy or overused, the setup loses quality fast.&quot;,items:[
   {key:&quot;fresh_zone&quot;,title:&quot;Fresh / Untouched Zone&quot;,desc:&quot;The zone has not been repeatedly tested or traded through.&quot;},
@@ -3407,15 +3528,15 @@ const weaknessKeys=new Set(data.weakness.items.map(i=&gt;i.key));
 
 function saveJournalStorage(){localStorage.setItem(STORAGE_KEY,JSON.stringify(journalEntries))}
 function renderJournalList(){
- const list=document.getElementById(&#x27;journalList&#x27;);
- if(!journalEntries.length){list.innerHTML=&#x27;&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved Supply &amp; Demand trades will appear here.&lt;/div&gt;&lt;/div&gt;&#x27;;return;}
- list.innerHTML=journalEntries.slice().reverse().map(entry=&gt;`&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTop&quot;&gt;&lt;div&gt;&lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result||&#x27;Unlogged&#x27;}&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;${entry.score} • ${entry.status} • ${entry.session||&#x27;No session&#x27;}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;smallBadge&quot;&gt;${entry.date}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry||&#x27;-&#x27;} · SL: ${entry.sl||&#x27;-&#x27;} · TP: ${entry.tp||&#x27;-&#x27;}&lt;/div&gt;&lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note||&#x27;No note added.&#x27;}&lt;/div&gt;${entry.image?`&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;`:&#x27;&#x27;}&lt;/div&gt;`).join(&#x27;&#x27;);
+ const list=document.getElementById('journalList');
+ if(!journalEntries.length){list.innerHTML='&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTitle&quot;&gt;No journal entries yet&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;Saved Supply &amp; Demand trades will appear here.&lt;/div&gt;&lt;/div&gt;';return;}
+ list.innerHTML=journalEntries.slice().reverse().map(entry=&gt;`&lt;div class=&quot;entryCard&quot;&gt;&lt;div class=&quot;entryTop&quot;&gt;&lt;div&gt;&lt;div class=&quot;entryTitle&quot;&gt;${entry.strategy} • ${entry.result||'Unlogged'}&lt;/div&gt;&lt;div class=&quot;entryMeta&quot;&gt;${entry.score} • ${entry.status} • ${entry.session||'No session'}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;smallBadge&quot;&gt;${entry.date}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;Entry: ${entry.entry||'-'} · SL: ${entry.sl||'-'} · TP: ${entry.tp||'-'}&lt;/div&gt;&lt;div class=&quot;entryMeta&quot; style=&quot;margin-top:8px;&quot;&gt;${entry.note||'No note added.'}&lt;/div&gt;${entry.image?`&lt;img class=&quot;entryImg&quot; style=&quot;display:block&quot; src=&quot;${entry.image}&quot; /&gt;`:''}&lt;/div&gt;`).join('');
 }
-document.getElementById(&#x27;screenshotField&#x27;).addEventListener(&#x27;change&#x27;,e=&gt;{
- const file=e.target.files&amp;&amp;e.target.files[0],img=document.getElementById(&#x27;previewImg&#x27;);
- if(!file){previewData=&#x27;&#x27;;img.src=&#x27;&#x27;;img.style.display=&#x27;none&#x27;;return;}
+document.getElementById('screenshotField').addEventListener('change',e=&gt;{
+ const file=e.target.files&amp;&amp;e.target.files[0],img=document.getElementById('previewImg');
+ if(!file){previewData='';img.src='';img.style.display='none';return;}
  const reader=new FileReader();
- reader.onload=()=&gt;{previewData=reader.result;img.src=reader.result;img.style.display=&#x27;block&#x27;;};
+ reader.onload=()=&gt;{previewData=reader.result;img.src=reader.result;img.style.display='block';};
  reader.readAsDataURL(file);
 });
 function getCounts(){const counts={};phaseOrder.forEach(pk=&gt;{const phase=data[pk];counts[pk]={total:phase.items.length,done:phase.items.filter(item=&gt;state.checked[item.key]).length};});return counts;}
@@ -3452,8 +3573,8 @@ function updateUI(){
  const tradeBtn=document.getElementById(&quot;unlockTradeBtn&quot;);
  tradeBtn.classList.toggle(&quot;locked&quot;,status.badge!==&quot;READY&quot;);
  tradeBtn.textContent=status.badge===&quot;READY&quot;?&quot;🔓 Unlock Trade&quot;:&quot;🔒 Unlock Trade&quot;;
- document.querySelectorAll(&#x27;.phaseCard&#x27;).forEach(card=&gt;card.classList.remove(&#x27;ready&#x27;));
- if(status.badge===&quot;READY&quot;) document.querySelectorAll(&#x27;.phaseCard&#x27;).forEach(card=&gt;card.classList.add(&#x27;ready&#x27;));
+ document.querySelectorAll('.phaseCard').forEach(card=&gt;card.classList.remove('ready'));
+ if(status.badge===&quot;READY&quot;) document.querySelectorAll('.phaseCard').forEach(card=&gt;card.classList.add('ready'));
 }
 function openPhase(phaseKey){
  state.activePhase=phaseKey; const phase=data[phaseKey];
@@ -3502,20 +3623,13 @@ document.getElementById(&quot;saveTradeBtn&quot;).onclick=()=&gt;{
 updateUI(); renderJournalList();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe>
-      </div>
-    </div>
-  </section>
-
-
-  <section class="view" id="eval"><div class="section"><h2 class="sectionTitle">Eval Tracker</h2><input type="hidden" id="evalId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="evalFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="evalSize" onchange="applyAccountDefaults('eval')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Profit Goal</div><input class="field" id="evalGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="evalDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Days Passed</div><input class="field" id="evalDays" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="evalStatus"><option value="active">Active</option><option value="passed">Passed</option><option value="failed">Failed</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="evalNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('eval')">Save Eval</button><button class="btn" onclick="clearAccountForm('eval')">Clear</button></div></div><div class="section"><h2 class="sectionTitle">Saved Evals</h2><div id="evalList" class="accountList"></div></div></section>
-
-  <section class="view" id="funded"><div class="section"><h2 class="sectionTitle">Funded Tracker</h2><input type="hidden" id="fundedId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="fundedFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="fundedSize" onchange="applyAccountDefaults('funded')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Goal</div><input class="field" id="fundedPayoutGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="fundedDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Taken</div><input class="field" id="fundedPayoutTaken" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="fundedStatus"><option value="active">Active</option><option value="risk">Drawdown Risk</option><option value="blown">Blown</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="fundedNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('funded')">Save Funded</button><button class="btn" onclick="clearAccountForm('funded')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Funded Running PnL</div><div class="miniNum" id="fundedRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Funded Trades</div><div class="miniNum" id="fundedTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Funded</h2><div id="fundedList" class="accountList"></div></div></section>
-
-  
-<section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input type="hidden" id="liveId"><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Live Running PnL</div><div class="miniNum" id="liveRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Live Trades</div><div class="miniNum" id="liveTradeCount">0</div></div></div></div>
-
-
+&lt;/html&gt;" style="width:100%;height:1400px;border:none;border-radius:22px;background:transparent;display:block;overflow:hidden;" title="Supply and Demand Strategy"></iframe>
+</div>
+</div>
+</section>
+<section class="view" id="eval"><div class="section"><h2 class="sectionTitle">Eval Tracker</h2><input id="evalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="evalFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="evalSize" onchange="applyAccountDefaults('eval')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Profit Goal</div><input class="field" id="evalGoal" type="number"/></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="evalDrawdown" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Days Passed</div><input class="field" id="evalDays" type="number"/></div><div><div class="fieldLabel">Status</div><select class="field" id="evalStatus"><option value="active">Active</option><option value="passed">Passed</option><option value="failed">Failed</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="evalNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('eval')">Save Eval</button><button class="btn" onclick="clearAccountForm('eval')">Clear</button></div></div><div class="section"><h2 class="sectionTitle">Saved Evals</h2><div class="accountList" id="evalList"></div></div></section>
+<section class="view" id="funded"><div class="section"><h2 class="sectionTitle">Funded Tracker</h2><input id="fundedId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="fundedFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="fundedSize" onchange="applyAccountDefaults('funded')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Goal</div><input class="field" id="fundedPayoutGoal" type="number"/></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="fundedDrawdown" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Taken</div><input class="field" id="fundedPayoutTaken" type="number"/></div><div><div class="fieldLabel">Status</div><select class="field" id="fundedStatus"><option value="active">Active</option><option value="risk">Drawdown Risk</option><option value="blown">Blown</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="fundedNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('funded')">Save Funded</button><button class="btn" onclick="clearAccountForm('funded')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Funded Running PnL</div><div class="miniNum" id="fundedRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Funded Trades</div><div class="miniNum" id="fundedTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Funded</h2><div class="accountList" id="fundedList"></div></div></section>
+<section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input id="liveId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"/></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"/></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"/></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Live Running PnL</div><div class="miniNum" id="liveRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Live Trades</div><div class="miniNum" id="liveTradeCount">0</div></div></div></div>
 <div class="section"><h2 class="sectionTitle">Live Goal Tracker</h2>
 <div class="liveTrackerCard">
 <div class="liveTrackerGrid">
@@ -3532,130 +3646,104 @@ updateUI(); renderJournalList();
 <div class="liveTrackerCard"><div class="sectionTitle">Trade Panel</div>
 <div class="liveTrackerGrid">
 <div><div class="fieldLabel">Week Number</div><select class="field" id="ltWeek"></select></div>
-<div><div class="fieldLabel">Trading Days</div><input class="field" id="ltTradingDays" type="number" min="1" max="7"></div>
-<div><div class="fieldLabel">Weekly Goal ($)</div><input class="field" id="ltWeeklyGoal" type="number"></div>
-<div><div class="fieldLabel">Start Balance ($)</div><input class="field" id="ltStartBalance" type="number"></div>
+<div><div class="fieldLabel">Trading Days</div><input class="field" id="ltTradingDays" max="7" min="1" type="number"/></div>
+<div><div class="fieldLabel">Weekly Goal ($)</div><input class="field" id="ltWeeklyGoal" type="number"/></div>
+<div><div class="fieldLabel">Start Balance ($)</div><input class="field" id="ltStartBalance" type="number"/></div>
 <div><div class="fieldLabel">Contract Type</div><select class="field" id="ltContractType"><option value="2">MNQ ($2/pt)</option><option value="20">NQ ($20/pt)</option></select></div>
-<div><div class="fieldLabel">Contracts</div><input class="field" id="ltContracts" type="number" min="1"></div>
-<div><div class="fieldLabel">Withdraw Above ($)</div><input class="field" id="ltWithdrawAbove" type="number"></div>
-<div><div class="fieldLabel">Max Loss Per Day ($)</div><input class="field" id="ltMaxLoss" type="number"></div>
-<div class="full"><div class="fieldLabel">Target Points Per Trade</div><input class="field" id="ltTargetPts" type="number"></div>
-<div><div class="fieldLabel">Points Won</div><input class="field" id="ltPointsWon" type="number" step="0.1" value="0"></div>
-<div><div class="fieldLabel">Points Lost</div><input class="field" id="ltPointsLost" type="number" step="0.1" value="0"></div>
-<div><div class="fieldLabel">Profit ($)</div><input class="field" id="ltProfit" readonly></div>
-<div><div class="fieldLabel">Loss ($)</div><input class="field" id="ltLoss" readonly></div>
-<div><div class="fieldLabel">Withdrawn ($)</div><input class="field" id="ltWithdrawn" type="number" value="0"></div>
-<div><div class="fieldLabel">Net ($)</div><input class="field" id="ltNet" readonly></div>
+<div><div class="fieldLabel">Contracts</div><input class="field" id="ltContracts" min="1" type="number"/></div>
+<div><div class="fieldLabel">Withdraw Above ($)</div><input class="field" id="ltWithdrawAbove" type="number"/></div>
+<div><div class="fieldLabel">Max Loss Per Day ($)</div><input class="field" id="ltMaxLoss" type="number"/></div>
+<div class="full"><div class="fieldLabel">Target Points Per Trade</div><input class="field" id="ltTargetPts" type="number"/></div>
+<div><div class="fieldLabel">Points Won</div><input class="field" id="ltPointsWon" step="0.1" type="number" value="0"/></div>
+<div><div class="fieldLabel">Points Lost</div><input class="field" id="ltPointsLost" step="0.1" type="number" value="0"/></div>
+<div><div class="fieldLabel">Profit ($)</div><input class="field" id="ltProfit" readonly=""/></div>
+<div><div class="fieldLabel">Loss ($)</div><input class="field" id="ltLoss" readonly=""/></div>
+<div><div class="fieldLabel">Withdrawn ($)</div><input class="field" id="ltWithdrawn" type="number" value="0"/></div>
+<div><div class="fieldLabel">Net ($)</div><input class="field" id="ltNet" readonly=""/></div>
 <div class="full"><div class="fieldLabel">Notes</div><textarea class="field" id="ltNotes"></textarea></div>
 </div>
-<div class="liveTrackerActions"><button class="btn primary" type="button" onclick="ltLoadWeek()">Load This Week</button><button class="btn" type="button" onclick="ltResetEntry()">Reset Entry</button></div>
+<div class="liveTrackerActions"><button class="btn primary" onclick="ltLoadWeek()" type="button">Load This Week</button><button class="btn" onclick="ltResetEntry()" type="button">Reset Entry</button></div>
 </div>
 <div class="liveTrackerCard"><div class="sectionTitle">Weeks 1-32 Plan</div>
-<div class="grid2"><div><div class="fieldLabel">Select Week</div><select class="field" id="ltWeekQuick"></select></div><button class="btn primary" style="align-self:end" type="button" onclick="ltUseQuickWeek()">Use</button></div>
+<div class="grid2"><div><div class="fieldLabel">Select Week</div><select class="field" id="ltWeekQuick"></select></div><button class="btn primary" onclick="ltUseQuickWeek()" style="align-self:end" type="button">Use</button></div>
 <div class="livePlanGrid" id="ltPlanGrid"></div></div>
-
 <div class="section">
-  <h2 class="sectionTitle">Weekly Auto Summary</h2>
-  <div class="trackerSummary">
-    <div class="trackerRow"><span class="label">Week</span><span class="val" id="liveSummaryWeek">1</span></div>
-    <div class="trackerRow"><span class="label">Weekly Goal</span><span class="val" id="liveSummaryGoal">$0</span></div>
-    <div class="trackerRow"><span class="label">Saved Entries</span><span class="val" id="liveSummaryEntries">0</span></div>
-    <div class="trackerRow"><span class="label">Total Profit</span><span class="val" id="liveSummaryProfit">$0</span></div>
-    <div class="trackerRow"><span class="label">Total Loss</span><span class="val" id="liveSummaryLoss">$0</span></div>
-    <div class="trackerRow"><span class="label">Total Net</span><span class="val" id="liveSummaryNet">$0</span></div>
-    <div class="trackerRow"><span class="label">Total Points</span><span class="val" id="liveSummaryPoints">0 pts</span></div>
-    <div class="trackerRow"><span class="label">Total Withdrawn</span><span class="val" id="liveSummaryWithdrawn">$0</span></div>
-    <div class="trackerRow"><span class="label">Goal Progress</span><span class="val" id="liveSummaryPct">0%</span></div>
-  </div>
+<h2 class="sectionTitle">Weekly Auto Summary</h2>
+<div class="trackerSummary">
+<div class="trackerRow"><span class="label">Week</span><span class="val" id="liveSummaryWeek">1</span></div>
+<div class="trackerRow"><span class="label">Weekly Goal</span><span class="val" id="liveSummaryGoal">$0</span></div>
+<div class="trackerRow"><span class="label">Saved Entries</span><span class="val" id="liveSummaryEntries">0</span></div>
+<div class="trackerRow"><span class="label">Total Profit</span><span class="val" id="liveSummaryProfit">$0</span></div>
+<div class="trackerRow"><span class="label">Total Loss</span><span class="val" id="liveSummaryLoss">$0</span></div>
+<div class="trackerRow"><span class="label">Total Net</span><span class="val" id="liveSummaryNet">$0</span></div>
+<div class="trackerRow"><span class="label">Total Points</span><span class="val" id="liveSummaryPoints">0 pts</span></div>
+<div class="trackerRow"><span class="label">Total Withdrawn</span><span class="val" id="liveSummaryWithdrawn">$0</span></div>
+<div class="trackerRow"><span class="label">Goal Progress</span><span class="val" id="liveSummaryPct">0%</span></div>
 </div>
-
-
+</div>
 <div class="section">
-  <h2 class="sectionTitle">Live Trade History</h2>
-  <div id="liveTradeHistory" class="historyStack"></div>
+<h2 class="sectionTitle">Live Trade History</h2>
+<div class="historyStack" id="liveTradeHistory"></div>
 </div>
-<div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div id="liveList" class="accountList"></div></div></section>
-
+<div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div class="accountList" id="liveList"></div></div></div></section>
 <section class="view" id="journal">
-<div class="section"><h2 class="sectionTitle">Journal</h2><input type="hidden" id="journalId"><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" type="number" step="0.01"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply & Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input class="field" id="journalScreenshot" type="file" accept="image/*" onchange="previewJournalImage(event)"><img id="journalPreview" class="previewImg"></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div id="journalList" class="journalList"></div></div></section>
-
-  <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div id="strategyStats" class="accountList"></div></div></section>
-
-  <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
-
-  <section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
-
-  <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
-
-  <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
+<div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
+<section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div class="accountList" id="strategyStats"></div></div></section>
+<section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
+<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
+<section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"/></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly=""/></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
+<section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
 </div>
-
-
-    </div>
-  </div>
-</div>
-
-
-
 <section class="view" id="psych">
-  <div class="section">
-    <h2 class="sectionTitle">Psychology Tab</h2>
-
-    <div class="psych-grid">
-      <div class="psych-card">
-        <div class="mini">Discipline Score</div>
-        <div class="psych-score" id="psychScore">72%</div>
-        <div class="psych-copy">Built for patience, confirmation, and no chasing.</div>
-        <div class="psych-progress"><span id="psychProgressFill"></span></div>
-      </div>
-
-      <div class="psych-card">
-        <div class="mini">Main Focus</div>
-        <div class="psych-focus" id="psychFocus">Wait</div>
-        <div class="psych-copy">No jumping in because candles look big.</div>
-      </div>
-    </div>
-
-    <div class="psych-rule" data-psych-rule="1">
-      <div class="psych-num">1</div>
-      <div>
-        <div class="psych-rule-title">Confirmation first.</div>
-        <div class="psych-rule-copy">Wait for BOS, CHoCH, or clean reclaim/rejection before entry.</div>
-      </div>
-    </div>
-
-    <div class="psych-rule" data-psych-rule="2">
-      <div class="psych-num">2</div>
-      <div>
-        <div class="psych-rule-title">No FOMO candles.</div>
-        <div class="psych-rule-copy">If the move already exploded, let it go and wait for the next clean setup.</div>
-      </div>
-    </div>
-
-    <div class="psych-rule" data-psych-rule="3">
-      <div class="psych-num">3</div>
-      <div>
-        <div class="psych-rule-title">Respect trade cap.</div>
-        <div class="psych-rule-copy">Stay locked to your session and avoid overtrading after emotional swings.</div>
-      </div>
-    </div>
-
-    <div class="psych-rule" data-psych-rule="4">
-      <div class="psych-num">4</div>
-      <div>
-        <div class="psych-rule-title">Money follows skill.</div>
-        <div class="psych-rule-copy">Your job is execution quality, not forcing income from the market today.</div>
-      </div>
-    </div>
-
-    <div class="psych-actions">
-      <button class="psych-btn" id="psychJournalBtn" type="button">Journal Emotion</button>
-      <button class="psych-btn" id="psychResetBtn" type="button">Reset Mindset</button>
-    </div>
-  </div>
+<div class="section">
+<h2 class="sectionTitle">Psychology Tab</h2>
+<div class="psych-grid">
+<div class="psych-card">
+<div class="mini">Discipline Score</div>
+<div class="psych-score" id="psychScore">72%</div>
+<div class="psych-copy">Built for patience, confirmation, and no chasing.</div>
+<div class="psych-progress"><span id="psychProgressFill"></span></div>
+</div>
+<div class="psych-card">
+<div class="mini">Main Focus</div>
+<div class="psych-focus" id="psychFocus">Wait</div>
+<div class="psych-copy">No jumping in because candles look big.</div>
+</div>
+</div>
+<div class="psych-rule" data-psych-rule="1">
+<div class="psych-num">1</div>
+<div>
+<div class="psych-rule-title">Confirmation first.</div>
+<div class="psych-rule-copy">Wait for BOS, CHoCH, or clean reclaim/rejection before entry.</div>
+</div>
+</div>
+<div class="psych-rule" data-psych-rule="2">
+<div class="psych-num">2</div>
+<div>
+<div class="psych-rule-title">No FOMO candles.</div>
+<div class="psych-rule-copy">If the move already exploded, let it go and wait for the next clean setup.</div>
+</div>
+</div>
+<div class="psych-rule" data-psych-rule="3">
+<div class="psych-num">3</div>
+<div>
+<div class="psych-rule-title">Respect trade cap.</div>
+<div class="psych-rule-copy">Stay locked to your session and avoid overtrading after emotional swings.</div>
+</div>
+</div>
+<div class="psych-rule" data-psych-rule="4">
+<div class="psych-num">4</div>
+<div>
+<div class="psych-rule-title">Money follows skill.</div>
+<div class="psych-rule-copy">Your job is execution quality, not forcing income from the market today.</div>
+</div>
+</div>
+<div class="psych-actions">
+<button class="psych-btn" id="psychJournalBtn" type="button">Journal Emotion</button>
+<button class="psych-btn" id="psychResetBtn" type="button">Reset Mindset</button>
+</div>
+</div>
 </section>
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const tabs = document.querySelectorAll('#mainTabs .pill[data-view]');
@@ -3752,8 +3840,6 @@ function ltInit(){ if(!document.getElementById('ltWeek')) return; ltPopulateWeek
 ltInit();
 
 </script>
-
-
 <script>
 (function(){
   const CONNECT_KEY = 'faceless_connected_state_v1';
@@ -3990,8 +4076,6 @@ ltInit();
   });
 })();
 </script>
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const mergedTabs = document.querySelectorAll('#mergedStrategyTabs [data-merged-strategy]');
@@ -4024,11 +4108,6 @@ document.addEventListener('DOMContentLoaded', function(){
   activateMergedStrategy('icc');
 });
 </script>
-
-
-
-
-
 <script>
 (function(){
   const APP_KEY = 'faceless_app_state_v2';
@@ -4362,8 +4441,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const styleBtn = document.getElementById('styleToggle');
@@ -4505,31 +4582,12 @@ document.addEventListener('DOMContentLoaded', function(){
   setInterval(syncSystemUI, 1200);
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="styleIconMenu" aria-hidden="true">
-  <button class="themeIconBtn" type="button" data-theme-icon="theme-soft-purple" title="Soft Purple">🌙</button>
-  <button class="themeIconBtn" type="button" data-theme-icon="theme-bright-purple" title="Bright Purple">💜</button>
-  <button class="themeIconBtn" type="button" data-theme-icon="theme-soft-bluegreen" title="Soft Blue-Green">🌊</button>
-  <button class="themeIconBtn" type="button" data-theme-icon="theme-bright-bluegreen" title="Bright Blue-Green">💚</button>
+<div aria-hidden="true" id="styleIconMenu">
+<button class="themeIconBtn" data-theme-icon="theme-soft-purple" title="Soft Purple" type="button">🌙</button>
+<button class="themeIconBtn" data-theme-icon="theme-bright-purple" title="Bright Purple" type="button">💜</button>
+<button class="themeIconBtn" data-theme-icon="theme-soft-bluegreen" title="Soft Blue-Green" type="button">🌊</button>
+<button class="themeIconBtn" data-theme-icon="theme-bright-bluegreen" title="Bright Blue-Green" type="button">💚</button>
 </div>
-
-
 <script>
 (function(){
   function byId(id){ return document.getElementById(id); }
@@ -4838,8 +4896,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <script>
 (function(){
   function byId(id){ return document.getElementById(id); }
@@ -5069,8 +5125,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <style id="faceless-sync-v2-css">
 #evalList .entryCard,
 #fundedList .entryCard,
@@ -5113,7 +5167,6 @@ document.addEventListener('DOMContentLoaded', function(){
 #journalResetBtn{ margin-left:12px; }
 @media (max-width:480px){ #journalResetBtn{ margin-left:0; margin-top:10px; } }
 </style>
-
 <script id="faceless-sync-v2-js">
 (function(){
   const APP_KEY = 'faceless_app_state_v3';
@@ -5851,8 +5904,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <style id="journal-history-enhance-css">
 .journalActions{
   display:flex;
@@ -5878,7 +5929,6 @@ document.addEventListener('DOMContentLoaded', function(){
   cursor:pointer;
 }
 </style>
-
 <script id="journal-history-enhance-js">
 (function(){
   const APP_KEY = 'faceless_app_state_v3';
@@ -6081,8 +6131,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <style id="faceless-account-journal-sync-fix-css">
 #linkedAccountJournalWrap{
   margin-top:14px;
@@ -6157,7 +6205,6 @@ document.addEventListener('DOMContentLoaded', function(){
 }
 
 </style>
-
 <script id="faceless-account-journal-sync-fix-js">
 (function(){
   const APP_KEY = 'faceless_app_state_v4';
@@ -6742,22 +6789,21 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     container.innerHTML = `
-      <div class="sessionStable compact ${window.__sessionExpanded ? 'expanded' : ''}" id="sessionStableCard">
-        <div class="sessionMainRow" style="display:flex;align-items:center;gap:8px;">
-          <div>${d.flag}</div>
-          <div style="font-weight:600;">${d.name}</div>
+      <div class="sessionStable" id="sessionStableCard">
+        <div class="sessionMainRow" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+            <div>${d.flag}</div>
+            <div style="font-weight:600;">${d.name}</div>
+          </div>
+          <div class="sessionCountdownLine" style="font-size:13px;text-align:right;white-space:nowrap;">${d.text}</div>
         </div>
-        <div class="sessionCountdownLine" style="font-size:13px;margin-top:4px;">${d.text}</div>
-        <div class="expandHint">${window.__sessionExpanded ? 'Tap to collapse' : 'Tap for details'}</div>
-        <div class="sessionDetails">
+        <div class="sessionDetails" style="display:block;margin-top:8px;">
           <div style="margin-top:2px;font-size:12px;"><strong>Best:</strong> ${d.best}</div>
           <div style="margin-top:6px;font-size:12px;"><strong>Meaning:</strong> ${d.meaning}</div>
         </div>
       </div>
     `;
-
-    
-  };
+};
   window.renderSession = window.renderCompactSession;
 
   document.addEventListener('DOMContentLoaded', function(){
@@ -6770,8 +6816,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
 <style id="session-stable-expand-css">
 #sessionContainer .sessionStable.compact{
   cursor:pointer !important;
@@ -6792,140 +6836,445 @@ document.addEventListener('DOMContentLoaded', function(){
   opacity:.9;
 }
 </style>
+<script>
+// DAILY RESET LOGIC (5:30 PM)
+function getTradingDay(){
+  const now = new Date();
+  const resetHour = 17; // 5 PM
+  const resetMinute = 30;
 
+  let day = new Date(now);
+  if (now.getHours() > resetHour || (now.getHours() === resetHour && now.getMinutes() >= resetMinute)) {
+    day.setDate(day.getDate() + 1);
+  }
+  return day.toDateString();
+}
 
-<script id="oai-today-pnl-sync">
+const todayKey = getTradingDay();
+const savedDay = localStorage.getItem("pnlDay");
+
+if(savedDay !== todayKey){
+  localStorage.setItem("pnlDay", todayKey);
+  localStorage.setItem("pnl", "0");
+  localStorage.setItem("wins", "0");
+  localStorage.setItem("losses", "0");
+}
+
+// Load values
+function loadPnL(){
+  const pnl = localStorage.getItem("pnl") || "0";
+  const wins = parseInt(localStorage.getItem("wins") || "0");
+  const losses = parseInt(localStorage.getItem("losses") || "0");
+
+  const total = wins + losses;
+  const winRate = total ? Math.round((wins/total)*100) : 0;
+
+  const pnlBox = document.querySelector(".pnl-tab");
+  if(pnlBox){
+    pnlBox.innerText = "$" + pnl + "\n" + winRate + "% win";
+  }
+}
+
+loadPnL();
+</script>
+<script id="oai-final-logic">
 (function(){
   function getTradingDayStart(now){
     const d = new Date(now);
     const start = new Date(d);
     start.setHours(17,30,0,0);
-    if(d < start) start.setDate(start.getDate() - 1);
+    if(d < start){
+      start.setDate(start.getDate()-1);
+    }
     return start;
   }
 
   function readState(){
-    const keys = [
-      'faceless_app_state_v4',
-      'faceless_app_state_v3',
-      'faceless_app_state_v2',
-      'facelessTraderState',
-      'faceless_trader_state'
-    ];
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
     for(const key of keys){
       try{
         const raw = localStorage.getItem(key);
-        if(!raw) continue;
-        const parsed = JSON.parse(raw);
-        if(parsed && typeof parsed === 'object') return parsed;
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(parsed && parsed.journalEntries) return parsed;
+        }
       }catch(e){}
     }
-    return {};
+    return {journalEntries:[], goals:[]};
   }
 
-  function money(v){
-    const n = Number(v || 0);
+  function fmtMoney(n){
     const sign = n < 0 ? '-$' : '$';
-    return sign + Math.abs(n).toFixed(0);
+    return sign + Math.abs(Number(n || 0)).toFixed(0);
   }
 
-  function entryTimestamp(entry){
-    return Number(
-      entry.savedAt ||
-      entry.updatedAt ||
-      entry.createdAt ||
-      entry.timestamp ||
-      entry.dateMs ||
-      0
-    );
-  }
-
-  function entryPnl(entry){
-    const direct = Number(entry.pnl ?? entry.net ?? entry.netPnl ?? entry.profitLoss ?? 0);
-    if(!Number.isNaN(direct) && direct !== 0) return direct;
-
-    const profit = Number(entry.profit ?? entry.todayProfit ?? 0);
-    const loss = Number(entry.loss ?? entry.todayLoss ?? 0);
-    if(profit || loss) return profit - loss;
-
-    const pointsWon = Number(entry.pointsWon ?? 0);
-    const pointsLost = Number(entry.pointsLost ?? 0);
-    const netPoints = Number(entry.netPoints ?? (pointsWon - pointsLost) ?? 0);
-    const contracts = Number(entry.contracts ?? entry.numContracts ?? 1);
-    const pointValue = Number(entry.pointValue ?? entry.dollarsPerPoint ?? 2);
-    return netPoints * contracts * pointValue;
-  }
-
-  function collectEntries(state){
-    const buckets = [
-      state.journalEntries,
-      state.entries,
-      state.liveEntries,
-      state.trades,
-      state.tradeEntries
-    ].filter(Array.isArray);
-
-    const merged = [];
-    buckets.forEach(arr => arr.forEach(item => merged.push(item)));
-    return merged;
-  }
-
-  function todayStats(){
+  function computeTodayStats(){
     const state = readState();
-    const startMs = getTradingDayStart(new Date()).getTime();
-    const entries = collectEntries(state).filter(e => entryTimestamp(e) >= startMs);
+    const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+    const start = getTradingDayStart(new Date()).getTime();
 
-    let pnl = 0;
-    let wins = 0;
-    let losses = 0;
+    const todays = entries.filter(j => {
+      const t = Number(j.savedAt || j.updatedAt || 0);
+      if(!t) return false;
+      return t >= start;
+    });
 
-    entries.forEach(entry => {
-      const v = entryPnl(entry);
-      pnl += v;
-      if(v > 0) wins += 1;
-      if(v < 0) losses += 1;
+    const pnl = todays.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
+
+    let wins = 0, losses = 0;
+    todays.forEach(j => {
+      const pnlVal = Number(j.pnl || 0);
+      const tag = String(j.tag || '').toLowerCase();
+      if(pnlVal > 0 || tag.includes('valid') || tag.includes('win')) wins += 1;
+      else if(pnlVal < 0 || tag.includes('fail') || tag.includes('loss')) losses += 1;
     });
 
     const total = wins + losses;
     const winRate = total ? Math.round((wins / total) * 100) : 0;
-    return { pnl, winRate, total };
+
+    return { pnl, wins, losses, total, winRate, todays, state };
   }
 
   function syncTodayPnl(){
-    const valueEl = document.getElementById('todayPnl');
+    const todayEl = document.getElementById('todayPnl');
     const badgeEl = document.getElementById('todayBadge');
-    if(!valueEl) return;
+    const pnlDaily = document.getElementById('pnlDaily');
 
-    const stats = todayStats();
-    valueEl.textContent = money(stats.pnl);
-    valueEl.classList.remove('positive', 'negative', 'neutral');
-    valueEl.classList.add(stats.pnl > 0 ? 'positive' : stats.pnl < 0 ? 'negative' : 'neutral');
+    if(!todayEl) return;
+
+    const stats = computeTodayStats();
+    todayEl.textContent = fmtMoney(stats.pnl);
+    todayEl.classList.remove('positive','negative','neutral');
+    todayEl.classList.add(stats.pnl > 0 ? 'positive' : stats.pnl < 0 ? 'negative' : 'neutral');
 
     if(badgeEl){
-      badgeEl.textContent = stats.total ? (stats.winRate + '% win') : 'No goal active';
+      if(stats.total){
+        badgeEl.textContent = stats.winRate + '% win';
+      } else {
+        badgeEl.textContent = 'No trades today';
+      }
+    }
+
+    if(pnlDaily){
+      pnlDaily.textContent = fmtMoney(stats.pnl);
     }
   }
 
-  function disableSessionToggle(){
-    const container = document.getElementById('sessionContainer');
-    if(!container) return;
-    container.addEventListener('click', function(e){
-      e.stopPropagation();
-    }, true);
-    const card = document.getElementById('sessionStableCard');
-    if(card) card.onclick = null;
+  function resetTodayOnlyIfNeeded(){
+    const markerKey = 'faceless_today_marker_v1';
+    const now = new Date();
+    const start = getTradingDayStart(now);
+    const marker = start.toISOString();
+    const saved = localStorage.getItem(markerKey);
+    if(saved === marker) return;
+
+    localStorage.setItem(markerKey, marker);
+
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) continue;
+        const state = JSON.parse(raw);
+        if(!state || !Array.isArray(state.journalEntries)) continue;
+        // do not delete entries; daily reset means display resets by trading-day filter
+        localStorage.setItem(key, JSON.stringify(state));
+      }catch(e){}
+    }
+  }
+
+  function moveTodayCardIfNeeded(){
+    const dashboard = document.querySelector('.dashboard');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const home = document.getElementById('home');
+    const command = home ? home.querySelector('.section') : null;
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const sessionCard = document.getElementById('sessionContainer')?.closest('.card');
+
+    if(!dashboard || !row || !todayCard || !sessionCard) return;
+
+    // Keep both near top, but stacked so session stretches.
+    row.style.display = 'flex';
+    row.style.flexDirection = 'column';
+    row.style.gap = '12px';
+
+    todayCard.style.width = '100%';
+    sessionCard.style.width = '100%';
   }
 
   function boot(){
+    resetTodayOnlyIfNeeded();
+    moveTodayCardIfNeeded();
     syncTodayPnl();
-    disableSessionToggle();
   }
 
   document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('load', boot);
+  setInterval(syncTodayPnl, 1000);
+})();
+</script>
+
+
+<script id="oai-clean-pass-js">
+(function(){
+  function finalTopAndTabsCleanup(){
+    const dashboard = document.querySelector('.dashboard');
+    const hero = dashboard ? dashboard.querySelector('.hero') : null;
+    const tabs = document.getElementById('mainTabs');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const todayCard = document.getElementById('todayPnl') ? document.getElementById('todayPnl').closest('.card') : null;
+    const sessionCard = document.getElementById('sessionContainer') ? document.getElementById('sessionContainer').closest('.card') : null;
+
+    if(dashboard && hero && tabs && todayCard && sessionCard){
+      let stack = document.getElementById('topHomeStack');
+      if(!stack){
+        stack = document.createElement('div');
+        stack.id = 'topHomeStack';
+        hero.insertAdjacentElement('afterend', stack);
+      }
+
+      if(todayCard.parentElement !== stack){
+        todayCard.id = 'todayPnlCard';
+        stack.appendChild(todayCard);
+      }
+      if(sessionCard.parentElement !== stack){
+        sessionCard.id = 'sessionStatusCard';
+        stack.appendChild(sessionCard);
+      }
+
+      if(row && row.parentElement){
+        row.remove();
+      }
+    }
+
+    if(tabs){
+      // remove accidental stray text nodes around tabs
+      Array.from(tabs.parentNode.childNodes).forEach(node => {
+        if(node.nodeType === 3 && node.textContent && node.textContent.trim() === 'PnL'){
+          node.textContent = '';
+        }
+      });
+      tabs.scrollLeft = 0;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', finalTopAndTabsCleanup);
+  window.addEventListener('load', finalTopAndTabsCleanup);
+  setTimeout(finalTopAndTabsCleanup, 250);
+})();
+</script>
+
+
+<script id="oai-final-home-session-fix-js">
+(function(){
+  function weekendClosed(now){
+    const day = now.getDay(); // 0 Sun ... 5 Fri 6 Sat
+    const mins = now.getHours() * 60 + now.getMinutes();
+    if(day === 5 && mins >= 18*60) return true; // Friday after 6 PM
+    if(day === 6) return true; // Saturday
+    if(day === 0 && mins < 18*60) return true; // Sunday before 6 PM
+    return false;
+  }
+
+  function fmtClock(totalMinutes){
+    let h = Math.floor(totalMinutes/60) % 24;
+    let m = totalMinutes % 60;
+    const suffix = h >= 12 ? 'PM' : 'AM';
+    let display = h % 12;
+    if(display === 0) display = 12;
+    return display + ':' + String(m).padStart(2,'0') + ' ' + suffix;
+  }
+
+  function fmtCountdown(totalSeconds){
+    totalSeconds = Math.max(0, totalSeconds);
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+
+  function secondsUntilSundayOpen(now){
+    const open = new Date(now);
+    const day = now.getDay();
+    const diffDays = (7 - day) % 7;
+    open.setDate(now.getDate() + diffDays);
+    open.setHours(18,0,0,0);
+    if(open <= now){
+      open.setDate(open.getDate() + 7);
+    }
+    return Math.floor((open - now) / 1000);
+  }
+
+  function renderSessionFixed(){
+    const container = document.getElementById('sessionContainer');
+    if(!container) return;
+
+    const now = new Date();
+
+    if(weekendClosed(now)){
+      container.innerHTML = `
+        <div class="sessionStable">
+          <div class="top">
+            <div class="flag">🌙</div>
+            <div class="name">Market Closed</div>
+          </div>
+          <div class="sub">Friday 6:00 PM – Sunday 6:00 PM</div>
+          <div class="led waiting">
+            <span class="dot"></span>
+            Weekend Closed
+          </div>
+          <div class="countdown"><strong>Reopens in:</strong> ${fmtCountdown(secondsUntilSundayOpen(now))}</div>
+          <div class="block">
+            <div class="label">Best</div>
+            <div class="text">No trades. Rest, journal, and prepare for Sunday open.</div>
+          </div>
+          <div class="block">
+            <div class="label">Meaning</div>
+            <div class="text">Futures are closed for the weekend.</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const minsNow = now.getHours() * 60 + now.getMinutes();
+    const secNow = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const sessions = [
+      { key:'asia', name:'Asia Session', flag:'🌏', start:18*60, end:3*60, label:'Setup Session', best:'7 PM – 11 PM · 1 AM – 3 AM', meaning:'Build levels and prepare.' },
+      { key:'london', name:'London Session', flag:'🇬🇧', start:3*60, end:11*60, label:'Momentum Session', best:'3 AM – 6 AM', meaning:'Strong directional moves and cleaner breakouts.' },
+      { key:'ny', name:'NY Session', flag:'🇺🇸', start:8*60, end:16*60, label:'Power Session', best:'8 AM – 11 AM · 9:30 AM open volatility', meaning:'Highest probability trades and biggest moves.' }
+    ];
+    const inSession = s => s.start < s.end ? minsNow >= s.start && minsNow < s.end : (minsNow >= s.start || minsNow < s.end);
+    const active = sessions.filter(inSession);
+
+    function nextSession(){
+      return sessions
+        .map(s => ({...s, until: ((s.start*60) - secNow + 86400) % 86400}))
+        .sort((a,b)=>a.until-b.until)[0];
+    }
+
+    let d;
+    if(active.find(s => s.key === 'london') && active.find(s => s.key === 'ny')){
+      d = {
+        flag:'🔥',
+        name:'London + NY Overlap',
+        sub:'8:00 AM – 11:00 AM',
+        ledClass:'overlap',
+        ledText:'Best Trading Window',
+        countdownLabel:'Time left',
+        countdown:fmtCountdown(Math.max(0, 11*3600 - secNow)),
+        best:'8 AM – 11 AM 🔥🔥',
+        meaning:'Highest probability overlap window.'
+      };
+    } else if(active.length){
+      const s = active[0];
+      let endSec = s.end * 60;
+      let cur = secNow;
+      if(s.start > s.end){
+        if(cur < endSec){ cur += 86400; endSec += 86400; } else { endSec += 86400; }
+      }
+      d = {
+        flag:s.flag,
+        name:s.name,
+        sub:fmtClock(s.start) + ' – ' + fmtClock(s.end),
+        ledClass:s.key === 'asia' ? 'waiting' : 'active',
+        ledText:s.label,
+        countdownLabel:'Time left',
+        countdown:fmtCountdown(Math.max(0, endSec - cur)),
+        best:s.best,
+        meaning:s.meaning
+      };
+    } else {
+      const next = nextSession();
+      d = {
+        flag: next.key === 'asia' ? '🌙' : next.flag,
+        name: next.key === 'london' ? 'Pre-London Setup' : (next.key === 'ny' ? 'Transition Phase' : 'Dead Zone'),
+        sub:'Between sessions',
+        ledClass:'waiting',
+        ledText:'Waiting',
+        countdownLabel:'Next in',
+        countdown:fmtCountdown(next.until),
+        best: next.key === 'london' ? 'Mark levels and wait for London momentum.' : (next.key === 'ny' ? 'Wait for NY open.' : 'No trades. Wait for Asia.'),
+        meaning: next.key === 'london' ? 'Market positioning before London.' : (next.key === 'ny' ? 'Chop or fake moves are more likely. Wait for NY liquidity and confirmation.' : 'Low probability environment. Review, journal, and prepare.')
+      };
+    }
+
+    container.innerHTML = `
+      <div class="sessionStable">
+        <div class="top">
+          <div class="flag">${d.flag}</div>
+          <div class="name">${d.name}</div>
+        </div>
+        <div class="sub">${d.sub}</div>
+        <div class="led ${d.ledClass}">
+          <span class="dot"></span>
+          ${d.ledText}
+        </div>
+        <div class="countdown"><strong>${d.countdownLabel}:</strong> ${d.countdown}</div>
+        <div class="block">
+          <div class="label">Best</div>
+          <div class="text">${d.best}</div>
+        </div>
+        <div class="block">
+          <div class="label">Meaning</div>
+          <div class="text">${d.meaning}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function moveTodayPnlUnderCommandCenter(){
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const home = document.getElementById('home');
+    if(!todayCard || !home) return;
+
+    const sections = home.querySelectorAll('.section');
+    if(!sections.length) return;
+    const commandCenter = sections[0];
+
+    let wrap = document.getElementById('todayPnlMovedWrap');
+    if(!wrap){
+      wrap = document.createElement('div');
+      wrap.id = 'todayPnlMovedWrap';
+      wrap.className = 'section';
+      commandCenter.insertAdjacentElement('afterend', wrap);
+    }
+    if(todayCard.parentElement !== wrap){
+      wrap.appendChild(todayCard);
+    }
+  }
+
+  function colorTodayPnl(){
+    const el = document.getElementById('todayPnl');
+    if(!el) return;
+    const txt = (el.textContent || '').trim().replace(/,/g,'');
+    let n = 0;
+    if(txt.startsWith('-$')) n = -parseFloat(txt.slice(2)) || 0;
+    else if(txt.startsWith('$')) n = parseFloat(txt.slice(1)) || 0;
+    el.classList.remove('positive','negative','neutral');
+    el.classList.add(n > 0 ? 'positive' : n < 0 ? 'negative' : 'neutral');
+  }
+
+  function cleanTabs(){
+    const tabs = document.getElementById('mainTabs');
+    if(!tabs) return;
+    tabs.querySelectorAll('.pnl-nav').forEach(n => n.remove());
+    Array.from(tabs.childNodes).forEach(node => {
+      if(node.nodeType === 3 && /PnL/.test(node.textContent || '')) node.textContent = '';
+    });
+  }
+
+  function bootFinalFixes(){
+    cleanTabs();
+    moveTodayPnlUnderCommandCenter();
+    renderSessionFixed();
+    colorTodayPnl();
+  }
+
+  document.addEventListener('DOMContentLoaded', bootFinalFixes);
+  window.addEventListener('load', bootFinalFixes);
   setInterval(function(){
-    syncTodayPnl();
-    disableSessionToggle();
+    bootFinalFixes();
   }, 1000);
 })();
 </script>
