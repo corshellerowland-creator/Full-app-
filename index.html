@@ -1487,7 +1487,6 @@ button.option,
   display:block !important;
 }
 </style>
-
 <style id="oai-remove-session-clean-tabs">
 #mainTabs{
   overflow-x:auto !important;
@@ -1500,6 +1499,40 @@ button.option,
 #mainTabs .pill{
   flex:0 0 auto !important;
   white-space:nowrap !important;
+}
+</style>
+
+<style id="oai-white-bottom-pnl-fix">
+html, body {
+  min-height: 100vh !important;
+  height: auto !important;
+  margin: 0 !important;
+  background: #05030a !important;
+}
+body {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255,89,220,.24), transparent 24%),
+    radial-gradient(circle at 84% 0%, rgba(198,108,255,.18), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(155,125,255,.10), transparent 32%),
+    linear-gradient(180deg, #05030a 0%, #080410 44%, #090511 100%) !important;
+  background-attachment: fixed !important;
+}
+.shell,
+.dashboard {
+  min-height: calc(100vh - 28px) !important;
+  background-color: transparent !important;
+}
+#mainTabs {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  white-space: nowrap !important;
+}
+#mainTabs::-webkit-scrollbar { display: none !important; }
+#mainTabs .pill {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
 }
 </style>
 
@@ -1529,11 +1562,10 @@ button.option,
 <div class="value" id="todayPnl">$0</div>
 <div class="pill" id="todayBadge">No goal active</div>
 </div>
-
 </div>
 </div>
 <div class="tabs" id="mainTabs">
-<button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl"> </button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
+<button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
 <button class="pill" data-view="psych">Psychology</button></div>
 <div class="app-content">
 <section class="view active" id="home">
@@ -7147,5 +7179,45 @@ loadPnL();
   setInterval(boot, 1000);
 })();
 </script>
+
+<script id="oai-white-bottom-pnl-fix-js">
+(function(){
+  function cleanGhostPnl(){
+    const tabs = document.getElementById('mainTabs');
+    if(!tabs) return;
+
+    const pnlBtn = tabs.querySelector('.pill[data-view="pnl"]');
+    if(pnlBtn && !(pnlBtn.textContent || '').trim()){
+      pnlBtn.textContent = 'PnL';
+    }
+
+    tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
+
+    Array.from(tabs.parentNode ? tabs.parentNode.childNodes : []).forEach(node => {
+      if(node !== tabs && node.nodeType === 3 && (node.textContent || '').trim() === 'PnL'){
+        node.textContent = '';
+      }
+      if(node !== tabs && node.nodeType === 1 && (node.textContent || '').trim() === 'PnL' && !node.matches('.pill,[data-view]')){
+        node.remove();
+      }
+    });
+  }
+
+  function forceDarkBottom(){
+    document.documentElement.style.background = '#05030a';
+    document.body.style.backgroundColor = '#05030a';
+  }
+
+  function boot(){
+    cleanGhostPnl();
+    forceDarkBottom();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setTimeout(boot, 200);
+})();
+</script>
+
 </body>
 </html>
