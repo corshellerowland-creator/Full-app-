@@ -1340,7 +1340,6 @@ button.option,
 }
 
 </style>
-
 <style id="oai-final-fixes">
 /* move top pnl out so session can stretch */
 .hero + .row,
@@ -1374,8 +1373,6 @@ button.option,
 #todayPnl.negative{ color:#ff6b6b !important; }
 #todayPnl.neutral{ color:inherit !important; }
 </style>
-
-
 <style id="oai-clean-pass">
 /* final top layout */
 #topHomeStack{
@@ -1433,8 +1430,6 @@ button.option,
   white-space:nowrap !important;
 }
 </style>
-
-
 <style id="oai-session-stabilizer">
 #todayPnlMovedWrap{margin-top:16px!important;}
 #todayPnlMovedWrap .card{width:100%!important;max-width:none!important;}
@@ -1470,8 +1465,6 @@ button.option,
 #mainTabs::-webkit-scrollbar{display:none!important;}
 #mainTabs .pill{flex:0 0 auto!important;white-space:nowrap!important;}
 </style>
-
-
 <style id="oai-finish-fix">
 #todayPnlMovedWrap{
   display:block !important;
@@ -1492,6 +1485,21 @@ button.option,
 }
 #sessionContainer .text{
   display:block !important;
+}
+</style>
+
+<style id="oai-remove-session-clean-tabs">
+#mainTabs{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  white-space:nowrap !important;
+}
+#mainTabs::-webkit-scrollbar{display:none !important;}
+#mainTabs .pill{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
 }
 </style>
 
@@ -1521,13 +1529,12 @@ button.option,
 <div class="value" id="todayPnl">$0</div>
 <div class="pill" id="todayBadge">No goal active</div>
 </div>
-<div class="card">
-<div class="label">Session Status</div><div id="sessionContainer"></div></div>
+
 </div>
 </div>
 <div class="tabs" id="mainTabs">
-<button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
-<button class="pill" data-view="psych">Psychology</button><div class="pnl-nav">PnL</div></div>
+<button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl"> </button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
+<button class="pill" data-view="psych">Psychology</button></div>
 <div class="app-content">
 <section class="view active" id="home">
 <div class="section"><h2 class="sectionTitle">Command Center</h2><div class="kpiGrid"><div class="kpi"><div class="label">Active Goal</div><div class="num" id="homeGoal">$—</div><div class="muted" id="homeGoalType">No goal set</div></div><div class="kpi"><div class="label">Max Loss</div><div class="num" id="homeLoss">$—</div><div class="muted">Used by lock rules</div></div><div class="kpi"><div class="label">Best Strategy</div><div class="num" id="bestStrategy" style="font-size:18px">—</div><div class="muted" id="bestStrategyMeta">Waiting for trades</div></div><div class="kpi"><div class="label">Accounts</div><div class="num" id="accountCount">0</div><div class="muted">Eval + Funded + Live</div></div></div></div>
@@ -3659,10 +3666,10 @@ updateUI(); renderJournalList();
 </div>
 <div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div class="accountList" id="liveList"></div></div></div></section>
 <section class="view" id="journal">
-<div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
+<div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel"> </div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
 <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div class="accountList" id="strategyStats"></div></div></section>
 <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
-<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
+<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle"> </h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
 <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"/></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly=""/></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
 <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
 </div>
@@ -6985,8 +6992,6 @@ loadPnL();
   setInterval(syncTodayPnl, 1000);
 })();
 </script>
-
-
 <script id="oai-clean-pass-js">
 (function(){
   function finalTopAndTabsCleanup(){
@@ -7035,11 +7040,6 @@ loadPnL();
   setTimeout(finalTopAndTabsCleanup, 250);
 })();
 </script>
-
-
-
-
-
 <script id="oai-finish-fix-js">
 (function(){
   function weekendClosed(now){
@@ -7147,6 +7147,5 @@ loadPnL();
   setInterval(boot, 1000);
 })();
 </script>
-
 </body>
 </html>
