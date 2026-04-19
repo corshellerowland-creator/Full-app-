@@ -1340,288 +1340,31 @@ button.option,
 }
 
 </style>
-<style id="oai-final-fixes">
-/* move top pnl out so session can stretch */
-.hero + .row,
-.dashboard > .row {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.dashboard > .row > .card:first-child{
-  order:1;
-}
-.dashboard > .row > .card:last-child{
-  order:2;
-  width:100%;
-}
-#sessionContainer, #sessionContainer .sessionStable{
-  width:100% !important;
-  max-width:none !important;
-}
-#sessionContainer .sessionStable{
-  border-radius:18px !important;
-}
-#sessionContainer .sessionMainRow{
-  width:100% !important;
-  display:flex !important;
-  justify-content:space-between !important;
-  align-items:flex-start !important;
-  gap:12px !important;
-}
-#todayPnl.positive{ color:#6aff8f !important; }
-#todayPnl.negative{ color:#ff6b6b !important; }
-#todayPnl.neutral{ color:inherit !important; }
-</style>
-<style id="oai-clean-pass">
-/* final top layout */
-#topHomeStack{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:12px !important;
-  margin-top:14px !important;
-}
-#topHomeStack .card{
-  width:100% !important;
-  max-width:none !important;
-}
-#topHomeStack #todayPnlCard{
-  order:1;
-}
-#topHomeStack #sessionStatusCard{
-  order:2;
-}
-#topHomeStack #sessionStatusCard #sessionContainer,
-#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
-  width:100% !important;
-  max-width:none !important;
-}
-#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
-  border-radius:18px !important;
-}
-#topHomeStack #sessionStatusCard #sessionContainer .sessionMainRow{
-  width:100% !important;
-  display:flex !important;
-  justify-content:space-between !important;
-  align-items:flex-start !important;
-  gap:12px !important;
-}
 
-/* clean tab row */
-.dashboard{
-  overflow-x:hidden !important;
+<style id="oai-final-patch">
+/* remove the big dead gap under hero by collapsing the wrapper directly under it */
+.hero{
+  margin-bottom: 8px !important;
 }
-#mainTabs{
-  display:flex !important;
-  flex-wrap:nowrap !important;
-  overflow-x:auto !important;
-  overflow-y:hidden !important;
-  -webkit-overflow-scrolling:touch !important;
-  scrollbar-width:none !important;
-  padding:0 16px 4px 0 !important;
-  margin-top:12px !important;
-  gap:10px !important;
-}
-#mainTabs::-webkit-scrollbar{
-  display:none !important;
-}
-#mainTabs .pill{
-  flex:0 0 auto !important;
-  white-space:nowrap !important;
-}
-</style>
-<style id="oai-session-stabilizer">
-#todayPnlMovedWrap{margin-top:16px!important;}
-#todayPnlMovedWrap .card{width:100%!important;max-width:none!important;}
-#todayPnl.positive{color:#69ff8b!important;}
-#todayPnl.negative{color:#ff6b6b!important;}
-#todayPnl.neutral{color:inherit!important;}
-
-#sessionContainer,.sessionStable{width:100%!important;max-width:none!important;}
-#sessionContainer .sessionStable{
-  border-radius:20px!important;
-  padding:16px!important;
-}
-#sessionContainer .top{display:flex!important;align-items:center!important;gap:10px!important;margin-bottom:6px!important;}
-#sessionContainer .flag{font-size:24px!important;}
-#sessionContainer .name{font-size:18px!important;font-weight:900!important;}
-#sessionContainer .sub{font-size:13px!important;color:#d8cbff!important;margin-bottom:10px!important;}
-#sessionContainer .led{display:inline-flex!important;align-items:center!important;gap:8px!important;padding:10px 14px!important;border-radius:999px!important;font-weight:800!important;margin-bottom:10px!important;}
-#sessionContainer .dot{width:10px!important;height:10px!important;border-radius:999px!important;}
-#sessionContainer .active{background:#143b2f!important;color:#dfffee!important;}
-#sessionContainer .waiting{background:#4a3a12!important;color:#fff3bf!important;}
-#sessionContainer .overlap{background:#3a1f6e!important;color:#f1e4ff!important;}
-#sessionContainer .closed{background:#3b2228!important;color:#ffd7de!important;}
-#sessionContainer .active .dot{background:#66ffc7!important;}
-#sessionContainer .waiting .dot{background:#ffd75f!important;}
-#sessionContainer .overlap .dot{background:linear-gradient(135deg,#c87cff,#6affc8)!important;}
-#sessionContainer .closed .dot{background:#ff8797!important;}
-#sessionContainer .countdown{margin-top:10px!important;font-size:13px!important;}
-#sessionContainer .block{display:block!important;margin-top:10px!important;}
-#sessionContainer .label{font-size:11px!important;color:#d8cbff!important;}
-#sessionContainer .text{font-size:13px!important;font-weight:700!important;}
-#sessionContainer .expandHint,.sessionDetails{display:none!important;}
-#mainTabs{overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;white-space:nowrap!important;}
-#mainTabs::-webkit-scrollbar{display:none!important;}
-#mainTabs .pill{flex:0 0 auto!important;white-space:nowrap!important;}
-</style>
-<style id="oai-finish-fix">
-#todayPnlMovedWrap{
-  display:block !important;
-  width:100% !important;
-  max-width:none !important;
-  margin-top:16px !important;
-}
-#todayPnlMovedWrap .card{
-  width:100% !important;
-  max-width:none !important;
-}
-#sessionContainer .block{
-  display:block !important;
-  margin-top:10px !important;
-}
-#sessionContainer .label{
-  display:block !important;
-}
-#sessionContainer .text{
-  display:block !important;
-}
-</style>
-<style id="oai-remove-session-clean-tabs">
-#mainTabs{
-  overflow-x:auto !important;
-  overflow-y:hidden !important;
-  -webkit-overflow-scrolling:touch !important;
-  scrollbar-width:none !important;
-  white-space:nowrap !important;
-}
-#mainTabs::-webkit-scrollbar{display:none !important;}
-#mainTabs .pill{
-  flex:0 0 auto !important;
-  white-space:nowrap !important;
-}
-</style>
-<style id="oai-white-bottom-pnl-fix">
-html, body {
-  min-height: 100vh !important;
-  height: auto !important;
-  margin: 0 !important;
-  background: #05030a !important;
-}
-body {
-  background:
-    radial-gradient(circle at 14% 0%, rgba(255,89,220,.24), transparent 24%),
-    radial-gradient(circle at 84% 0%, rgba(198,108,255,.18), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(155,125,255,.10), transparent 32%),
-    linear-gradient(180deg, #05030a 0%, #080410 44%, #090511 100%) !important;
-  background-attachment: fixed !important;
-}
-.shell,
-.dashboard {
-  min-height: calc(100vh - 28px) !important;
-  background-color: transparent !important;
-}
-#mainTabs {
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  scrollbar-width: none !important;
-  white-space: nowrap !important;
-}
-#mainTabs::-webkit-scrollbar { display: none !important; }
-#mainTabs .pill {
-  flex: 0 0 auto !important;
-  white-space: nowrap !important;
-}
-</style>
-<style id="oai-pnl-final-fix">
-/* remove the dead spacer under hero */
-.dashboard > .row:first-of-type,
 .hero + .row{
   display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
 }
-.app-content{
-  margin-top:12px !important;
+.dashboard{
+  padding-bottom:14px !important;
+}
+.dashboard::after{
+  content:none !important;
 }
 
-/* restore PnL tab to full panel */
-#pnl .pnl-wrap{
-  border-radius:28px;
-  padding:18px;
-  border:1px solid rgba(255,255,255,.10);
-  background:
-    radial-gradient(circle at 20% 0%, rgba(84,218,255,.12), transparent 22%),
-    radial-gradient(circle at 80% 100%, rgba(198,108,255,.10), transparent 26%),
-    linear-gradient(180deg, rgba(20,11,36,.92), rgba(8,6,16,.98));
-  box-shadow:0 18px 42px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.02);
-}
-#pnl .pnl-title{
-  font-size:16px;
-  font-weight:700;
-  color:#efe8ff;
-  margin-bottom:12px;
-}
-#pnl .pnl-main{
-  border-radius:20px;
-  padding:16px 18px;
-  border:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg, rgba(36,18,64,.70), rgba(18,10,34,.90));
-}
-#pnl .pnl-row{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:10px;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-#pnl .pnl-row:last-child{border-bottom:0;}
-#pnl .pnl-head{
-  font-size:22px;
-  font-weight:800;
-}
-#pnl .pnl-label{
-  font-size:18px;
-  color:#efe8ff;
-}
-#pnl .pnl-value{
-  font-size:18px;
-  font-weight:800;
-  color:#a9d6ff;
-}
-#pnl .bottom-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:14px;
-}
-#pnl .mini{
-  border-radius:20px;
-  padding:16px 18px;
-  border:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg, rgba(40,30,90,.66), rgba(18,12,44,.88));
-}
-#pnl .mini-row{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:8px;
-  padding:6px 0;
-}
-#pnl .mini-label{
-  font-size:16px;
-  color:#e9ddff;
-}
-#pnl .mini-value{
-  font-size:18px;
-  font-weight:800;
-  color:#9dd8ff;
-}
-#pnl .positive{ color:#82f7ae !important; }
-#pnl .negative{ color:#ff8a8a !important; }
-#pnl .neutral{ color:#a9d6ff !important; }
-
-/* keep tab row clean */
+/* keep tabs close to hero */
 #mainTabs{
+  margin-top:8px !important;
   overflow-x:auto !important;
   overflow-y:hidden !important;
   -webkit-overflow-scrolling:touch !important;
@@ -1629,23 +1372,17 @@ body {
   white-space:nowrap !important;
 }
 #mainTabs::-webkit-scrollbar{display:none !important;}
-#mainTabs .pill{flex:0 0 auto !important;white-space:nowrap !important;}
-</style>
+#mainTabs .pill{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
 
-<style id="oai-spacer-journal-final">
-/* remove dead top spacer for real */
-.shell > .row { display:none !important; }
-.dashboard { margin-bottom: 12px !important; }
-
-/* journal layout: keep existing fields, just make them read correctly */
+/* journal spacing fix only: keep the real pnl field, just make the row read correctly */
 #journal .grid2{
   display:grid !important;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
   gap:14px 16px !important;
   align-items:start !important;
-}
-#journal .grid2[style]{
-  margin-top:14px !important;
 }
 #journal .fieldLabel{
   display:block !important;
@@ -1664,15 +1401,6 @@ body {
 }
 #journal textarea.field{
   min-height:120px !important;
-}
-#journal .section{
-  overflow:visible !important;
-}
-
-/* add a touch more breathing room around the account/pnl row */
-#journal #journalAccountId,
-#journal #journalPnl{
-  margin-top:0 !important;
 }
 </style>
 
@@ -1696,7 +1424,15 @@ body {
 </div>
 </div>
 </div>
-
+<div class="row">
+<div class="card">
+<div class="label">Today PnL</div>
+<div class="value" id="todayPnl">$0</div>
+<div class="pill" id="todayBadge">No goal active</div>
+</div>
+<div class="card">
+<div class="label">Session Status</div><div id="sessionContainer"></div></div>
+</div>
 </div>
 <div class="tabs" id="mainTabs">
 <button class="pill active" data-view="home">Home</button><button class="pill" data-view="goals">Goals</button><button class="pill" data-view="plan">Plan</button><button class="pill" data-view="strategy">Strategy</button><button class="pill" data-view="eval">Eval</button><button class="pill" data-view="funded">Fund</button><button class="pill" data-view="live">Live</button><button class="pill" data-view="journal">Journal</button><button class="pill" data-view="stats">Stats</button><button class="pill" data-view="lock">Lock</button><button class="pill" data-view="pnl">PnL</button><button class="pill" data-view="sizer">Sizer</button><button class="pill" data-view="timer">Timer</button>
@@ -3832,52 +3568,10 @@ updateUI(); renderJournalList();
 </div>
 <div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div class="accountList" id="liveList"></div></div></div></section>
 <section class="view" id="journal">
-<div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel"> </div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
+<div class="section"><h2 class="sectionTitle">Journal</h2><input id="journalId" type="hidden"/><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"/></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" step="0.01" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply &amp; Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input accept="image/*" class="field" id="journalScreenshot" onchange="previewJournalImage(event)" type="file"/><img class="previewImg" id="journalPreview"/></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div class="journalList" id="journalList"></div></div></section>
 <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div class="accountList" id="strategyStats"></div></div></section>
 <section class="view" id="lock"><div class="section"><h2 class="sectionTitle">Lock</h2><div class="muted">Connected from Psychology, Journal, Funded, Live, and PnL.</div><div class="lockStatusCard"><div class="label">System Status</div><div class="lockState" id="lockStateText">LOCKED</div><div class="lockReason" id="lockReasonText">Complete psychology and stay inside loss/trade rules.</div><div class="lockMeta"><div class="lockBadge">Trades Today: <span id="lockTradeCount">0</span>/5</div><div class="lockBadge">Loss Floor: <span id="lockLossFloor">$-300</span></div></div></div><div class="btnrow"><button class="btn warn" id="forceLockBtn" type="button">Lock Trading</button><button class="btn" id="forceUnlockBtn" type="button">Unlock</button></div></div></section>
-<section class="view" id="pnl">
-<div class="section pnl-screen">
-<div class="pnl-wrap">
-<div class="pnl-title">Today's PnL (resets daily)</div>
-<div class="pnl-main">
-<div class="pnl-row">
-<div class="pnl-head">Profit / Loss</div>
-<div class="pnl-head pnl-daily" id="pnlDailyBig">$0.00</div>
-</div>
-<div class="pnl-row">
-<div class="pnl-label">Net</div>
-<div class="pnl-value" id="pnlNet">$0.00</div>
-</div>
-<div class="pnl-row">
-<div class="pnl-label">Points</div>
-<div class="pnl-value" id="pnlPointsBig">+0.00</div>
-</div>
-<div class="pnl-row">
-<div class="pnl-label">Withdrawn</div>
-<div class="pnl-value" id="pnlWithdrawn">$0.00</div>
-</div>
-<div class="pnl-row">
-<div class="pnl-label">Trade Count / Win %</div>
-<div class="pnl-value" id="pnlTradeWin">0 / 00.0%</div>
-</div>
-<div class="pnl-row">
-<div class="pnl-label">Journal Sync</div>
-<div class="pnl-value" id="pnlJournalSync">OK</div>
-</div>
-</div>
-<div class="bottom-grid">
-<div class="mini">
-<div class="mini-row"><div class="mini-label">Daily</div><div class="mini-value" id="pnlDaily">$0.00</div></div>
-<div class="mini-row"><div class="mini-label">Monthly</div><div class="mini-value" id="pnlMonthly">$0.00</div></div>
-</div>
-<div class="mini">
-<div class="mini-row"><div class="mini-label">Weekly</div><div class="mini-value" id="pnlWeekly">$0.00</div></div>
-<div class="mini-row"><div class="mini-label">Win %</div><div class="mini-value" id="pnlProgress">00.0%</div></div>
-</div>
-</div>
-</div>
-</div>
-</section>
+<section class="view" id="pnl"><div class="section"><h2 class="sectionTitle">PnL</h2><div class="statsGrid"><div class="kpi"><div class="label">Daily</div><div class="num" id="pnlDaily">$0</div></div><div class="kpi"><div class="label">Weekly</div><div class="num" id="pnlWeekly">$0</div></div><div class="kpi"><div class="label">Monthly</div><div class="num" id="pnlMonthly">$0</div></div><div class="kpi"><div class="label">Goal Progress</div><div class="num" id="pnlProgress">0%</div></div></div></div></section>
 <section class="view" id="sizer"><div class="section"><h2 class="sectionTitle">Sizer</h2><div class="grid2"><div><div class="fieldLabel">Risk ($)</div><input class="field" id="riskDollar" type="number"/></div><div><div class="fieldLabel">Stop (points)</div><input class="field" id="stopPoints" type="number"/></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Instrument</div><select class="field" id="instrument"><option value="mnq">MNQ</option><option value="mes">MES</option><option value="mgc">MGC</option><option value="mym">MYM</option></select></div><div><div class="fieldLabel">Suggested Size</div><input class="field" id="suggestedSize" readonly=""/></div></div><button class="cta" onclick="calculateSizer()">Calculate Size</button></div></section>
 <section class="view" id="timer"><div class="section timer"><h2 class="sectionTitle">Timer</h2><div class="clock" id="clock">02:00:00</div><div class="muted">Start, pause, resume, and end session early.</div><div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resumeTimer()">Resume</button><button class="btn warn" onclick="endTimerEarly()">End Early</button></div></div></section>
 </div>
@@ -7064,310 +6758,13 @@ function loadPnL(){
 
 loadPnL();
 </script>
-<script id="oai-final-logic">
-(function(){
-  function getTradingDayStart(now){
-    const d = new Date(now);
-    const start = new Date(d);
-    start.setHours(17,30,0,0);
-    if(d < start){
-      start.setDate(start.getDate()-1);
-    }
-    return start;
-  }
 
-  function readState(){
-    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
-    for(const key of keys){
-      try{
-        const raw = localStorage.getItem(key);
-        if(raw){
-          const parsed = JSON.parse(raw);
-          if(parsed && parsed.journalEntries) return parsed;
-        }
-      }catch(e){}
-    }
-    return {journalEntries:[], goals:[]};
-  }
-
-  function fmtMoney(n){
-    const sign = n < 0 ? '-$' : '$';
-    return sign + Math.abs(Number(n || 0)).toFixed(0);
-  }
-
-  function computeTodayStats(){
-    const state = readState();
-    const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
-    const start = getTradingDayStart(new Date()).getTime();
-
-    const todays = entries.filter(j => {
-      const t = Number(j.savedAt || j.updatedAt || 0);
-      if(!t) return false;
-      return t >= start;
-    });
-
-    const pnl = todays.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
-
-    let wins = 0, losses = 0;
-    todays.forEach(j => {
-      const pnlVal = Number(j.pnl || 0);
-      const tag = String(j.tag || '').toLowerCase();
-      if(pnlVal > 0 || tag.includes('valid') || tag.includes('win')) wins += 1;
-      else if(pnlVal < 0 || tag.includes('fail') || tag.includes('loss')) losses += 1;
-    });
-
-    const total = wins + losses;
-    const winRate = total ? Math.round((wins / total) * 100) : 0;
-
-    return { pnl, wins, losses, total, winRate, todays, state };
-  }
-
-  function syncTodayPnl(){
-    const todayEl = document.getElementById('todayPnl');
-    const badgeEl = document.getElementById('todayBadge');
-    const pnlDaily = document.getElementById('pnlDaily');
-
-    if(!todayEl) return;
-
-    const stats = computeTodayStats();
-    todayEl.textContent = fmtMoney(stats.pnl);
-    todayEl.classList.remove('positive','negative','neutral');
-    todayEl.classList.add(stats.pnl > 0 ? 'positive' : stats.pnl < 0 ? 'negative' : 'neutral');
-
-    if(badgeEl){
-      if(stats.total){
-        badgeEl.textContent = stats.winRate + '% win';
-      } else {
-        badgeEl.textContent = 'No trades today';
-      }
-    }
-
-    if(pnlDaily){
-      pnlDaily.textContent = fmtMoney(stats.pnl);
-    }
-  }
-
-  function resetTodayOnlyIfNeeded(){
-    const markerKey = 'faceless_today_marker_v1';
-    const now = new Date();
-    const start = getTradingDayStart(now);
-    const marker = start.toISOString();
-    const saved = localStorage.getItem(markerKey);
-    if(saved === marker) return;
-
-    localStorage.setItem(markerKey, marker);
-
-    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
-    for(const key of keys){
-      try{
-        const raw = localStorage.getItem(key);
-        if(!raw) continue;
-        const state = JSON.parse(raw);
-        if(!state || !Array.isArray(state.journalEntries)) continue;
-        // do not delete entries; daily reset means display resets by trading-day filter
-        localStorage.setItem(key, JSON.stringify(state));
-      }catch(e){}
-    }
-  }
-
-  function moveTodayCardIfNeeded(){
-    const dashboard = document.querySelector('.dashboard');
-    const row = dashboard ? dashboard.querySelector('.row') : null;
-    const home = document.getElementById('home');
-    const command = home ? home.querySelector('.section') : null;
-    const todayCard = document.getElementById('todayPnl')?.closest('.card');
-    const sessionCard = document.getElementById('sessionContainer')?.closest('.card');
-
-    if(!dashboard || !row || !todayCard || !sessionCard) return;
-
-    // Keep both near top, but stacked so session stretches.
-    row.style.display = 'flex';
-    row.style.flexDirection = 'column';
-    row.style.gap = '12px';
-
-    todayCard.style.width = '100%';
-    sessionCard.style.width = '100%';
-  }
-
-  function boot(){
-    resetTodayOnlyIfNeeded();
-    moveTodayCardIfNeeded();
-    syncTodayPnl();
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  window.addEventListener('load', boot);
-  setInterval(syncTodayPnl, 1000);
-})();
-</script>
-<script id="oai-clean-pass-js">
-(function(){
-  function finalTopAndTabsCleanup(){
-    const dashboard = document.querySelector('.dashboard');
-    const hero = dashboard ? dashboard.querySelector('.hero') : null;
-    const tabs = document.getElementById('mainTabs');
-    const row = dashboard ? dashboard.querySelector('.row') : null;
-    const todayCard = document.getElementById('todayPnl') ? document.getElementById('todayPnl').closest('.card') : null;
-    const sessionCard = document.getElementById('sessionContainer') ? document.getElementById('sessionContainer').closest('.card') : null;
-
-    if(dashboard && hero && tabs && todayCard && sessionCard){
-      let stack = document.getElementById('topHomeStack');
-      if(!stack){
-        stack = document.createElement('div');
-        stack.id = 'topHomeStack';
-        hero.insertAdjacentElement('afterend', stack);
-      }
-
-      if(todayCard.parentElement !== stack){
-        todayCard.id = 'todayPnlCard';
-        stack.appendChild(todayCard);
-      }
-      if(sessionCard.parentElement !== stack){
-        sessionCard.id = 'sessionStatusCard';
-        stack.appendChild(sessionCard);
-      }
-
-      if(row && row.parentElement){
-        row.remove();
-      }
-    }
-
-    if(tabs){
-      // remove accidental stray text nodes around tabs
-      Array.from(tabs.parentNode.childNodes).forEach(node => {
-        if(node.nodeType === 3 && node.textContent && node.textContent.trim() === 'PnL'){
-          node.textContent = '';
-        }
-      });
-      tabs.scrollLeft = 0;
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', finalTopAndTabsCleanup);
-  window.addEventListener('load', finalTopAndTabsCleanup);
-  setTimeout(finalTopAndTabsCleanup, 250);
-})();
-</script>
-<script id="oai-finish-fix-js">
-(function(){
-  function weekendClosed(now){
-    const day = now.getDay();
-    const mins = now.getHours()*60 + now.getMinutes();
-    return (day === 5 && mins >= 18*60) || day === 6 || (day === 0 && mins < 18*60);
-  }
-  function fmtCountdown(totalSeconds){
-    totalSeconds = Math.max(0, Math.floor(totalSeconds));
-    const h = Math.floor(totalSeconds/3600), m = Math.floor((totalSeconds%3600)/60), s = totalSeconds%60;
-    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  }
-  function secondsUntilSundayOpen(now){
-    const open = new Date(now);
-    const day = now.getDay();
-    const addDays = (7 - day) % 7;
-    open.setDate(now.getDate() + addDays);
-    open.setHours(18,0,0,0);
-    if(open <= now) open.setDate(open.getDate() + 7);
-    return (open - now)/1000;
-  }
-  function ensureTodayPnlUnderCommandCenter(){
-    const home = document.getElementById('home');
-    const todayCard = document.getElementById('todayPnl')?.closest('.card');
-    if(!home || !todayCard) return;
-
-    const sections = home.querySelectorAll('.section');
-    if(!sections.length) return;
-    const commandCenter = sections[0];
-
-    let wrap = document.getElementById('todayPnlMovedWrap');
-    if(!wrap){
-      wrap = document.createElement('div');
-      wrap.id = 'todayPnlMovedWrap';
-      wrap.className = 'section';
-      commandCenter.insertAdjacentElement('afterend', wrap);
-    }
-    if(todayCard.parentElement !== wrap){
-      wrap.appendChild(todayCard);
-    }
-
-    // hide the old empty top card slot if still present
-    const topRow = document.querySelector('.dashboard > .row');
-    if(topRow){
-      topRow.querySelectorAll('.card').forEach(card=>{
-        if(!card.querySelector('#sessionContainer') && !card.querySelector('#todayPnl')){
-          card.style.display = 'none';
-        }
-      });
-    }
-  }
-
-  function ensureWeekendStudyBlocks(){
-    const container = document.getElementById('sessionContainer');
-    if(!container) return;
-    const now = new Date();
-    if(!weekendClosed(now)) return;
-
-    const stable = container.querySelector('.sessionStable');
-    if(!stable) return;
-
-    // Keep current closed layout, just ensure Best / Meaning are present and visible
-    let bestBlock = stable.querySelector('.block.best-block');
-    if(!bestBlock){
-      bestBlock = document.createElement('div');
-      bestBlock.className = 'block best-block';
-      bestBlock.innerHTML = '<div class="label">Best</div><div class="text">Study charts, journal, and prepare for Sunday open.</div>';
-      stable.appendChild(bestBlock);
-    } else {
-      const label = bestBlock.querySelector('.label') || document.createElement('div');
-      const text = bestBlock.querySelector('.text') || document.createElement('div');
-      label.className = 'label';
-      label.textContent = 'Best';
-      text.className = 'text';
-      text.textContent = 'Study charts, journal, and prepare for Sunday open.';
-      if(!bestBlock.contains(label)) bestBlock.appendChild(label);
-      if(!bestBlock.contains(text)) bestBlock.appendChild(text);
-    }
-
-    let meaningBlock = stable.querySelector('.block.meaning-block');
-    if(!meaningBlock){
-      meaningBlock = document.createElement('div');
-      meaningBlock.className = 'block meaning-block';
-      meaningBlock.innerHTML = '<div class="label">Meaning</div><div class="text">Study time. Futures are closed for the weekend.</div>';
-      stable.appendChild(meaningBlock);
-    } else {
-      const label = meaningBlock.querySelector('.label') || document.createElement('div');
-      const text = meaningBlock.querySelector('.text') || document.createElement('div');
-      label.className = 'label';
-      label.textContent = 'Meaning';
-      text.className = 'text';
-      text.textContent = 'Study time. Futures are closed for the weekend.';
-      if(!meaningBlock.contains(label)) meaningBlock.appendChild(label);
-      if(!meaningBlock.contains(text)) meaningBlock.appendChild(text);
-    }
-  }
-
-  function boot(){
-    ensureTodayPnlUnderCommandCenter();
-    ensureWeekendStudyBlocks();
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  window.addEventListener('load', boot);
-  setInterval(boot, 1000);
-})();
-</script>
-<script id="oai-white-bottom-pnl-fix-js">
+<script id="oai-final-patch-js">
 (function(){
   function cleanGhostPnl(){
     const tabs = document.getElementById('mainTabs');
     if(!tabs) return;
-
-    const pnlBtn = tabs.querySelector('.pill[data-view="pnl"]');
-    if(pnlBtn && !(pnlBtn.textContent || '').trim()){
-      pnlBtn.textContent = 'PnL';
-    }
-
     tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
-
     Array.from(tabs.parentNode ? tabs.parentNode.childNodes : []).forEach(node => {
       if(node !== tabs && node.nodeType === 3 && (node.textContent || '').trim() === 'PnL'){
         node.textContent = '';
@@ -7378,191 +6775,69 @@ loadPnL();
     });
   }
 
-  function forceDarkBottom(){
-    document.documentElement.style.background = '#05030a';
-    document.body.style.backgroundColor = '#05030a';
-  }
-
-  function boot(){
-    cleanGhostPnl();
-    forceDarkBottom();
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  window.addEventListener('load', boot);
-  setTimeout(boot, 200);
-})();
-</script>
-<script id="oai-pnl-final-fix-js">
-(function(){
-  function money(n){
-    const v = Number(n || 0);
-    const sign = v < 0 ? '-$' : '$';
-    return sign + Math.abs(v).toFixed(2);
-  }
-  function signedNum(n){
-    const v = Number(n || 0);
-    return (v >= 0 ? '+' : '') + v.toFixed(2);
-  }
-  function readState(){
-    const keys = [
-      'faceless_app_state_v4',
-      'faceless_app_state_v3',
-      'faceless_app_state_v2',
-      'facelessTraderState',
-      'faceless_trader_state'
-    ];
-    for(const key of keys){
-      try{
-        const raw = localStorage.getItem(key);
-        if(!raw) continue;
-        const parsed = JSON.parse(raw);
-        if(parsed && typeof parsed === 'object') return parsed;
-      }catch(e){}
-    }
-    return {};
-  }
-  function entryTs(entry){
-    return Number(entry.savedAt || entry.updatedAt || entry.createdAt || entry.timestamp || entry.dateMs || 0);
-  }
-  function entryPnl(entry){
-    const direct = Number(entry.pnl ?? entry.net ?? entry.netPnl ?? entry.profitLoss ?? 0);
-    if(!Number.isNaN(direct) && direct !== 0) return direct;
-    const profit = Number(entry.profit ?? entry.todayProfit ?? 0);
-    const loss = Number(entry.loss ?? entry.todayLoss ?? 0);
-    if(profit || loss) return profit - loss;
-    const pointsWon = Number(entry.pointsWon ?? 0);
-    const pointsLost = Number(entry.pointsLost ?? 0);
-    const netPoints = Number(entry.netPoints ?? (pointsWon - pointsLost) ?? 0);
-    const contracts = Number(entry.contracts ?? entry.numContracts ?? 1);
-    const pointValue = Number(entry.pointValue ?? entry.dollarsPerPoint ?? 2);
-    return netPoints * contracts * pointValue;
-  }
-  function collectEntries(state){
-    const buckets = [
-      state.journalEntries, state.entries, state.liveEntries, state.trades, state.tradeEntries
-    ].filter(Array.isArray);
-    const merged = [];
-    buckets.forEach(arr => arr.forEach(item => merged.push(item)));
-    return merged;
-  }
-  function tradingDayStart(now){
-    const d = new Date(now);
-    const start = new Date(d);
-    start.setHours(17,30,0,0);
-    if(d < start) start.setDate(start.getDate() - 1);
-    return start.getTime();
-  }
-  function weeklyStart(now){
-    const d = new Date(now);
-    d.setHours(17,30,0,0);
-    const offset = (d.getDay() + 6) % 7; // Monday-based
-    d.setDate(d.getDate() - offset);
-    return d.getTime();
-  }
-  function monthlyStart(now){
-    const d = new Date(now.getFullYear(), now.getMonth(), 1, 17, 30, 0, 0);
-    return d.getTime();
-  }
-  function stats(){
-    const state = readState();
-    const entries = collectEntries(state);
-    const now = new Date();
-    const dayStart = tradingDayStart(now);
-    const weekStart = weeklyStart(now);
-    const monthStart = monthlyStart(now);
-
-    let daily=0, weekly=0, monthly=0, withdrawn=0, points=0, wins=0, losses=0;
-    entries.forEach(e => {
-      const t = entryTs(e);
-      const pnl = entryPnl(e);
-      const wd = Number(e.withdrawn ?? e.withdraw ?? 0);
-      const pts = Number(e.netPoints ?? ((Number(e.pointsWon||0)) - (Number(e.pointsLost||0))) ?? 0);
-
-      if(t >= dayStart){
-        daily += pnl;
-        withdrawn += wd;
-        points += pts;
-        if(pnl > 0) wins += 1;
-        else if(pnl < 0) losses += 1;
-      }
-      if(t >= weekStart) weekly += pnl;
-      if(t >= monthStart) monthly += pnl;
-    });
-
-    const totalTrades = wins + losses;
-    const winRate = totalTrades ? (wins / totalTrades) * 100 : 0;
-    return { daily, weekly, monthly, withdrawn, points, totalTrades, winRate };
-  }
-  function paintValue(el, n, moneyMode=true){
-    if(!el) return;
-    el.textContent = moneyMode ? money(n) : signedNum(n);
-    el.classList.remove('positive','negative','neutral');
-    el.classList.add(n > 0 ? 'positive' : n < 0 ? 'negative' : 'neutral');
-  }
-  function updatePnl(){
-    const s = stats();
-    paintValue(document.getElementById('pnlDailyBig'), s.daily, true);
-    paintValue(document.getElementById('pnlNet'), s.daily, true);
-    paintValue(document.getElementById('pnlPointsBig'), s.points, false);
-    paintValue(document.getElementById('pnlWithdrawn'), s.withdrawn, true);
-    paintValue(document.getElementById('pnlDaily'), s.daily, true);
-    paintValue(document.getElementById('pnlWeekly'), s.weekly, true);
-    paintValue(document.getElementById('pnlMonthly'), s.monthly, true);
-
-    const tradeWin = document.getElementById('pnlTradeWin');
-    if(tradeWin){
-      tradeWin.textContent = `${s.totalTrades} / ${s.winRate.toFixed(1)}%`;
-    }
-    const prog = document.getElementById('pnlProgress');
-    if(prog){
-      prog.textContent = s.winRate.toFixed(1) + '%';
-    }
-    const sync = document.getElementById('pnlJournalSync');
-    if(sync){
-      sync.textContent = 'OK';
-    }
-  }
-  function cleanGhostPnl(){
-    const tabs = document.getElementById('mainTabs');
-    if(!tabs) return;
-    const btn = tabs.querySelector('.pill[data-view="pnl"]');
-    if(btn && !(btn.textContent || '').trim()){
-      btn.textContent = 'PnL';
-    }
-    tabs.querySelectorAll('.pnl-nav').forEach(el => el.remove());
-    Array.from(tabs.parentNode ? tabs.parentNode.childNodes : []).forEach(node => {
-      if(node !== tabs && node.nodeType === 3 && (node.textContent || '').trim() === 'PnL') node.textContent = '';
-      if(node !== tabs && node.nodeType === 1 && (node.textContent || '').trim() === 'PnL' && !node.matches('.pill,[data-view]')) node.remove();
-    });
-  }
-  function boot(){
-    cleanGhostPnl();
-    updatePnl();
-  }
-  document.addEventListener('DOMContentLoaded', boot);
-  window.addEventListener('load', boot);
-  setInterval(updatePnl, 1000);
-})();
-</script>
-
-<script id="oai-spacer-journal-final-js">
-(function(){
-  function removeObviousBlankInjectedJournalCells(){
+  function labelJournalPnl(){
     const journal = document.getElementById('journal');
     if(!journal) return;
-    // Only remove totally empty div wrappers that sit directly in grid2 rows
-    journal.querySelectorAll('.grid2 > div').forEach(cell => {
-      const hasLabel = !!cell.querySelector('.fieldLabel');
-      const hasField = !!cell.querySelector('.field, input, select, textarea');
-      const text = (cell.textContent || '').trim();
-      if(!hasLabel && !hasField && !text){
-        cell.remove();
-      }
-    });
+
+    // Find the account type / pnl row and relabel the second field if it has lost its visible label.
+    const cells = Array.from(journal.querySelectorAll('.grid2 > div'));
+    cells.forEach((cell, idx) => {
+      const input = cell.querySelector('input.field, input, select.field, select');
+      const label = cell.querySelector('.fieldLabel, label');
+      if(!input) return;
+
+      const placeholder = (input.getAttribute('placeholder') || '').toLowerCase();
+      const name = (input.getAttribute('name') || '').toLowerCase();
+      const id = (input.getAttribute('id') || '').toLowerCase();
+
+          });
   }
-  document.addEventListener('DOMContentLoaded', removeObviousBlankInjectedJournalCells);
-  window.addEventListener('load', removeObviousBlankInjectedJournalCells);
+
+  function fixJournalPnlLabel(){
+    const journal = document.getElementById('journal');
+    if(!journal) return;
+
+    // Try direct match first
+    let pnlInput = journal.querySelector('#journalPnl, input[name="pnl"], input[id*="pnl" i], input[placeholder*="pnl" i]');
+    if(!pnlInput){
+      // fallback: the text/number input in the right cell under Account Type
+      const grid = journal.querySelector('.grid2');
+      if(grid){
+        const cells = Array.from(grid.children);
+        for(const cell of cells){
+          const input = cell.querySelector('input.field, input');
+          const select = cell.querySelector('select.field, select');
+          const label = cell.querySelector('.fieldLabel, label');
+          if(input && !select && (!label || !/pnl/i.test(label.textContent || ''))){
+            pnlInput = input;
+          }
+        }
+      }
+    }
+    if(!pnlInput) return;
+
+    const parent = pnlInput.parentElement;
+    if(!parent) return;
+
+    let label = parent.querySelector('.fieldLabel, label');
+    if(!label){
+      label = document.createElement('div');
+      label.className = 'fieldLabel';
+      label.textContent = 'PnL';
+      parent.insertBefore(label, pnlInput);
+    } else if(!/pnl/i.test(label.textContent || '')){
+      label.textContent = 'PnL';
+    }
+  }
+
+  function boot(){
+    cleanGhostPnl();
+    fixJournalPnlLabel();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setTimeout(boot, 250);
 })();
 </script>
 
