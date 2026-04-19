@@ -1340,6 +1340,100 @@ button.option,
 }
 
 </style>
+
+<style id="oai-final-fixes">
+/* move top pnl out so session can stretch */
+.hero + .row,
+.dashboard > .row {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.dashboard > .row > .card:first-child{
+  order:1;
+}
+.dashboard > .row > .card:last-child{
+  order:2;
+  width:100%;
+}
+#sessionContainer, #sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#sessionContainer .sessionStable{
+  border-radius:18px !important;
+}
+#sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+#todayPnl.positive{ color:#6aff8f !important; }
+#todayPnl.negative{ color:#ff6b6b !important; }
+#todayPnl.neutral{ color:inherit !important; }
+</style>
+
+
+<style id="oai-clean-pass">
+/* final top layout */
+#topHomeStack{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  margin-top:14px !important;
+}
+#topHomeStack .card{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #todayPnlCard{
+  order:1;
+}
+#topHomeStack #sessionStatusCard{
+  order:2;
+}
+#topHomeStack #sessionStatusCard #sessionContainer,
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  width:100% !important;
+  max-width:none !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionStable{
+  border-radius:18px !important;
+}
+#topHomeStack #sessionStatusCard #sessionContainer .sessionMainRow{
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+
+/* clean tab row */
+.dashboard{
+  overflow-x:hidden !important;
+}
+#mainTabs{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  padding:0 16px 4px 0 !important;
+  margin-top:12px !important;
+  gap:10px !important;
+}
+#mainTabs::-webkit-scrollbar{
+  display:none !important;
+}
+#mainTabs .pill{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+</style>
+
 </head>
 <body class="theme-soft-purple">
 <div class="shell">
@@ -6693,5 +6787,193 @@ function loadPnL(){
 }
 
 loadPnL();
-</script></body>
+</script>
+<script id="oai-final-logic">
+(function(){
+  function getTradingDayStart(now){
+    const d = new Date(now);
+    const start = new Date(d);
+    start.setHours(17,30,0,0);
+    if(d < start){
+      start.setDate(start.getDate()-1);
+    }
+    return start;
+  }
+
+  function readState(){
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(parsed && parsed.journalEntries) return parsed;
+        }
+      }catch(e){}
+    }
+    return {journalEntries:[], goals:[]};
+  }
+
+  function fmtMoney(n){
+    const sign = n < 0 ? '-$' : '$';
+    return sign + Math.abs(Number(n || 0)).toFixed(0);
+  }
+
+  function computeTodayStats(){
+    const state = readState();
+    const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+    const start = getTradingDayStart(new Date()).getTime();
+
+    const todays = entries.filter(j => {
+      const t = Number(j.savedAt || j.updatedAt || 0);
+      if(!t) return false;
+      return t >= start;
+    });
+
+    const pnl = todays.reduce((sum, j) => sum + Number(j.pnl || 0), 0);
+
+    let wins = 0, losses = 0;
+    todays.forEach(j => {
+      const pnlVal = Number(j.pnl || 0);
+      const tag = String(j.tag || '').toLowerCase();
+      if(pnlVal > 0 || tag.includes('valid') || tag.includes('win')) wins += 1;
+      else if(pnlVal < 0 || tag.includes('fail') || tag.includes('loss')) losses += 1;
+    });
+
+    const total = wins + losses;
+    const winRate = total ? Math.round((wins / total) * 100) : 0;
+
+    return { pnl, wins, losses, total, winRate, todays, state };
+  }
+
+  function syncTodayPnl(){
+    const todayEl = document.getElementById('todayPnl');
+    const badgeEl = document.getElementById('todayBadge');
+    const pnlDaily = document.getElementById('pnlDaily');
+
+    if(!todayEl) return;
+
+    const stats = computeTodayStats();
+    todayEl.textContent = fmtMoney(stats.pnl);
+    todayEl.classList.remove('positive','negative','neutral');
+    todayEl.classList.add(stats.pnl > 0 ? 'positive' : stats.pnl < 0 ? 'negative' : 'neutral');
+
+    if(badgeEl){
+      if(stats.total){
+        badgeEl.textContent = stats.winRate + '% win';
+      } else {
+        badgeEl.textContent = 'No trades today';
+      }
+    }
+
+    if(pnlDaily){
+      pnlDaily.textContent = fmtMoney(stats.pnl);
+    }
+  }
+
+  function resetTodayOnlyIfNeeded(){
+    const markerKey = 'faceless_today_marker_v1';
+    const now = new Date();
+    const start = getTradingDayStart(now);
+    const marker = start.toISOString();
+    const saved = localStorage.getItem(markerKey);
+    if(saved === marker) return;
+
+    localStorage.setItem(markerKey, marker);
+
+    const keys = ['faceless_app_state_v4','faceless_app_state_v3','faceless_app_state_v2'];
+    for(const key of keys){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) continue;
+        const state = JSON.parse(raw);
+        if(!state || !Array.isArray(state.journalEntries)) continue;
+        // do not delete entries; daily reset means display resets by trading-day filter
+        localStorage.setItem(key, JSON.stringify(state));
+      }catch(e){}
+    }
+  }
+
+  function moveTodayCardIfNeeded(){
+    const dashboard = document.querySelector('.dashboard');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const home = document.getElementById('home');
+    const command = home ? home.querySelector('.section') : null;
+    const todayCard = document.getElementById('todayPnl')?.closest('.card');
+    const sessionCard = document.getElementById('sessionContainer')?.closest('.card');
+
+    if(!dashboard || !row || !todayCard || !sessionCard) return;
+
+    // Keep both near top, but stacked so session stretches.
+    row.style.display = 'flex';
+    row.style.flexDirection = 'column';
+    row.style.gap = '12px';
+
+    todayCard.style.width = '100%';
+    sessionCard.style.width = '100%';
+  }
+
+  function boot(){
+    resetTodayOnlyIfNeeded();
+    moveTodayCardIfNeeded();
+    syncTodayPnl();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  window.addEventListener('load', boot);
+  setInterval(syncTodayPnl, 1000);
+})();
+</script>
+
+
+<script id="oai-clean-pass-js">
+(function(){
+  function finalTopAndTabsCleanup(){
+    const dashboard = document.querySelector('.dashboard');
+    const hero = dashboard ? dashboard.querySelector('.hero') : null;
+    const tabs = document.getElementById('mainTabs');
+    const row = dashboard ? dashboard.querySelector('.row') : null;
+    const todayCard = document.getElementById('todayPnl') ? document.getElementById('todayPnl').closest('.card') : null;
+    const sessionCard = document.getElementById('sessionContainer') ? document.getElementById('sessionContainer').closest('.card') : null;
+
+    if(dashboard && hero && tabs && todayCard && sessionCard){
+      let stack = document.getElementById('topHomeStack');
+      if(!stack){
+        stack = document.createElement('div');
+        stack.id = 'topHomeStack';
+        hero.insertAdjacentElement('afterend', stack);
+      }
+
+      if(todayCard.parentElement !== stack){
+        todayCard.id = 'todayPnlCard';
+        stack.appendChild(todayCard);
+      }
+      if(sessionCard.parentElement !== stack){
+        sessionCard.id = 'sessionStatusCard';
+        stack.appendChild(sessionCard);
+      }
+
+      if(row && row.parentElement){
+        row.remove();
+      }
+    }
+
+    if(tabs){
+      // remove accidental stray text nodes around tabs
+      Array.from(tabs.parentNode.childNodes).forEach(node => {
+        if(node.nodeType === 3 && node.textContent && node.textContent.trim() === 'PnL'){
+          node.textContent = '';
+        }
+      });
+      tabs.scrollLeft = 0;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', finalTopAndTabsCleanup);
+  window.addEventListener('load', finalTopAndTabsCleanup);
+  setTimeout(finalTopAndTabsCleanup, 250);
+})();
+</script>
+
+</body>
 </html>
