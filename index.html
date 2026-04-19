@@ -3422,9 +3422,78 @@ updateUI(); renderJournalList();
 
   <section class="view" id="funded"><div class="section"><h2 class="sectionTitle">Funded Tracker</h2><input type="hidden" id="fundedId"><div class="grid2"><div><div class="fieldLabel">Firm</div><select class="field" id="fundedFirm"><option value="">Select firm</option><option>Topstep</option><option>Tradeify</option><option>Lucid</option><option>Apex</option></select></div><div><div class="fieldLabel">Account Size</div><select class="field" id="fundedSize" onchange="applyAccountDefaults('funded')"><option value="">Select size</option><option value="25000">25K</option><option value="50000">50K</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Goal</div><input class="field" id="fundedPayoutGoal" type="number"></div><div><div class="fieldLabel">Drawdown</div><input class="field" id="fundedDrawdown" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Payout Taken</div><input class="field" id="fundedPayoutTaken" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="fundedStatus"><option value="active">Active</option><option value="risk">Drawdown Risk</option><option value="blown">Blown</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="fundedNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('funded')">Save Funded</button><button class="btn" onclick="clearAccountForm('funded')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Funded Running PnL</div><div class="miniNum" id="fundedRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Funded Trades</div><div class="miniNum" id="fundedTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Funded</h2><div id="fundedList" class="accountList"></div></div></section>
 
-  <section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input type="hidden" id="liveId"><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Live Running PnL</div><div class="miniNum" id="liveRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Live Trades</div><div class="miniNum" id="liveTradeCount">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div id="liveList" class="accountList"></div></div></section>
+  
+<section class="view" id="live"><div class="section"><h2 class="sectionTitle">Live Account</h2><input type="hidden" id="liveId"><div class="grid2"><div><div class="fieldLabel">Broker</div><input class="field" id="liveBroker"></div><div><div class="fieldLabel">Account Label</div><input class="field" id="liveLabel"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Starting Balance</div><input class="field" id="liveBalance" type="number"></div><div><div class="fieldLabel">Risk Limit</div><input class="field" id="liveRiskLimit" type="number"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Daily Goal</div><input class="field" id="liveGoal" type="number"></div><div><div class="fieldLabel">Status</div><select class="field" id="liveStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="archived">Archived</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveNotes"></textarea></div><div class="btnrow"><button class="btn primary" onclick="saveAccount('live')">Save Live</button><button class="btn" onclick="clearAccountForm('live')">Clear</button></div><div class="connectedStrip"><div class="connectedMini"><div class="miniLabel">Live Running PnL</div><div class="miniNum" id="liveRunningPnl">$0</div></div><div class="connectedMini"><div class="miniLabel">Live Trades</div><div class="miniNum" id="liveTradeCount">0</div></div></div></div>
 
-  <section class="view" id="journal"><div class="section"><h2 class="sectionTitle">Journal</h2><input type="hidden" id="journalId"><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" type="number" step="0.01"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply & Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input class="field" id="journalScreenshot" type="file" accept="image/*" onchange="previewJournalImage(event)"><img id="journalPreview" class="previewImg"></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div id="journalList" class="journalList"></div></div></section>
+<div class="section">
+  <h2 class="sectionTitle">Live Goal Tracker</h2>
+  <input type="hidden" id="liveTradeJournalId">
+  <div class="trackerMiniGrid">
+    <div class="trackerCard"><div class="miniLabel">Daily Goal</div><div class="miniNum" id="liveDailyGoalOut">$0</div><div class="trackerSub">weekly goal ÷ trading days</div></div>
+    <div class="trackerCard"><div class="miniLabel">Points Needed</div><div class="miniNum" id="livePointsNeededOut">0 pts</div><div class="trackerSub">for today</div></div>
+    <div class="trackerCard"><div class="miniLabel">$ Per 10 Points</div><div class="miniNum" id="liveTenPointOut">$0</div><div class="trackerSub">contracts × point value × 10</div></div>
+    <div class="trackerCard"><div class="miniLabel">Current Balance</div><div class="miniNum" id="liveCurrentBalanceOut">$0</div><div class="trackerSub">start balance + net - withdrawn</div></div>
+  </div>
+
+  <div class="trackerGrid2" style="margin-top:12px">
+    <div><div class="fieldLabel">Week Number</div><input class="field" id="liveTradeWeek" type="number" min="1" max="32" value="1"></div>
+    <div><div class="fieldLabel">Trading Days</div><input class="field" id="liveTradeDays" type="number" min="1" max="7" value="5"></div>
+  </div>
+  <div class="trackerGrid2" style="margin-top:10px">
+    <div><div class="fieldLabel">Contract Type</div><select class="field" id="liveTradeContractType"><option value="2">MNQ ($2/pt)</option><option value="20">NQ ($20/pt)</option></select></div>
+    <div><div class="fieldLabel">Contracts</div><input class="field" id="liveTradeContracts" type="number" min="1" value="1"></div>
+  </div>
+  <div style="margin-top:10px"><div class="fieldLabel">Withdraw Above</div><input class="field" id="liveTradeWithdrawAbove" type="number"></div>
+  <div class="trackerGrid2" style="margin-top:10px">
+    <div><div class="fieldLabel">Points Won</div><input class="field" id="liveTradePointsWon" type="number" step="0.1" value="0"></div>
+    <div><div class="fieldLabel">Points Lost</div><input class="field" id="liveTradePointsLost" type="number" step="0.1" value="0"></div>
+  </div>
+  <div class="trackerGrid2" style="margin-top:10px">
+    <div><div class="fieldLabel">Profit ($)</div><input class="field" id="liveTradeProfit" type="number" readonly></div>
+    <div><div class="fieldLabel">Loss ($)</div><input class="field" id="liveTradeLoss" type="number" readonly></div>
+  </div>
+  <div class="trackerGrid3" style="margin-top:10px">
+    <div><div class="fieldLabel">Net ($)</div><input class="field" id="liveTradeNet" type="number" readonly></div>
+    <div><div class="fieldLabel">Net Points</div><input class="field" id="liveTradeNetPoints" type="number" readonly></div>
+    <div><div class="fieldLabel">Withdrawn ($)</div><input class="field" id="liveTradeWithdrawn" type="number" step="0.01" value="0"></div>
+  </div>
+  <div class="trackerGrid2" style="margin-top:10px">
+    <div><div class="fieldLabel">Date</div><input class="field" id="liveTradeDate" type="date"></div>
+    <div><div class="fieldLabel">Execution Tag</div><select class="field" id="liveTradeExecutionTag"><option value="Clean Execution">Clean Execution</option><option value="Mistake">Mistake</option><option value="Revenge">Revenge</option><option value="No Trade">No Trade</option></select></div>
+  </div>
+  <div class="trackerGrid2" style="margin-top:10px">
+    <div><div class="fieldLabel">Followed Plan?</div><select class="field" id="liveTradeFollowedPlan"><option value="Yes">Yes</option><option value="No">No</option></select></div>
+    <div><div class="fieldLabel">Status</div><div id="liveTradeStatus" class="trackerPill">ALLOWED TO TRADE</div></div>
+  </div>
+  <div class="trackerProgressWrap"><div class="fieldLabel" style="margin-bottom:6px">Goal Progress</div><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div id="liveTradeProgressText" style="font-weight:800;font-size:22px">0%</div><div id="liveTradeCanWithdraw" class="trackerSub">$0 can withdraw</div></div><div class="trackerProgress"><div id="liveTradeProgressBar" class="trackerProgressBar"></div></div></div>
+  <div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="liveTradeNotes"></textarea></div>
+  <div class="btnrow"><button class="btn primary" onclick="saveLiveTradeEntry()">Save Entry</button><button class="btn" onclick="resetLiveTradeForm()">Reset Entry</button></div>
+</div>
+
+<div class="section">
+  <h2 class="sectionTitle">Weekly Auto Summary</h2>
+  <div class="trackerSummary">
+    <div class="trackerRow"><span class="label">Week</span><span class="val" id="liveSummaryWeek">1</span></div>
+    <div class="trackerRow"><span class="label">Weekly Goal</span><span class="val" id="liveSummaryGoal">$0</span></div>
+    <div class="trackerRow"><span class="label">Saved Entries</span><span class="val" id="liveSummaryEntries">0</span></div>
+    <div class="trackerRow"><span class="label">Total Profit</span><span class="val" id="liveSummaryProfit">$0</span></div>
+    <div class="trackerRow"><span class="label">Total Loss</span><span class="val" id="liveSummaryLoss">$0</span></div>
+    <div class="trackerRow"><span class="label">Total Net</span><span class="val" id="liveSummaryNet">$0</span></div>
+    <div class="trackerRow"><span class="label">Total Points</span><span class="val" id="liveSummaryPoints">0 pts</span></div>
+    <div class="trackerRow"><span class="label">Total Withdrawn</span><span class="val" id="liveSummaryWithdrawn">$0</span></div>
+    <div class="trackerRow"><span class="label">Goal Progress</span><span class="val" id="liveSummaryPct">0%</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="sectionTitle">Live Trade History</h2>
+  <div id="liveTradeHistory" class="historyStack"></div>
+</div>
+
+<div class="section"><h2 class="sectionTitle">Saved Live Accounts</h2><div id="liveList" class="accountList"></div></div></section>
+
+<section class="view" id="journal">
+<div class="section"><h2 class="sectionTitle">Journal</h2><input type="hidden" id="journalId"><div class="grid2"><div><div class="fieldLabel">Date</div><input class="field" id="journalDate" type="date"></div><div><div class="fieldLabel">Account Type</div><select class="field" id="journalAccountType" onchange="refreshJournalAccounts()"><option value="eval">Eval</option><option value="funded">Funded</option><option value="live">Live</option></select></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Linked Account</div><select class="field" id="journalAccountId"></select></div><div><div class="fieldLabel">PnL</div><input class="field" id="journalPnl" type="number" step="0.01"></div></div><div class="grid2" style="margin-top:10px"><div><div class="fieldLabel">Setup / Strategy</div><select class="field" id="journalSetup"><option value="">Select strategy</option><option>Supply & Demand</option><option>ORB</option><option>EMA/TEMA</option><option>ICC</option></select></div><div><div class="fieldLabel">Result Tag</div><select class="field" id="journalTag"><option value="valid">Valid</option><option value="failed">Failed</option><option value="no trade">No Trade</option><option value="no trade day">No Trade Day</option></select></div></div><div style="margin-top:10px"><div class="fieldLabel">Notes</div><textarea class="field" id="journalNotes"></textarea></div><div style="margin-top:10px"><div class="fieldLabel">Trade Screenshot</div><input class="field" id="journalScreenshot" type="file" accept="image/*" onchange="previewJournalImage(event)"><img id="journalPreview" class="previewImg"></div><button class="cta" onclick="saveJournal()">Save Journal Entry</button><div class="connectedNote">Simple connected mode: log setup + result + account, and this will auto update Stats, Funded/Live tracking, PnL, and Lock.</div></div><div class="section"><h2 class="sectionTitle">Journal History</h2><div id="journalList" class="journalList"></div></div></section>
 
   <section class="view" id="stats"><div class="section"><h2 class="sectionTitle">Stats</h2><div class="statsGrid"><div class="kpi"><div class="label">Total Entries</div><div class="num" id="statEntries">0</div></div><div class="kpi"><div class="label">Win Rate</div><div class="num" id="statWinRate">0%</div></div><div class="kpi"><div class="label">Goal Hit Days</div><div class="num" id="statGoalHit">0</div></div><div class="kpi"><div class="label">Max Loss Days</div><div class="num" id="statLossHit">0</div></div></div></div><div class="section"><h2 class="sectionTitle">Strategy Performance</h2><div id="strategyStats" class="accountList"></div></div></section>
 
@@ -5217,6 +5286,8 @@ document.addEventListener('DOMContentLoaded', function(){
     renderAccounts();
     renderJournal();
     renderConnected();
+    initLiveTrackerDefaults();
+    renderLiveWeeklySummary();
   }
 
   function saveEval(){
@@ -5341,6 +5412,11 @@ document.addEventListener('DOMContentLoaded', function(){
   function openJournal(id){
     const j = state.journalEntries.find(x => String(x.id) === String(id));
     if(!j) return;
+    if(j.liveTracker){
+      loadLiveTradeEntry(j.id);
+      switchTo('live');
+      return;
+    }
     setValue('journalId', j.id);
     setValue('journalDate', j.date);
     setValue('journalAccountType', j.accountType || 'eval');
@@ -5352,6 +5428,253 @@ document.addEventListener('DOMContentLoaded', function(){
     setValue('journalNotes', j.notes);
     switchTo('journal');
   }
+
+
+  function liveDefaultWeekData(week){
+    const plan = {
+      1:{goal:10,contracts:1,type:'MNQ',start:200,withdraw:215,days:1},
+      2:{goal:40,contracts:1,type:'MNQ',start:210,withdraw:260,days:5},
+      3:{goal:50,contracts:1,type:'MNQ',start:250,withdraw:310,days:5},
+      4:{goal:65,contracts:1,type:'MNQ',start:300,withdraw:380,days:5},
+      5:{goal:80,contracts:1,type:'MNQ',start:365,withdraw:460,days:5},
+      6:{goal:100,contracts:2,type:'MNQ',start:445,withdraw:575,days:5},
+      7:{goal:130,contracts:2,type:'MNQ',start:545,withdraw:710,days:5},
+      8:{goal:170,contracts:3,type:'MNQ',start:675,withdraw:890,days:5},
+      9:{goal:215,contracts:3,type:'MNQ',start:845,withdraw:1120,days:5},
+      10:{goal:270,contracts:4,type:'MNQ',start:1060,withdraw:1400,days:5},
+      11:{goal:340,contracts:4,type:'MNQ',start:1330,withdraw:1760,days:5},
+      12:{goal:430,contracts:5,type:'MNQ',start:1670,withdraw:2200,days:5},
+      13:{goal:540,contracts:5,type:'MNQ',start:2100,withdraw:2750,days:5},
+      14:{goal:680,contracts:8,type:'MNQ',start:2640,withdraw:3450,days:5},
+      15:{goal:850,contracts:10,type:'MNQ',start:3320,withdraw:4300,days:5},
+      16:{goal:1060,contracts:10,type:'MNQ',start:4170,withdraw:5400,days:5},
+      17:{goal:1300,contracts:12,type:'MNQ',start:5230,withdraw:6750,days:5},
+      18:{goal:1580,contracts:15,type:'MNQ',start:6530,withdraw:8400,days:5},
+      19:{goal:2000,contracts:20,type:'MNQ',start:8110,withdraw:10500,days:5},
+      20:{goal:2500,contracts:25,type:'MNQ',start:10110,withdraw:13100,days:5},
+      21:{goal:3200,contracts:30,type:'MNQ',start:12610,withdraw:16400,days:5},
+      22:{goal:4000,contracts:4,type:'NQ',start:15810,withdraw:20500,days:5},
+      23:{goal:5000,contracts:5,type:'NQ',start:19810,withdraw:25700,days:5},
+      24:{goal:6200,contracts:6,type:'NQ',start:24810,withdraw:32000,days:5},
+      25:{goal:7700,contracts:7,type:'NQ',start:31010,withdraw:40000,days:5},
+      26:{goal:10000,contracts:10,type:'NQ',start:38710,withdraw:50000,days:5},
+      27:{goal:12500,contracts:12,type:'NQ',start:48710,withdraw:63000,days:5},
+      28:{goal:15000,contracts:15,type:'NQ',start:61210,withdraw:77000,days:5},
+      29:{goal:18000,contracts:18,type:'NQ',start:76210,withdraw:96000,days:5},
+      30:{goal:20000,contracts:20,type:'NQ',start:94210,withdraw:115000,days:5},
+      31:{goal:22000,contracts:22,type:'NQ',start:114210,withdraw:136000,days:5},
+      32:{goal:25000,contracts:25,type:'NQ',start:136210,withdraw:161500,days:5}
+    };
+    return plan[Number(week)] || null;
+  }
+
+  function initLiveTrackerDefaults(){
+    const dateEl = document.getElementById('liveTradeDate');
+    if(dateEl && !dateEl.value) dateEl.value = new Date().toISOString().slice(0,10);
+    const wkEl = document.getElementById('liveTradeWeek');
+    if(wkEl && !wkEl.value) wkEl.value = 1;
+    syncLiveTrackerToWeek();
+    recalcLiveTracker();
+  }
+
+  function syncLiveTrackerToWeek(){
+    const wk = Number(document.getElementById('liveTradeWeek')?.value || 1);
+    const data = liveDefaultWeekData(wk);
+    if(!data) return;
+    const daysEl = document.getElementById('liveTradeDays');
+    const typeEl = document.getElementById('liveTradeContractType');
+    const contractsEl = document.getElementById('liveTradeContracts');
+    const withdrawEl = document.getElementById('liveTradeWithdrawAbove');
+    if(daysEl && !daysEl.dataset.manual) daysEl.value = data.days;
+    if(typeEl && !typeEl.dataset.manual) typeEl.value = data.type === 'MNQ' ? '2' : '20';
+    if(contractsEl && !contractsEl.dataset.manual) contractsEl.value = data.contracts;
+    if(withdrawEl && !withdrawEl.dataset.manual) withdrawEl.value = data.withdraw;
+  }
+
+  function activeLiveAccountId(){
+    const liveId = document.getElementById('liveId')?.value;
+    const liveLabel = document.getElementById('liveLabel')?.value;
+    return liveId || liveLabel || 'LIVE-UNSAVED';
+  }
+
+  function recalcLiveTracker(){
+    const liveGoal = Number(document.getElementById('liveGoal')?.value || 0);
+    const liveBalance = Number(document.getElementById('liveBalance')?.value || 0);
+    const liveRiskLimit = Number(document.getElementById('liveRiskLimit')?.value || 0);
+    const days = Math.max(1, Number(document.getElementById('liveTradeDays')?.value || 1));
+    const contractType = Number(document.getElementById('liveTradeContractType')?.value || 2);
+    const contracts = Math.max(1, Number(document.getElementById('liveTradeContracts')?.value || 1));
+    const pointsWon = Number(document.getElementById('liveTradePointsWon')?.value || 0);
+    const pointsLost = Number(document.getElementById('liveTradePointsLost')?.value || 0);
+    const withdrawn = Number(document.getElementById('liveTradeWithdrawn')?.value || 0);
+    const withdrawAbove = Number(document.getElementById('liveTradeWithdrawAbove')?.value || 0);
+
+    const dollarsPerPoint = contractType * contracts;
+    const dailyGoal = liveGoal / days;
+    const pointsNeeded = dollarsPerPoint ? dailyGoal / dollarsPerPoint : 0;
+    const profit = pointsWon * dollarsPerPoint;
+    const loss = pointsLost * dollarsPerPoint;
+    const net = profit - loss;
+    const netPoints = pointsWon - pointsLost;
+    const currentBalance = liveBalance + net - withdrawn;
+    const canWithdraw = Math.max(0, currentBalance - withdrawAbove);
+    const progress = dailyGoal > 0 ? Math.max(0, Math.min(100, (net / dailyGoal) * 100)) : 0;
+
+    setValue('liveTradeProfit', profit.toFixed(2));
+    setValue('liveTradeLoss', loss.toFixed(2));
+    setValue('liveTradeNet', net.toFixed(2));
+    setValue('liveTradeNetPoints', netPoints.toFixed(1));
+
+    setText('liveDailyGoalOut', currency(dailyGoal));
+    setText('livePointsNeededOut', pointsNeeded.toFixed(1) + ' pts');
+    setText('liveTenPointOut', currency(dollarsPerPoint * 10));
+    setText('liveCurrentBalanceOut', currency(currentBalance));
+    setText('liveTodayNetOut', currency(net));
+    setText('liveTradeProgressText', Math.round(progress) + '%');
+    const progressBar = document.getElementById('liveTradeProgressBar');
+    if(progressBar) progressBar.style.width = progress + '%';
+    setText('liveTradeCanWithdraw', currency(canWithdraw) + ' can withdraw');
+
+    const status = document.getElementById('liveTradeStatus');
+    if(status){
+      if(loss >= liveRiskLimit && liveRiskLimit > 0){
+        status.textContent = 'STOP — LOSS LIMIT';
+        status.className = 'trackerPill bad';
+      }else if(net >= dailyGoal && dailyGoal > 0){
+        status.textContent = 'GOAL HIT — STOP';
+        status.className = 'trackerPill good';
+      }else{
+        status.textContent = 'ALLOWED TO TRADE';
+        status.className = 'trackerPill';
+      }
+    }
+    renderLiveWeeklySummary();
+  }
+
+  function liveTrackerEntries(){
+    const currentWeek = Number(document.getElementById('liveTradeWeek')?.value || 1);
+    const accountId = activeLiveAccountId();
+    return [...state.journalEntries]
+      .filter(j => j.liveTracker && String(j.accountType || '').toLowerCase() === 'live' && Number(j.week || 0) === currentWeek && String(j.accountId || '') === String(accountId))
+      .sort((a,b) => (b.savedAt || 0) - (a.savedAt || 0));
+  }
+
+  function renderLiveWeeklySummary(){
+    const week = Number(document.getElementById('liveTradeWeek')?.value || 1);
+    const goal = Number(document.getElementById('liveGoal')?.value || 0);
+    const entries = liveTrackerEntries();
+    const profit = entries.reduce((s,e)=>s + Number(e.profit || e.pnl || 0), 0);
+    const loss = entries.reduce((s,e)=>s + Number(e.loss || 0), 0);
+    const net = entries.reduce((s,e)=>s + Number(e.pnl || e.net || 0), 0);
+    const points = entries.reduce((s,e)=>s + Number(e.netPoints || 0), 0);
+    const withdrawn = entries.reduce((s,e)=>s + Number(e.withdrawn || 0), 0);
+    const pct = goal > 0 ? Math.max(0, (net / goal) * 100) : 0;
+
+    setText('liveSummaryWeek', String(week));
+    setText('liveSummaryGoal', currency(goal));
+    setText('liveSummaryEntries', String(entries.length));
+    setText('liveSummaryProfit', currency(profit));
+    setText('liveSummaryLoss', currency(loss));
+    setText('liveSummaryNet', currency(net));
+    setText('liveSummaryPoints', points.toFixed(1) + ' pts');
+    setText('liveSummaryWithdrawn', currency(withdrawn));
+    setText('liveSummaryPct', Math.round(pct) + '%');
+
+    const host = document.getElementById('liveTradeHistory');
+    if(host){
+      host.innerHTML = entries.length ? entries.map(e => {
+        const tagClass = e.executionTag === 'Clean Execution' ? 'good' : (e.executionTag === 'Mistake' || e.executionTag === 'Revenge') ? 'bad' : 'warn';
+        const planClass = String(e.followedPlan || '') === 'Yes' ? 'good' : 'bad';
+        return `
+          <div class="liveHistoryCard">
+            <div class="liveHistoryTop">
+              <div>
+                <div class="liveHistoryTitle">${e.date || ''}</div>
+                <div class="liveHistoryMeta">${Number(e.pointsWon || 0).toFixed(1)} pts won · ${Number(e.pointsLost || 0).toFixed(1)} pts lost · ${Number(e.netPoints || 0).toFixed(1)} pts net · ${Number(e.contracts || 0)} ${e.contractType || ''}</div>
+              </div>
+              <div style="font-weight:900">${currency(e.pnl || e.net || 0)}</div>
+            </div>
+            <div class="liveTags">
+              <span class="liveTag ${tagClass}">${e.executionTag || 'Tracked'}</span>
+              <span class="liveTag ${planClass}">Plan: ${e.followedPlan || 'Yes'}</span>
+              <span class="liveTag">Profit ${currency(e.profit || 0)}</span>
+              <span class="liveTag">Loss ${currency(e.loss || 0)}</span>
+              <span class="liveTag">Withdrew ${currency(e.withdrawn || 0)}</span>
+            </div>
+            ${e.notes ? `<div class="trackerSub" style="margin-top:10px">${e.notes}</div>` : ''}
+            <div class="liveHistoryActions">
+              <button class="btn primary" onclick="loadLiveTradeEntry('${String(e.id)}')">Edit Entry</button>
+              <button class="btn" onclick="switchTo('journal'); openJournal('${String(e.id)}')">Open in Journal</button>
+            </div>
+          </div>`;
+      }).join('') : '<div class="empty">No live trade entries yet.</div>';
+    }
+  }
+
+  function saveLiveTradeEntry(){
+    const pnl = Number(document.getElementById('liveTradeNet')?.value || 0) || 0;
+    const entry = {
+      id: document.getElementById('liveTradeJournalId')?.value || ('LT-' + Date.now()),
+      date: document.getElementById('liveTradeDate')?.value || new Date().toISOString().slice(0,10),
+      accountType: 'live',
+      accountId: activeLiveAccountId(),
+      pnl: pnl,
+      setup: 'Live Goal',
+      tag: document.getElementById('liveTradeExecutionTag')?.value || 'Clean Execution',
+      notes: document.getElementById('liveTradeNotes')?.value || '',
+      savedAt: Date.now(),
+      liveTracker: true,
+      week: Number(document.getElementById('liveTradeWeek')?.value || 1),
+      days: Number(document.getElementById('liveTradeDays')?.value || 1),
+      contractType: Number(document.getElementById('liveTradeContractType')?.value || 2) === 2 ? 'MNQ' : 'NQ',
+      contracts: Number(document.getElementById('liveTradeContracts')?.value || 1),
+      pointsWon: Number(document.getElementById('liveTradePointsWon')?.value || 0),
+      pointsLost: Number(document.getElementById('liveTradePointsLost')?.value || 0),
+      netPoints: Number(document.getElementById('liveTradeNetPoints')?.value || 0),
+      profit: Number(document.getElementById('liveTradeProfit')?.value || 0),
+      loss: Number(document.getElementById('liveTradeLoss')?.value || 0),
+      withdrawn: Number(document.getElementById('liveTradeWithdrawn')?.value || 0),
+      followedPlan: document.getElementById('liveTradeFollowedPlan')?.value || 'Yes',
+      executionTag: document.getElementById('liveTradeExecutionTag')?.value || 'Clean Execution'
+    };
+    upsert(state.journalEntries, entry);
+    setValue('liveTradeJournalId', entry.id);
+    renderAll();
+    switchTo('live');
+    alert('Live trade synced to Live + Journal.');
+  }
+
+  function loadLiveTradeEntry(id){
+    const e = state.journalEntries.find(x => String(x.id) === String(id) && x.liveTracker);
+    if(!e) return;
+    setValue('liveTradeJournalId', e.id);
+    setValue('liveTradeDate', e.date);
+    setValue('liveTradeWeek', e.week);
+    setValue('liveTradeDays', e.days || 5);
+    setValue('liveTradeContractType', e.contractType === 'MNQ' ? 2 : 20);
+    setValue('liveTradeContracts', e.contracts);
+    setValue('liveTradeWithdrawAbove', document.getElementById('liveTradeWithdrawAbove')?.value || '');
+    setValue('liveTradePointsWon', e.pointsWon);
+    setValue('liveTradePointsLost', e.pointsLost);
+    setValue('liveTradeWithdrawn', e.withdrawn || 0);
+    setValue('liveTradeExecutionTag', e.executionTag || e.tag || 'Clean Execution');
+    setValue('liveTradeFollowedPlan', e.followedPlan || 'Yes');
+    setValue('liveTradeNotes', e.notes || '');
+    recalcLiveTracker();
+  }
+
+  function resetLiveTradeForm(){
+    setValue('liveTradeJournalId','');
+    setValue('liveTradeDate', new Date().toISOString().slice(0,10));
+    setValue('liveTradePointsWon',0);
+    setValue('liveTradePointsLost',0);
+    setValue('liveTradeWithdrawn',0);
+    setValue('liveTradeExecutionTag','Clean Execution');
+    setValue('liveTradeFollowedPlan','Yes');
+    setValue('liveTradeNotes','');
+    recalcLiveTracker();
+  }
+
 
   function bindButtons(){
     window.applyAccountDefaults = applyAccountDefaults;
@@ -5373,6 +5696,30 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const journalType = document.getElementById('journalAccountType');
     if(journalType) journalType.onchange = refreshJournalAccounts;
+
+    window.saveLiveTradeEntry = saveLiveTradeEntry;
+    window.resetLiveTradeForm = resetLiveTradeForm;
+    window.loadLiveTradeEntry = loadLiveTradeEntry;
+
+    ['liveGoal','liveBalance','liveRiskLimit','liveTradeWeek','liveTradeDays','liveTradeContractType','liveTradeContracts','liveTradeWithdrawAbove','liveTradePointsWon','liveTradePointsLost','liveTradeWithdrawn'].forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('input', function(){
+        if(['liveTradeDays','liveTradeContractType','liveTradeContracts','liveTradeWithdrawAbove'].includes(id)) this.dataset.manual = '1';
+        if(id === 'liveTradeWeek') syncLiveTrackerToWeek();
+        recalcLiveTracker();
+      });
+      el.addEventListener('change', function(){
+        if(['liveTradeDays','liveTradeContractType','liveTradeContracts','liveTradeWithdrawAbove'].includes(id)) this.dataset.manual = '1';
+        if(id === 'liveTradeWeek') syncLiveTrackerToWeek();
+        recalcLiveTracker();
+      });
+    });
+
+    const liveIdField = document.getElementById('liveId');
+    const liveLabelField = document.getElementById('liveLabel');
+    if(liveIdField) liveIdField.addEventListener('input', renderLiveWeeklySummary);
+    if(liveLabelField) liveLabelField.addEventListener('input', renderLiveWeeklySummary);
 
     document.querySelectorAll('button').forEach(btn => {
       const txt = (btn.textContent || '').trim().toLowerCase();
@@ -5673,6 +6020,45 @@ document.addEventListener('DOMContentLoaded', function(){
 #sessionContainer .block{
   display:none !important;
 }
+
+/* Live tracker sync */
+.trackerGrid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.trackerGrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.trackerMiniGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.trackerSummary{display:grid;gap:10px}
+.trackerRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(12,7,24,.42)}
+.trackerRow .label{font-size:13px;color:#dfd1ff}
+.trackerRow .val{font-weight:800}
+.trackerPill{
+  display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;
+  font-weight:800;font-size:13px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(242,183,85,.13);color:#ffd696
+}
+.trackerPill.good{background:rgba(42,211,120,.12);color:#9cffc2;border-color:rgba(42,211,120,.28)}
+.trackerPill.bad{background:rgba(255,103,103,.12);color:#ffb3b3;border-color:rgba(255,103,103,.28)}
+.trackerCard{padding:14px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:rgba(10,6,22,.42);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+.trackerCard .miniLabel{font-size:13px;color:#ddcbff}
+.trackerCard .miniNum{font-size:30px;font-weight:900;line-height:1.05;margin-top:8px}
+.trackerSub{font-size:12px;color:#c7b6ef;margin-top:4px}
+.trackerProgressWrap{margin-top:10px}
+.trackerProgress{height:12px;border-radius:999px;background:rgba(8,6,18,.75);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.trackerProgressBar{height:100%;width:0;background:linear-gradient(90deg,#f277df,#9b7dff,#6affc8)}
+.historyStack{display:grid;gap:12px}
+.liveHistoryCard{padding:14px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(10,6,22,.40)}
+.liveHistoryTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.liveHistoryTitle{font-weight:800}
+.liveHistoryMeta{font-size:13px;color:#d9c8ff;margin-top:4px}
+.liveTags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.liveTag{font-size:12px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#eadcff}
+.liveTag.good{color:#9cffc2;border-color:rgba(42,211,120,.28);background:rgba(42,211,120,.08)}
+.liveTag.bad{color:#ffb3b3;border-color:rgba(255,103,103,.28);background:rgba(255,103,103,.08)}
+.liveTag.warn{color:#ffd696;border-color:rgba(242,183,85,.28);background:rgba(242,183,85,.08)}
+.liveHistoryActions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+#journalList .entryMeta.extra{margin-top:6px;font-size:12px;color:#d7c3ff}
+@media (max-width:520px){
+  .trackerGrid2,.trackerGrid3,.trackerMiniGrid,.liveHistoryActions{grid-template-columns:1fr}
+}
+
 </style>
 
 <script id="faceless-account-journal-sync-fix-js">
@@ -5893,15 +6279,20 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function renderJournal(){
     const entries = [...state.journalEntries].sort((a,b) => (b.savedAt || 0) - (a.savedAt || 0));
-    const makeCard = (j) => `
+    const makeCard = (j) => {
+      const extra = j.liveTracker
+        ? `<div class="entryMeta extra">${Number(j.pointsWon || 0).toFixed(1)} pts won · ${Number(j.pointsLost || 0).toFixed(1)} pts lost · ${Number(j.netPoints || 0).toFixed(1)} pts net · ${Number(j.contracts || 0)} ${j.contractType || ''}</div>`
+        : '';
+      return `
       <div class="entryCard" data-open-journal="${String(j.id)}">
         <div class="entryTitle">${j.setup || 'No setup'} · ${(j.accountType || '').toUpperCase()}</div>
         <div class="entryMeta">${j.date || ''} · ${j.tag || 'logged'} · ${currency(j.pnl || 0)}</div>
+        ${extra}
         <div class="journalActions" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
           <button type="button" class="journalMiniBtn" data-edit-journal="${String(j.id)}">Edit</button>
           <button type="button" class="journalMiniBtn danger" data-delete-journal="${String(j.id)}">Delete</button>
         </div>
-      </div>`;
+      </div>`; };
 
     const journalList = document.getElementById('journalList');
     const recent = document.getElementById('recentJournal');
